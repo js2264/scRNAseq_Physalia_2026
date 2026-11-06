@@ -1,0 +1,126 @@
+# Program
+
+Classes are from:
+
+- 2 to 8 pm Paris time.
+- 1 to 7 pm London time.
+- 8 am to 2 pm NY time.
+- 5 am to 11 am SF time.
+
+## Monday - Classes from 14:00 to 20:00 (Paris time)
+
+### Lecture 1 - Introduction to scRNA-Seq analysis \[Jacques\]
+
+- General introduction: cell atlas overviews
+- Comparison of bulk and single cell RNA-Seq
+- Overview of available scRNA-seq technologies (10x) and experimental protocols
+
+### Lecture 2 - From sequencing reads to expression matrices \[Jacques\]
+
+- scRNA-Seq processing workflow starting with choice of sequencer (NextSeq, HiSeq, MiSeq) / barcode swapping and bcl files
+- Overview of Popular tools and algorithms
+- Common single-cell analyses and interpretation
+- Sequencing data: alignment and quality control
+- IGV: Looking at cool things in alignment like where reads are, mutations, splicing
+
+### Lab 1 - Familiarizing yourself with the workshop environment \[Jacques\]
+
+- Launching a workshop session on the Orchestra platform
+- Using RStudio
+- Shell and Unix commands to navigate directories, create folders, open files
+- Raw file formats
+- Get data from 10x website, single cell portal, from GEO and ENA (fastqs, counts)
+
+### Lab 2 - From sequencing reads to expression matrices \[Fabricio\]
+
+- Mapping sequencing data with Cellranger
+- Quality Control reports (CellRanger, dropEst, fastqc)
+
+## Tuesday - Classes from 14:00 to 20:00 (Paris time)
+
+### Lecture 3 - Quality control for scRNA-Seq data \[Jacques\]
+
+- What CellRanger does for quality filtering
+- Normalisation methods
+- Doublets, empty droplets, DropletUtils
+- Barcode swapping
+- Regression with technical covariates
+
+### Lab 3 - Introduction to R/Bioconductor \[Fabricio\]
+
+- Installing packages with CRAN and Bioconductor
+- Data types, data manipulation, slicing
+- I/O for scRNAseq analysis in R
+
+### Lab 4 - scRNA-Seq data wrangling \[Fabricio\]
+
+- Data structure
+- Data filtering
+- Exploratory data analysis
+
+### Flash talks \[Everybody\]
+
+## Wednesday - Classes from 14:00 to 20:00 (Paris time)
+
+### Lecture 4 - Identifying cell populations \[Jacques\]
+
+- Feature selection
+- Dimensionality reduction
+- Graph-based clustering and other cluster methods
+- Assigning cluster identity
+- Differential expression tests
+
+### Lab 5 - Identifying Cell Populations: dimensionality reduction, clustering and annotation \[Fabricio\]
+
+- Feature selection
+- Dimensional reduction
+- Graph-based clustering
+- Marker gene detection
+- Cell type annotation
+- Data visualization
+
+### Lecture 5 - Data integration and batch effect correction \[Jacques\]
+
+- Batch correction methods (regress out batch, scaling within batch, Seurat v3, MNN, Liger, Harmony, scvi, scgen)
+- Evaluation methods for batch correction (ARI, average silhouette width, kBET…)
+
+### Lab 6 - Data integration and batch effect correction \[Jacques\]
+
+- Integration of pancreas datasets generated with four different technologies
+- Comparison of batch correction methods (MNN, Harmony, LIGER)
+- Choosing the optimal batch correction approach
+- Pseudobulk differential expression analysis
+
+## Thursday - Classes from 14:00 to 20:00 (Paris time)
+
+### Lecture 6 - Advances in single-cell genomics: the epigenome \[Jacques\]
+
+### Lab 7 - Single-cell ATAC-Seq analysis \[Jacques\]
+
+- Importing scATAC-seq data with `Signac`
+- Quality controls, normalization and clustering
+- Gene activity scores and cell annotation
+- Differential accessibility analysis
+
+### Lecture 7 - Trajectories and pseudotimes \[Jacques\]
+
+- Trajectory inference
+- Popular tools and packages for trajectory analysis (https://github.com/dynverse/dynmethods#list-of-included-methods)
+- Pseudotime inference
+- RNA velocity
+- Differential expression through pseudotime
+
+### Lab 8 - Inferring differentiation trajectories and pseudotime \[Fabricio\]
+
+- Inferring trajectory in sperm cell lineage
+- Modelling gene expression along pseudotime
+- Orientating a trajectory with RNA velocity
+
+## Friday - Classes from 14:00 to 20:00 (Paris time)
+
+Friday will be divided in two parts (see [Group projects](../pages/day5/group_projects.md)):
+
+- 14:00 - 18:00: Group projects: analysing scRNA-seq data by yourself, from A to Z
+- 18:00 - 20:00: Group presentations (10’ each group, max 5 slides: what/why/where/when/how, conclusions)
+
+Happy hour time!!

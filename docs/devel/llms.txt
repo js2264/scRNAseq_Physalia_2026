@@ -1,0 +1,34 @@
+# Single-cell RNA-seq analysis with R/Bioconductor
+
+> Course material for the 2026 edition of the Physalia workshop "Single-cell RNA-seq analysis with R/Bioconductor". This BiocBook gathers the lectures and hands-on labs of the five-day course: from sequencing reads to count matrices, quality control, normalisation, dimensionality reduction, clustering and cell annotation, batch correction, single-cell ATAC-seq and trajectory inference. A Docker image providing every tool, package and dataset used in the labs is built for each version of the book, and is used to run the workshop on the Bioconductor Orchestra platform.
+
+<!-- biocbook:start -->
+- Book package: `scRNAseqPhysalia2026` 1.0.0 (Bioconductor 3.24), source: <https://github.com/js2264/scRNAseq_Physalia_2026>
+- Install: `BiocManager::install("scRNAseqPhysalia2026")` (Bioconductor) or `BiocManager::install("js2264/scRNAseq_Physalia_2026")` (GitHub)
+- Docker image with every dependency: `docker run -it ghcr.io/js2264/scrnaseqphysalia2026:1.0.0 R`
+- Other versions of this book: one per Bioconductor release, at `https://js2264.github.io/scRNAseq_Physalia_2026/<version>/` (e.g. <https://js2264.github.io/scRNAseq_Physalia_2026/devel/>), indexed in <https://js2264.github.io/scRNAseq_Physalia_2026/llms.txt>
+<!-- biocbook:end -->
+
+## Pages
+
+- [Single-cell RNA-seq analysis with R/Bioconductor](https://js2264.github.io/scRNAseq_Physalia_2026/devel/index.llms.md)
+- [Program](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/program.llms.md)
+- [Getting started](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/getting-started.llms.md)
+- [Prerequisites](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/prerequisites.llms.md)
+- [1 Lecture 1 - Introduction to scRNA-seq analysis](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lecture1_introduction.llms.md)
+- [2 Lecture 2 - From sequencing reads to expression matrices](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lecture2_Bcl2matrix.llms.md)
+- [3 Lab 1: Familiarizing yourself with the workshop environment](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lab1_Intro.llms.md)
+- [4 Lab 2: From .bcl to count matrix](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lab2_processingreads.llms.md)
+- [5 Lecture 3 - Quality control for scRNA-seq data](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lecture3_qualitycontrol.llms.md)
+- [6 Lab 3: Introduction to R/Bioconductor](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lab3_Rbioc.llms.md)
+- [7 Lab 4 - Single-cell RNA-seq data wrangling](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lab4_data_wrangling_scRNAseq.llms.md)
+- [8 Lecture 4 - Identifying cell populations](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lecture4_clustering.llms.md)
+- [9 Lab 5: Dimension reduction, clustering and annotation](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lab5_clustering.llms.md)
+- [10 Lecture 5 - Data integration and batch effect correction](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lecture5_batchcorrection.llms.md)
+- [11 Lab 6: Batch correction](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lab6_batch_correction.llms.md)
+- [12 Lecture 6 - Advances in single-cell genomics: the epigenome](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lecture6_ATAC.llms.md)
+- [13 Lab 7: Single-cell ATAC-seq analysis workflow](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lab7_atac-seq.llms.md)
+- [14 Lecture 7 - Trajectories and pseudotimes](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lecture7_pseudotime.llms.md)
+- [15 Lab 8: Pseudotime analyses](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lab8_pseudotime.llms.md)
+- [16 Group projects](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day5/group_projects.llms.md)
+- [Extra resources](https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/extra.llms.md)

@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.5">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>15&nbsp; Lab 8: Pseudotime analyses – Single-cell RNA-seq analysis with R/Bioconductor</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../pages/day5/group_projects.html" rel="next">
+<link href="../../pages/day4/Lecture7_pseudotime.html" rel="prev">
+<link href="../../assets/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-5f883865545033bfab6feb3d329ab180.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-12bc14a37a5be0a5f4103bb70fc80799.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="alternate" type="text/markdown" href="Lab8_pseudotime.md">
+</head>
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../pages/day4/Lecture6_ATAC.html">Day 4</a></li><li class="breadcrumb-item"><a href="../../pages/day4/Lab8_pseudotime.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lab 8: Pseudotime analyses</span></a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Single-cell RNA-seq analysis with R/Bioconductor</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-git"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+<li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/scRNAseq_Physalia_2026/">
+            Source Code
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://js2264.github.io/scRNAseq_Physalia_2026/devel/">
+            Browse version `devel`
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/scRNAseq_Physalia_2026/pkgs/container/scrnaseqphysalia2026">
+            Docker image
+            </a>
+          </li>
+      </ul>
+</div>
+    <a href="https://github.com/js2264/scRNAseq_Physalia_2026/tree/main/inst/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Program</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequisites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Day 1</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day1/Lecture1_introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Lecture 1 - Introduction to scRNA-seq analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day1/Lecture2_Bcl2matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lecture 2 - From sequencing reads to expression matrices</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day1/Lab1_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab 1: Familiarizing yourself with the workshop environment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day1/Lab2_processingreads.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab 2: From .bcl to count matrix</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Day 2</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day2/Lecture3_qualitycontrol.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lecture 3 - Quality control for scRNA-seq data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day2/Lab3_Rbioc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab 3: Introduction to R/Bioconductor</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day2/Lab4_data_wrangling_scRNAseq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab 4 - Single-cell RNA-seq data wrangling</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Day 3</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day3/Lecture4_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lecture 4 - Identifying cell populations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day3/Lab5_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab 5: Dimension reduction, clustering and annotation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day3/Lecture5_batchcorrection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Lecture 5 - Data integration and batch effect correction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day3/Lab6_batch_correction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Lab 6: Batch correction</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">Day 4</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day4/Lecture6_ATAC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Lecture 6 - Advances in single-cell genomics: the epigenome</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day4/Lab7_atac-seq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Lab 7: Single-cell ATAC-seq analysis workflow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day4/Lecture7_pseudotime.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 7 - Trajectories and pseudotimes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day4/Lab8_pseudotime.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lab 8: Pseudotime analyses</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">Day 5</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/day5/group_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Group projects</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../pages/extra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Extra resources</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#process-testis-data-in-r" id="toc-process-testis-data-in-r" class="nav-link active" data-scroll-target="#process-testis-data-in-r"><span class="header-section-number">15.1</span> Process testis data in R</a>
+  <ul class="collapse">
+<li><a href="#import-testis-data-from-gse112013-and-pre-process-it" id="toc-import-testis-data-from-gse112013-and-pre-process-it" class="nav-link" data-scroll-target="#import-testis-data-from-gse112013-and-pre-process-it"><span class="header-section-number">15.1.1</span> Import testis data from GSE112013 and pre-process it</a></li>
+  <li><a href="#annotate-cells-using-hpa-resources" id="toc-annotate-cells-using-hpa-resources" class="nav-link" data-scroll-target="#annotate-cells-using-hpa-resources"><span class="header-section-number">15.1.2</span> Annotate cells using HPA resources</a></li>
+  <li><a href="#filter-the-testis-dataset-to-only-germinal-cells." id="toc-filter-the-testis-dataset-to-only-germinal-cells." class="nav-link" data-scroll-target="#filter-the-testis-dataset-to-only-germinal-cells."><span class="header-section-number">15.1.3</span> Filter the testis dataset to only germinal cells.</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#trajectory-inference-ti-in-scrnaseq" id="toc-trajectory-inference-ti-in-scrnaseq" class="nav-link" data-scroll-target="#trajectory-inference-ti-in-scrnaseq"><span class="header-section-number">15.2</span> Trajectory inference (TI) in scRNAseq</a>
+  <ul class="collapse">
+<li><a href="#trajectory" id="toc-trajectory" class="nav-link" data-scroll-target="#trajectory"><span class="header-section-number">15.2.1</span> Trajectory</a></li>
+  <li><a href="#pseudotime" id="toc-pseudotime" class="nav-link" data-scroll-target="#pseudotime"><span class="header-section-number">15.2.2</span> Pseudotime</a></li>
+  <li><a href="#bonus-daunting-snippet-but-that-makes-a-cool-figure-for-a-paper-modeling-pseudotime-dependent-gene-expression" id="toc-bonus-daunting-snippet-but-that-makes-a-cool-figure-for-a-paper-modeling-pseudotime-dependent-gene-expression" class="nav-link" data-scroll-target="#bonus-daunting-snippet-but-that-makes-a-cool-figure-for-a-paper-modeling-pseudotime-dependent-gene-expression"><span class="header-section-number">15.2.3</span> BONUS: Daunting snippet but that makes a cool figure for a paper: modeling pseudotime-dependent gene expression</a></li>
+  </ul>
+</li>
+  <li><a href="#ordering-trajectory-with-rna-velocity" id="toc-ordering-trajectory-with-rna-velocity" class="nav-link" data-scroll-target="#ordering-trajectory-with-rna-velocity"><span class="header-section-number">15.3</span> Ordering trajectory with RNA velocity</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">15.4</span> Session info</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../pages/day4/Lecture6_ATAC.html">Day 4</a></li><li class="breadcrumb-item"><a href="../../pages/day4/Lab8_pseudotime.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lab 8: Pseudotime analyses</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Lab 8: Pseudotime analyses</span>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p class="biocbook-md-link small"><a href="Lab8_pseudotime.md" type="text/markdown"><i class="bi bi-markdown" aria-hidden="true"></i> View as Markdown</a></p><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Notes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The estimated time for this lab is around 1h30.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Perform pseudotime and lineage analysis</li>
+<li>Model and visualize gene expression along pseudotime</li>
+<li>Understand the requirements for RNA velocity computation</li>
+<li>Compute RNA velocity and use it to orientate lineages</li>
+</ul>
+</div>
+</div>
+<section id="process-testis-data-in-r" class="level2" data-number="15.1"><h2 data-number="15.1" class="anchored" data-anchor-id="process-testis-data-in-r">
+<span class="header-section-number">15.1</span> Process testis data in R</h2>
+<section id="import-testis-data-from-gse112013-and-pre-process-it" class="level3" data-number="15.1.1"><h3 data-number="15.1.1" class="anchored" data-anchor-id="import-testis-data-from-gse112013-and-pre-process-it">
+<span class="header-section-number">15.1.1</span> Import testis data from GSE112013 and pre-process it</h3>
+<p>We will work on a <code>testis</code> dataset, from the “The adult human testis transcriptional cell atlas” study (<a href="https://doi.org/10.1038/s41422-018-0099-2">Guo et al., Cell Research 2018</a>). This dataset contains single-cell RNAseq data from human testis. It is available on the GEO database under the accession number <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112013">GSE112013</a>.</p>
+<p>We have applied the different analysis steps we have learned over the past three days to the count matrix <code>GSE112013_Combined_UMI_table.txt.gz</code>. See the code below for the details of pre-processing steps, and run it in your session (this takes a few minutes, and requires ~8 GB of memory).</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="👀 Data pre-processing 👇">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>👀 Data pre-processing 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Check the GEO page for supplementary processed data, and download the <code>GSE112013_Combined_UMI_table.txt.gz</code> table.</p>
+<p>With this data, we will:</p>
+<ul>
+<li>Import the dataset in R as a <code>SingleCellExperiment</code> object,</li>
+<li>Remove doublets,</li>
+<li>Filter genes and cells,</li>
+<li>Normalize <code>counts</code>,</li>
+<li>Correct for batch effect,</li>
+<li>Cluster cells.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SingleCellExperiment)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: SummarizedExperiment</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: MatrixGenerics</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: matrixStats</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'MatrixGenerics'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">##      colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">##      colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="do">##      colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="do">##      colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">##      colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">##      colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="do">##      colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="do">##      colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowVars, rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowWeightedSds, rowWeightedVars</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: GenomicRanges</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: stats4</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: BiocGenerics</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: generics</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'generics'</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:base':</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="do">##      as.difftime, as.factor, as.ordered, intersect, is.element,</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="do">##      setdiff, setequal, union</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'BiocGenerics'</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:stats':</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="do">##      IQR, mad, sd, var, xtabs</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following object is masked from 'package:utils':</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="do">##      data</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:base':</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="do">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="do">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="do">##      do.call, duplicated, eval, evalq, get, grep, grepl, is.unsorted,</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="do">##      lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="do">##      pmin.int, rank, rbind, rownames, sapply, saveRDS, scale,</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="do">##      sequence, table, tapply, transform, unique, unsplit, which.max,</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="do">##      which.min</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: S4Vectors</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'S4Vectors'</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following object is masked from 'package:utils':</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="do">##      findMatches</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:base':</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="do">##      I, expand.grid, unname</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: IRanges</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: Seqinfo</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: Biobase</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="do">##  Welcome to Bioconductor</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="do">##      Vignettes contain introductory material; view with</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="do">##      'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="do">##      'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'Biobase'</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following object is masked from 'package:MatrixGenerics':</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="do">##      rowMedians</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="do">##      anyMissing, rowMedians</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="do">##  ── Attaching core tidyverse packages ───────────────────── tidyverse 2.0.0 ──</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✔ dplyr     1.2.1     ✔ readr     2.2.0</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✔ forcats   1.0.1     ✔ stringr   1.6.0</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✔ ggplot2   4.0.3     ✔ tibble    3.3.1</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✔ lubridate 1.9.5     ✔ tidyr     1.3.2</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✔ purrr     1.2.2</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="do">##  ── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ lubridate::%within%() masks IRanges::%within%()</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ ggplot2::Position()   masks BiocGenerics::Position(), base::Position()</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::collapse()     masks IRanges::collapse()</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::combine()      masks Biobase::combine(), BiocGenerics::combine()</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::count()        masks matrixStats::count()</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::desc()         masks IRanges::desc()</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ tidyr::expand()       masks S4Vectors::expand()</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::filter()       masks stats::filter()</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::first()        masks S4Vectors::first()</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::lag()          masks stats::lag()</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ purrr::reduce()       masks GenomicRanges::reduce(), IRanges::reduce()</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::rename()       masks S4Vectors::rename()</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ lubridate::second()   masks S4Vectors::second()</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ lubridate::second&lt;-() masks S4Vectors::second&lt;-()</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="do">##  ✖ dplyr::slice()        masks IRanges::slice()</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="do">##  ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Download raw file</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BiocFileCache)</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="do">##  Loading required package: dbplyr</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="do">##  Attaching package: 'dbplyr'</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="do">##  The following objects are masked from 'package:dplyr':</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="do">##      ident, sql, sql_escape_ident, sql_escape_string</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="do">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="do">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>bfc <span class="ot">&lt;-</span> <span class="fu">BiocFileCache</span>(<span class="at">ask =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>umi_file <span class="ot">&lt;-</span> <span class="fu">bfcrpath</span>(bfc, <span class="st">'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE112nnn/GSE112013/suppl/GSE112013_Combined_UMI_table.txt.gz'</span>)</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="do">##  adding rname 'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE112nnn/GSE112013/suppl/GSE112013_Combined_UMI_table.txt.gz'</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Create SingleCellExperiment object</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(umi_file, <span class="at">data.table =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">as.matrix</span>(x[, <span class="sc">-</span><span class="dv">1</span>]), <span class="st">'dgCMatrix'</span>)</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> x[, <span class="dv">1</span>]</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(x); <span class="fu">invisible</span>(<span class="fu">gc</span>())</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> <span class="fu">SingleCellExperiment</span>(</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>    <span class="at">assays =</span> <span class="fu">list</span>(<span class="at">counts =</span> counts),</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>    <span class="at">colData =</span> <span class="fu">DataFrame</span>(<span class="at">cellid =</span> <span class="fu">colnames</span>(counts))</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>testis<span class="sc">$</span>Barcode <span class="ot">&lt;-</span> <span class="fu">str_replace</span>(testis<span class="sc">$</span>cellid, <span class="st">'Donor.-'</span>, <span class="st">''</span>) <span class="sc">|&gt;</span> <span class="fu">str_replace</span>(<span class="st">'-.'</span>, <span class="st">''</span>)</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>testis<span class="sc">$</span>donor <span class="ot">&lt;-</span> <span class="fu">str_replace</span>(testis<span class="sc">$</span>cellid, <span class="st">'-.*'</span>, <span class="st">''</span>)</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>testis<span class="sc">$</span>replicate <span class="ot">&lt;-</span> <span class="fu">str_replace</span>(testis<span class="sc">$</span>cellid, <span class="st">'.*-'</span>, <span class="st">''</span>)</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>testis<span class="sc">$</span>sample <span class="ot">&lt;-</span> <span class="fu">paste0</span>(testis<span class="sc">$</span>donor, <span class="st">'_rep'</span>, testis<span class="sc">$</span>replicate)</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(testis<span class="sc">$</span>donor, testis<span class="sc">$</span>replicate)</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="do">##          </span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="do">##              1    2</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="do">##    Donor1 1000 1248</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="do">##    Donor2  985 1009</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="do">##    Donor3 1116 1132</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove doublets</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scDblFinder<span class="sc">::</span><span class="fu">scDblFinder</span>(testis, <span class="at">samples =</span> testis<span class="sc">$</span>sample)</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                   <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===========</span>                                                        <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================</span>                                             <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================================</span>                                 <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=============================================</span>                      <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========================================================</span>           <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                         </span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(testis<span class="sc">$</span>scDblFinder.class)</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="do">##  singlet doublet </span></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="do">##     6224     266</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> testis[, testis<span class="sc">$</span>scDblFinder.class <span class="sc">==</span> <span class="st">'singlet'</span>]</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="co"># Recover Ensembl IDs and biotypes for genes, and keep protein-coding genes</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>gene_info <span class="ot">&lt;-</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>    org.Hs.eg.db<span class="sc">::</span>org.Hs.eg.db,</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>    <span class="at">keys =</span> <span class="fu">rownames</span>(testis), <span class="at">keytype =</span> <span class="st">'SYMBOL'</span>,</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">'ENSEMBL'</span>, <span class="st">'GENETYPE'</span>)</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(GENETYPE <span class="sc">==</span> <span class="st">'protein-coding'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(SYMBOL, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="do">##  'select()' returned 1:many mapping between keys and columns</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> testis[gene_info<span class="sc">$</span>SYMBOL, ]</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="fu">rowData</span>(testis)<span class="sc">$</span>gene_name <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>SYMBOL</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="fu">rowData</span>(testis)<span class="sc">$</span>gene_id <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>ENSEMBL</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="co"># Get QCs per cell, flag low-quality cells and filter them out</span></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>mito <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">'^MT-'</span>, <span class="fu">rownames</span>(testis), <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scrapper<span class="sc">::</span><span class="fu">quickRnaQc.se</span>(testis, <span class="at">subsets =</span> <span class="fu">list</span>(<span class="at">mito =</span> mito), <span class="at">block =</span> testis<span class="sc">$</span>sample)</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(testis<span class="sc">$</span>keep)</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="do">##  FALSE  TRUE </span></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="do">##    832  5392</span></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> testis[, testis<span class="sc">$</span>keep]</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out genes not expressed in at least 10 cells</span></span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> testis[Matrix<span class="sc">::</span><span class="fu">rowSums</span>(<span class="fu">counts</span>(testis) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">&gt;=</span> <span class="dv">10</span>, ]</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize counts</span></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>clusters <span class="ot">&lt;-</span> scran<span class="sc">::</span><span class="fu">quickCluster</span>(testis, <span class="at">block =</span> testis<span class="sc">$</span>sample)</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scran<span class="sc">::</span><span class="fu">computeSumFactors</span>(testis, <span class="at">clusters =</span> clusters)</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scrapper<span class="sc">::</span><span class="fu">normalizeRnaCounts.se</span>(</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>    testis, <span class="at">size.factors =</span> <span class="fu">sizeFactors</span>(testis), <span class="at">block =</span> testis<span class="sc">$</span>sample,</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>    <span class="at">more.norm.args =</span> <span class="fu">list</span>(<span class="at">delayed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a><span class="co"># Computing biological variance of each gene</span></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scrapper<span class="sc">::</span><span class="fu">chooseRnaHvgs.se</span>(testis, <span class="at">block =</span> testis<span class="sc">$</span>donor, <span class="at">top =</span> <span class="dv">2000</span>)</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="fu">rowData</span>(testis)<span class="sc">$</span>isHVG <span class="ot">&lt;-</span> <span class="fu">rowData</span>(testis)<span class="sc">$</span>hvg</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>HVGs <span class="ot">&lt;-</span> <span class="fu">rownames</span>(testis)[<span class="fu">rowData</span>(testis)<span class="sc">$</span>isHVG]</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a><span class="co"># Embedding dataset in PCA space, correcting for batch effect</span></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>mergedBatches <span class="ot">&lt;-</span> batchelor<span class="sc">::</span><span class="fu">fastMNN</span>(</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    testis,</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch =</span> testis<span class="sc">$</span>donor,</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>    <span class="at">subset.row =</span> HVGs</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="fu">reducedDim</span>(testis, <span class="st">'corrected'</span>) <span class="ot">&lt;-</span> <span class="fu">reducedDim</span>(mergedBatches, <span class="st">'corrected'</span>)</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="co"># Cluster cells using shared nearest-neighbors graph and Louvain community finding algorithm</span></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scrapper<span class="sc">::</span><span class="fu">clusterGraph.se</span>(testis, <span class="at">reddim.type =</span> <span class="st">'corrected'</span>, <span class="at">output.name =</span> <span class="st">'cluster'</span>)</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>testis<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">factor</span>(testis<span class="sc">$</span>cluster)</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(testis<span class="sc">$</span>cluster)</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="do">##    1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 </span></span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a><span class="do">##  519 754 806 471 241 347 288 534 302 335 176 304 128 168  19</span></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="co"># Embedding dataset in TSNE space for visualization</span></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>testis <span class="ot">&lt;-</span> scater<span class="sc">::</span><span class="fu">runTSNE</span>(testis, <span class="at">dimred =</span> <span class="st">'corrected'</span>)</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize embeddings</span></span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>    scater<span class="sc">::</span><span class="fu">plotReducedDim</span>(testis, <span class="st">'corrected'</span>, <span class="at">colour_by =</span> <span class="st">'donor'</span>),</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>    scater<span class="sc">::</span><span class="fu">plotReducedDim</span>(testis, <span class="st">'corrected'</span>, <span class="at">colour_by =</span> <span class="st">'cluster'</span>),</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>    scater<span class="sc">::</span><span class="fu">plotReducedDim</span>(testis, <span class="st">'TSNE'</span>, <span class="at">colour_by =</span> <span class="st">'donor'</span>),</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>    scater<span class="sc">::</span><span class="fu">plotReducedDim</span>(testis, <span class="st">'TSNE'</span>, <span class="at">colour_by =</span> <span class="st">'cluster'</span>)</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab8_pseudotime_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="annotate-cells-using-hpa-resources" class="level3" data-number="15.1.2"><h3 data-number="15.1.2" class="anchored" data-anchor-id="annotate-cells-using-hpa-resources">
+<span class="header-section-number">15.1.2</span> Annotate cells using HPA resources</h3>
+<p>The <a href="https://www.proteinatlas.org">Human Protein Atlas (HPA)</a> is a valuable resource for cell type annotations. It provides single-cell RNAseq data for a large number of cell types.</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Download <code>HPA</code> scRNAseq atlas (combined per cell type) <a href="https://www.proteinatlas.org/download/tsv/rna_single_cell_type.tsv.zip">from here</a>, and import it in R as a <code>SummarizedExperiment</code> object.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hpa_file</span> <span class="op">&lt;-</span> <span class="fu">bfcrpath</span><span class="op">(</span><span class="va">bfc</span>, <span class="st">'https://www.proteinatlas.org/download/tsv/rna_single_cell_type.tsv.zip'</span><span class="op">)</span></span>
+<span><span class="co">##  adding rname 'https://www.proteinatlas.org/download/tsv/rna_single_cell_type.tsv.zip'</span></span>
+<span><span class="va">HPA</span> <span class="op">&lt;-</span> <span class="fu">read_tsv</span><span class="op">(</span><span class="va">hpa_file</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Gene</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">`Cell type`</span>, values_from <span class="op">=</span> <span class="st">'nCPM'</span>, values_fn <span class="op">=</span> <span class="va">mean</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">distinct</span><span class="op">(</span><span class="va">`Gene name`</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">column_to_rownames</span><span class="op">(</span><span class="st">'Gene name'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  Rows: 3087080 Columns: 4</span></span>
+<span><span class="co">##  ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">##  Delimiter: "\t"</span></span>
+<span><span class="co">##  chr (3): Gene, Gene name, Cell type</span></span>
+<span><span class="co">##  dbl (1): nCPM</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">##  ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="va">HPA</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">HPA</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">HPA_se</span> <span class="op">&lt;-</span> <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">SummarizedExperiment</a></span><span class="op">(</span></span>
+<span>    assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'logcounts'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">HPA</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    colData <span class="op">=</span> <span class="fu">DataFrame</span><span class="op">(</span>cell_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">HPA</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">HPA_se</span></span>
+<span><span class="co">##  class: SummarizedExperiment </span></span>
+<span><span class="co">##  dim: 20151 154 </span></span>
+<span><span class="co">##  metadata(0):</span></span>
+<span><span class="co">##  assays(1): logcounts</span></span>
+<span><span class="co">##  rownames(20151): TSPAN6 TNMD ... ENSG00000291316 TMEM276</span></span>
+<span><span class="co">##  rowData names(0):</span></span>
+<span><span class="co">##  colnames(154): adipocytes adrenal cortex cells ... vascular</span></span>
+<span><span class="co">##    endothelial cells vascular smooth muscle cells</span></span>
+<span><span class="co">##  colData names(1): cell_type</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>How many and what cell types are profiled?</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">HPA_se</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 154</span></span>
+<span><span class="va">HPA_se</span><span class="op">$</span><span class="va">cell_type</span></span>
+<span><span class="co">##    [1] "adipocytes"                               </span></span>
+<span><span class="co">##    [2] "adrenal cortex cells"                     </span></span>
+<span><span class="co">##    [3] "adrenal medulla cells"                    </span></span>
+<span><span class="co">##    [4] "alveolar cells type 1"                    </span></span>
+<span><span class="co">##    [5] "alveolar cells type 2"                    </span></span>
+<span><span class="co">##    [6] "astrocytes"                               </span></span>
+<span><span class="co">##    [7] "b-cells"                                  </span></span>
+<span><span class="co">##    [8] "basal keratinocytes"                      </span></span>
+<span><span class="co">##    [9] "basal prostatic cells"                    </span></span>
+<span><span class="co">##   [10] "bergmann glia"                            </span></span>
+<span><span class="co">##   [11] "brain excitatory neurons"                 </span></span>
+<span><span class="co">##   [12] "brain inhibitory neurons"                 </span></span>
+<span><span class="co">##   [13] "breast hormone-responsive cells"          </span></span>
+<span><span class="co">##   [14] "breast lactating cells"                   </span></span>
+<span><span class="co">##   [15] "breast myoepithelial cells"               </span></span>
+<span><span class="co">##   [16] "breast secretory cells"                   </span></span>
+<span><span class="co">##   [17] "cardiomyocytes"                           </span></span>
+<span><span class="co">##   [18] "cdc"                                      </span></span>
+<span><span class="co">##   [19] "cholangiocytes"                           </span></span>
+<span><span class="co">##   [20] "choroid plexus epithelial cells"          </span></span>
+<span><span class="co">##   [21] "colonocytes"                              </span></span>
+<span><span class="co">##   [22] "cone photoreceptor cells"                 </span></span>
+<span><span class="co">##   [23] "conjunctival goblet cells"                </span></span>
+<span><span class="co">##   [24] "corticotrophs"                            </span></span>
+<span><span class="co">##   [25] "cytotrophoblasts"                         </span></span>
+<span><span class="co">##   [26] "decidual stromal cells"                   </span></span>
+<span><span class="co">##   [27] "differentiating spermatogonia"            </span></span>
+<span><span class="co">##   [28] "distal convoluted tubule cells"           </span></span>
+<span><span class="co">##   [29] "early primary spermatocytes"              </span></span>
+<span><span class="co">##   [30] "early spermatids"                         </span></span>
+<span><span class="co">##   [31] "endometrial ciliated cells"               </span></span>
+<span><span class="co">##   [32] "endometrial glandular cells"              </span></span>
+<span><span class="co">##   [33] "endometrial luminal cells"                </span></span>
+<span><span class="co">##   [34] "endometrial secretory cells"              </span></span>
+<span><span class="co">##   [35] "endometrial stromal cells"                </span></span>
+<span><span class="co">##   [36] "enteric stem cells"                       </span></span>
+<span><span class="co">##   [37] "enteric transient amplifying cells"       </span></span>
+<span><span class="co">##   [38] "enterocytes"                              </span></span>
+<span><span class="co">##   [39] "ependymal cells"                          </span></span>
+<span><span class="co">##   [40] "epicardial cells"                         </span></span>
+<span><span class="co">##   [41] "epididymal basal cells"                   </span></span>
+<span><span class="co">##   [42] "epididymal clear cells"                   </span></span>
+<span><span class="co">##   [43] "epididymal efferent duct absorptive cells"</span></span>
+<span><span class="co">##   [44] "epididymal efferent duct ciliated cells"  </span></span>
+<span><span class="co">##   [45] "epididymal principal cells"               </span></span>
+<span><span class="co">##   [46] "erythrocyte progenitors"                  </span></span>
+<span><span class="co">##   [47] "erythrocytes"                             </span></span>
+<span><span class="co">##   [48] "esophageal apical cells"                  </span></span>
+<span><span class="co">##   [49] "esophageal basal cells"                   </span></span>
+<span><span class="co">##   [50] "esophageal suprabasal cells"              </span></span>
+<span><span class="co">##   [51] "extravillous trophoblasts"                </span></span>
+<span><span class="co">##   [52] "fallopian secretory cells"                </span></span>
+<span><span class="co">##   [53] "fallopian tube ciliated cells"            </span></span>
+<span><span class="co">##   [54] "fibro-adipogenic progenitors"             </span></span>
+<span><span class="co">##   [55] "fibroblasts"                              </span></span>
+<span><span class="co">##   [56] "foveolar cells"                           </span></span>
+<span><span class="co">##   [57] "gastric chief cells"                      </span></span>
+<span><span class="co">##   [58] "gastric progenitor cells"                 </span></span>
+<span><span class="co">##   [59] "goblet cells"                             </span></span>
+<span><span class="co">##   [60] "gonadotrophs"                             </span></span>
+<span><span class="co">##   [61] "granulosa cells"                          </span></span>
+<span><span class="co">##   [62] "hematopoietic stem cells"                 </span></span>
+<span><span class="co">##   [63] "hepatic stellate cells"                   </span></span>
+<span><span class="co">##   [64] "hepatocytes"                              </span></span>
+<span><span class="co">##   [65] "hofbauer cells"                           </span></span>
+<span><span class="co">##   [66] "innate lymphoid cells"                    </span></span>
+<span><span class="co">##   [67] "kupffer cells"                            </span></span>
+<span><span class="co">##   [68] "lacrimal acinar cells"                    </span></span>
+<span><span class="co">##   [69] "lactotrophs"                              </span></span>
+<span><span class="co">##   [70] "late primary spermatocytes"               </span></span>
+<span><span class="co">##   [71] "late spermatids"                          </span></span>
+<span><span class="co">##   [72] "leydig cells"                             </span></span>
+<span><span class="co">##   [73] "loop of henle epithelial cells"           </span></span>
+<span><span class="co">##   [74] "lymphatic endothelial cells"              </span></span>
+<span><span class="co">##   [75] "macrophages"                              </span></span>
+<span><span class="co">##   [76] "mast cells"                               </span></span>
+<span><span class="co">##   [77] "medullary thymic epithelial cells"        </span></span>
+<span><span class="co">##   [78] "megakaryocyte progenitors"                </span></span>
+<span><span class="co">##   [79] "megakaryocyte-erythroid progenitors"      </span></span>
+<span><span class="co">##   [80] "megakaryocytes"                           </span></span>
+<span><span class="co">##   [81] "melanocytes"                              </span></span>
+<span><span class="co">##   [82] "mesothelial cells"                        </span></span>
+<span><span class="co">##   [83] "microglia"                                </span></span>
+<span><span class="co">##   [84] "migrating cytotrophoblasts"               </span></span>
+<span><span class="co">##   [85] "monocyte progenitors"                     </span></span>
+<span><span class="co">##   [86] "monocytes"                                </span></span>
+<span><span class="co">##   [87] "mucous neck cells"                        </span></span>
+<span><span class="co">##   [88] "müller glia"                              </span></span>
+<span><span class="co">##   [89] "myonuclei"                                </span></span>
+<span><span class="co">##   [90] "myosatellite cells"                       </span></span>
+<span><span class="co">##   [91] "neuroendocrine cells"                     </span></span>
+<span><span class="co">##   [92] "neutrophil progenitors"                   </span></span>
+<span><span class="co">##   [93] "neutrophils"                              </span></span>
+<span><span class="co">##   [94] "nk-cells"                                 </span></span>
+<span><span class="co">##   [95] "ocular epithelial cells"                  </span></span>
+<span><span class="co">##   [96] "oligodendrocyte progenitor cells"         </span></span>
+<span><span class="co">##   [97] "oligodendrocytes"                         </span></span>
+<span><span class="co">##   [98] "oocytes"                                  </span></span>
+<span><span class="co">##   [99] "other brain neurons"                      </span></span>
+<span><span class="co">##  [100] "ovarian stromal cells"                    </span></span>
+<span><span class="co">##  [101] "pancreatic acinar cells"                  </span></span>
+<span><span class="co">##  [102] "pancreatic duct cells"                    </span></span>
+<span><span class="co">##  [103] "pancreatic islet cells"                   </span></span>
+<span><span class="co">##  [104] "paneth cells"                             </span></span>
+<span><span class="co">##  [105] "papillary tip epithelial cells"           </span></span>
+<span><span class="co">##  [106] "parietal cells"                           </span></span>
+<span><span class="co">##  [107] "pdcs"                                     </span></span>
+<span><span class="co">##  [108] "pericytes"                                </span></span>
+<span><span class="co">##  [109] "peritubular myoid cells"                  </span></span>
+<span><span class="co">##  [110] "pituicytes/fscs"                          </span></span>
+<span><span class="co">##  [111] "pituitary stem cells"                     </span></span>
+<span><span class="co">##  [112] "plasma cells"                             </span></span>
+<span><span class="co">##  [113] "platelets"                                </span></span>
+<span><span class="co">##  [114] "podocytes"                                </span></span>
+<span><span class="co">##  [115] "prostatic club cells"                     </span></span>
+<span><span class="co">##  [116] "prostatic glandular cells"                </span></span>
+<span><span class="co">##  [117] "prostatic hillock cells"                  </span></span>
+<span><span class="co">##  [118] "proximal tubule cells"                    </span></span>
+<span><span class="co">##  [119] "renal collecting duct intercalated cells" </span></span>
+<span><span class="co">##  [120] "renal collecting duct principal cells"    </span></span>
+<span><span class="co">##  [121] "renal connecting tubule cells"            </span></span>
+<span><span class="co">##  [122] "respiratory basal cells"                  </span></span>
+<span><span class="co">##  [123] "respiratory ciliated cells"               </span></span>
+<span><span class="co">##  [124] "respiratory deuterosomal cells"           </span></span>
+<span><span class="co">##  [125] "respiratory ionocytes"                    </span></span>
+<span><span class="co">##  [126] "respiratory secretory cells"              </span></span>
+<span><span class="co">##  [127] "retinal amacrine cells"                   </span></span>
+<span><span class="co">##  [128] "retinal bipolar cells"                    </span></span>
+<span><span class="co">##  [129] "retinal ganglion cells"                   </span></span>
+<span><span class="co">##  [130] "retinal horizontal cells"                 </span></span>
+<span><span class="co">##  [131] "retinal pigment epithelial cells"         </span></span>
+<span><span class="co">##  [132] "rod photoreceptor cells"                  </span></span>
+<span><span class="co">##  [133] "salivary acinar cells"                    </span></span>
+<span><span class="co">##  [134] "salivary basal cells"                     </span></span>
+<span><span class="co">##  [135] "salivary duct cells"                      </span></span>
+<span><span class="co">##  [136] "salivary ionocytes"                       </span></span>
+<span><span class="co">##  [137] "salivary myoepithelial cells"             </span></span>
+<span><span class="co">##  [138] "schwann cells"                            </span></span>
+<span><span class="co">##  [139] "sertoli cells"                            </span></span>
+<span><span class="co">##  [140] "smooth muscle cells"                      </span></span>
+<span><span class="co">##  [141] "somatotrophs"                             </span></span>
+<span><span class="co">##  [142] "submucosal glandular cells"               </span></span>
+<span><span class="co">##  [143] "suprabasal keratinocytes"                 </span></span>
+<span><span class="co">##  [144] "syncytiotrophoblasts"                     </span></span>
+<span><span class="co">##  [145] "t-cells"                                  </span></span>
+<span><span class="co">##  [146] "thymic myoid cells"                       </span></span>
+<span><span class="co">##  [147] "thymocytes"                               </span></span>
+<span><span class="co">##  [148] "thyrotrophs"                              </span></span>
+<span><span class="co">##  [149] "transitional alveolar cells"              </span></span>
+<span><span class="co">##  [150] "tuft cells"                               </span></span>
+<span><span class="co">##  [151] "undifferentiated spermatogonia"           </span></span>
+<span><span class="co">##  [152] "urothelial cells"                         </span></span>
+<span><span class="co">##  [153] "vascular endothelial cells"               </span></span>
+<span><span class="co">##  [154] "vascular smooth muscle cells"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>We can use the HPA reference to annotate cell types in the testis dataset.</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code>SingleR</code> to annotate cell types in the testis dataset using HPA reference.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu">SingleR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SingleR/man/SingleR.html">SingleR</a></span><span class="op">(</span></span>
+<span>    test <span class="op">=</span> <span class="va">testis</span>,</span>
+<span>    ref <span class="op">=</span> <span class="va">HPA_se</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu">colData</span><span class="op">(</span><span class="va">HPA_se</span><span class="op">)</span><span class="op">$</span><span class="va">cell_type</span>,</span>
+<span>    clusters <span class="op">=</span> <span class="va">testis</span><span class="op">$</span><span class="va">cluster</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">testis</span><span class="op">$</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="va">predictions</span><span class="op">$</span><span class="va">labels</span><span class="op">[</span><span class="va">testis</span><span class="op">$</span><span class="va">cluster</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">testis</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   differentiating spermatogonia    early primary spermatocytes </span></span>
+<span><span class="co">##                             304                            335 </span></span>
+<span><span class="co">##                early spermatids     late primary spermatocytes </span></span>
+<span><span class="co">##                            1053                            304 </span></span>
+<span><span class="co">##                 late spermatids                   leydig cells </span></span>
+<span><span class="co">##                            1907                            471 </span></span>
+<span><span class="co">##                     macrophages                      pericytes </span></span>
+<span><span class="co">##                             288                             19 </span></span>
+<span><span class="co">##         peritubular myoid cells undifferentiated spermatogonia </span></span>
+<span><span class="co">##                             241                            168 </span></span>
+<span><span class="co">##      vascular endothelial cells </span></span>
+<span><span class="co">##                             302</span></span>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
+<span>    <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html">plotReducedDim</a></span><span class="op">(</span><span class="va">testis</span>, dimred <span class="op">=</span> <span class="st">'corrected'</span>, colour_by <span class="op">=</span> <span class="st">'cluster'</span>, text_by <span class="op">=</span> <span class="st">'cluster'</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'Testis data, PCA, graph-based clusters'</span><span class="op">)</span>,</span>
+<span>    <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html">plotReducedDim</a></span><span class="op">(</span><span class="va">testis</span>, dimred <span class="op">=</span> <span class="st">'corrected'</span>, colour_by <span class="op">=</span> <span class="st">'annotation'</span>, text_by <span class="op">=</span> <span class="st">'annotation'</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'PCA, Annotations transferred from HPA'</span><span class="op">)</span>,</span>
+<span>    <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html">plotReducedDim</a></span><span class="op">(</span><span class="va">testis</span>, dimred <span class="op">=</span> <span class="st">'TSNE'</span>, colour_by <span class="op">=</span> <span class="st">'cluster'</span>, text_by <span class="op">=</span> <span class="st">'cluster'</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'Testis data, tSNE, graph-based clusters'</span><span class="op">)</span>,</span>
+<span>    <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html">plotReducedDim</a></span><span class="op">(</span><span class="va">testis</span>, dimred <span class="op">=</span> <span class="st">'TSNE'</span>, colour_by <span class="op">=</span> <span class="st">'annotation'</span>, text_by <span class="op">=</span> <span class="st">'annotation'</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'tSNE, Annotations transferred from HPA'</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab8_pseudotime_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="filter-the-testis-dataset-to-only-germinal-cells." class="level3" data-number="15.1.3"><h3 data-number="15.1.3" class="anchored" data-anchor-id="filter-the-testis-dataset-to-only-germinal-cells.">
+<span class="header-section-number">15.1.3</span> Filter the testis dataset to only germinal cells.</h3>
+<p>In this notebook, we will focus on germinal cells only.</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Filter the <code>testis</code> dataset to only retain germinal cells.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">germcell_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"undifferentiated spermatogonia"</span>, <span class="st">"differentiating spermatogonia"</span>,</span>
+<span>    <span class="st">"early primary spermatocytes"</span>, <span class="st">"late primary spermatocytes"</span>,</span>
+<span>    <span class="st">"early spermatids"</span>, <span class="st">"late spermatids"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">germcells</span> <span class="op">&lt;-</span> <span class="va">testis</span><span class="op">[</span>, <span class="va">testis</span><span class="op">$</span><span class="va">annotation</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">germcell_types</span><span class="op">]</span></span>
+<span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span><span class="op">(</span><span class="va">germcell_types</span>, <span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  undifferentiated spermatogonia  differentiating spermatogonia </span></span>
+<span><span class="co">##                             168                            304 </span></span>
+<span><span class="co">##     early primary spermatocytes     late primary spermatocytes </span></span>
+<span><span class="co">##                             335                            304 </span></span>
+<span><span class="co">##                early spermatids                late spermatids </span></span>
+<span><span class="co">##                            1053                           1907</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section></section><section id="trajectory-inference-ti-in-scrnaseq" class="level2" data-number="15.2"><h2 data-number="15.2" class="anchored" data-anchor-id="trajectory-inference-ti-in-scrnaseq">
+<span class="header-section-number">15.2</span> Trajectory inference (TI) in scRNAseq</h2>
+<p>An important question in scRNAseq field of research is: how to identify a cell trajectory from high-dimensional expression data and map individual cells onto it? A large number of methods have currently emerged, each one with their own specificities, assumptions, and strengths. A nice breakdown (from 2019, so already very outdated!) is available from <code>Saelens et al., Nat. Biotech. 2019</code> (doi: 10.1038/s41587-019-0071-9):</p>
+<p><img src="img/Saelens2019_trajectory-methods.png" class="img-fluid"></p>
+<section id="trajectory" class="level3" data-number="15.2.1"><h3 data-number="15.2.1" class="anchored" data-anchor-id="trajectory">
+<span class="header-section-number">15.2.1</span> Trajectory</h3>
+<p><code>Slingshot</code> is perhaps one of the most widely used algorithms for users who want to focus on <code>R</code>-based approaches.</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Read Slingshot documentation to understand how to identify lineages in a scRNAseq dataset in R.</p>
+<p>Why is it recommended to infer lineages from PCA space rather than t-SNE or UMAP space, even though these spaces do “reveal” an obvious trajectory in 2D?</p>
+<p>Infer lineages, using cluster annotations as information to build the MST. Note that you will first need to remove the 50th dimension of the <code>corrected</code> embedding for <code>slingshot</code> to work (<a href="https://github.com/kstreet13/slingshot/issues/87">bug reported</a>).</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'corrected_2'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'corrected'</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">49</span><span class="op">]</span></span>
+<span><span class="va">germcells_slingshot</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingshot.html">slingshot</a></span><span class="op">(</span></span>
+<span>    <span class="va">germcells</span>,</span>
+<span>    reducedDim <span class="op">=</span> <span class="st">'corrected_2'</span>,</span>
+<span>    clusterLabels <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingLineages.html">slingLineages</a></span><span class="op">(</span><span class="va">germcells_slingshot</span><span class="op">)</span></span>
+<span><span class="co">##  $Lineage1</span></span>
+<span><span class="co">##  [1] "late spermatids"                "early spermatids"              </span></span>
+<span><span class="co">##  [3] "late primary spermatocytes"     "early primary spermatocytes"   </span></span>
+<span><span class="co">##  [5] "differentiating spermatogonia"  "undifferentiated spermatogonia"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="pseudotime" class="level3" data-number="15.2.2"><h3 data-number="15.2.2" class="anchored" data-anchor-id="pseudotime">
+<span class="header-section-number">15.2.2</span> Pseudotime</h3>
+<p><code>slingshot</code> automatically deduces a pseudotime for each cell, based on the inferred lineage. It can be useful to visualize the trajectory of cells in a 2D space, and to order cells along the trajectory.</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recover pseudotime values and principal curves from <code>slingshot</code> output.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Fetching pseudotime</span></span>
+<span><span class="va">germcells</span><span class="op">$</span><span class="va">pseudotime</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingPseudotime.html">slingPseudotime</a></span><span class="op">(</span><span class="va">germcells_slingshot</span><span class="op">)</span><span class="op">[</span>, <span class="st">'Lineage1'</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Fetching principal curve in PCA space</span></span>
+<span><span class="va">pca_curve</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingCurves.html">slingCurves</a></span><span class="op">(</span><span class="va">germcells_slingshot</span>, as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">pca_curve</span><span class="op">)</span></span>
+<span><span class="co">##   [1] "Dim.1"   "Dim.2"   "Dim.3"   "Dim.4"   "Dim.5"   "Dim.6"   "Dim.7"  </span></span>
+<span><span class="co">##   [8] "Dim.8"   "Dim.9"   "Dim.10"  "Dim.11"  "Dim.12"  "Dim.13"  "Dim.14" </span></span>
+<span><span class="co">##  [15] "Dim.15"  "Dim.16"  "Dim.17"  "Dim.18"  "Dim.19"  "Dim.20"  "Dim.21" </span></span>
+<span><span class="co">##  [22] "Dim.22"  "Dim.23"  "Dim.24"  "Dim.25"  "Dim.26"  "Dim.27"  "Dim.28" </span></span>
+<span><span class="co">##  [29] "Dim.29"  "Dim.30"  "Dim.31"  "Dim.32"  "Dim.33"  "Dim.34"  "Dim.35" </span></span>
+<span><span class="co">##  [36] "Dim.36"  "Dim.37"  "Dim.38"  "Dim.39"  "Dim.40"  "Dim.41"  "Dim.42" </span></span>
+<span><span class="co">##  [43] "Dim.43"  "Dim.44"  "Dim.45"  "Dim.46"  "Dim.47"  "Dim.48"  "Dim.49" </span></span>
+<span><span class="co">##  [50] "Order"   "Lineage"</span></span>
+<span><span class="co">## Rename the coordinates columns (all but the last two, `Order` and `Lineage`)</span></span>
+<span><span class="va">ndims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">pca_curve</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">pca_curve</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">ndims</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">'PC'</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">ndims</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pca_curve</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'PC1'</span>, <span class="st">'PC2'</span>, <span class="st">'Order'</span>, <span class="st">'Lineage'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">##          PC1       PC2 Order Lineage</span></span>
+<span><span class="co">##  1 0.3085413 0.1750947     1       1</span></span>
+<span><span class="co">##  2 0.3106834 0.1724270     2       1</span></span>
+<span><span class="co">##  3 0.3128256 0.1697593     3       1</span></span>
+<span><span class="co">##  4 0.3149677 0.1670916     4       1</span></span>
+<span><span class="co">##  5 0.3171095 0.1644158     5       1</span></span>
+<span><span class="co">##  6 0.3192504 0.1617224     6       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>We would like to visualize the trajectory of cells in our TSNE space, but the principal curve is only available in PCA space. We can use <code>slingshot</code> to embed it in the TSNE space!</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tsne_curve</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/embedCurves.html">embedCurves</a></span><span class="op">(</span><span class="va">germcells_slingshot</span>, <span class="st">'TSNE'</span>, smoother <span class="op">=</span> <span class="st">'loess'</span>, span <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingCurves.html">slingCurves</a></span><span class="op">(</span>as.df <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">tsne_curve</span> <span class="op">&lt;-</span> <span class="va">tsne_curve</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">tsne_curve</span><span class="op">$</span><span class="va">Order</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tsne_curve</span><span class="op">)</span></span>
+<span><span class="co">##                                TSNE1     TSNE2 Order Lineage</span></span>
+<span><span class="co">##  Donor1-CGACCTTGTAGCGTCC-2 -10.02767 -32.94658     1       1</span></span>
+<span><span class="co">##  Donor1-GCGCCAAAGTATGACA-1 -10.02767 -32.94658     2       1</span></span>
+<span><span class="co">##  Donor1-GGACAGAAGAATAGGG-2 -10.02767 -32.94658     3       1</span></span>
+<span><span class="co">##  Donor1-AGCGTCGAGTGAACGC-1 -10.02767 -32.94658     4       1</span></span>
+<span><span class="co">##  Donor1-GGCTCGATCCTAGAAC-1 -10.02767 -32.94658     5       1</span></span>
+<span><span class="co">##  Donor1-GTCATTTCACAGACAG-1 -10.02767 -32.94658     6       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Plot PCA and tSNE embeddings, coloring cells by either their annotation or their pseudotime value. Overlay the principal curves to each embedding.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span></span>
+<span>    PC1 <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'corrected'</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>,</span>
+<span>    PC2 <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'corrected'</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,</span>
+<span>    TSNE1 <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'TSNE'</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>,</span>
+<span>    TSNE2 <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'TSNE'</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,</span>
+<span>    annotation <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span>,</span>
+<span>    pseudotime <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">pseudotime</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
+<span>    <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, col <span class="op">=</span> <span class="va">annotation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">pca_curve</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Lineage</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">TSNE1</span>, <span class="va">TSNE2</span>, col <span class="op">=</span> <span class="va">annotation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">tsne_curve</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Lineage</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">TSNE1</span>, y <span class="op">=</span> <span class="va">TSNE2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span>, col <span class="op">=</span> <span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">pca_curve</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Lineage</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">TSNE1</span>, <span class="va">TSNE2</span>, col <span class="op">=</span> <span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">geom_path</span><span class="op">(</span>data <span class="op">=</span> <span class="va">tsne_curve</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Lineage</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">TSNE1</span>, y <span class="op">=</span> <span class="va">TSNE2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu">coord_fixed</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab8_pseudotime_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Check the distribution of pseudotime values across the different cell clusters.</p>
+<p>What do you observe? Where you expecting this?</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>    annotation <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span>,</span>
+<span>    pseudotime <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">pseudotime</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">annotation</span>, y <span class="op">=</span> <span class="va">pseudotime</span>, fill <span class="op">=</span> <span class="va">annotation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_violin</span><span class="op">(</span>scale <span class="op">=</span> <span class="st">'width'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_boxplot</span><span class="op">(</span>outlier.shape <span class="op">=</span> <span class="cn">NULL</span>, width <span class="op">=</span> <span class="fl">0.1</span>, fill <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab8_pseudotime_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><code>slingshot</code> does not know in which direction cells differentiate: the pseudotime may well increase from late spermatids to spermatogonia! Correct pseudotime values, so that they increase along the differentiation. Note that the <code>start.clus</code> argument of <code>slingshot()</code> can also be used to specify the starting point of a trajectory.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/slingshot/man/slingPseudotime.html">slingPseudotime</a></span><span class="op">(</span><span class="va">germcells_slingshot</span><span class="op">)</span><span class="op">[</span>, <span class="st">'Lineage1'</span><span class="op">]</span></span>
+<span><span class="va">first_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">last_type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">pt</span><span class="op">[</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span> <span class="op">==</span> <span class="va">first_type</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">pt</span><span class="op">[</span><span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span> <span class="op">==</span> <span class="va">last_type</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">pt</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">pt</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">germcells</span><span class="op">$</span><span class="va">pseudotime</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/rescale.html">rescale</a></span><span class="op">(</span><span class="va">pt</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="bonus-daunting-snippet-but-that-makes-a-cool-figure-for-a-paper-modeling-pseudotime-dependent-gene-expression" class="level3" data-number="15.2.3"><h3 data-number="15.2.3" class="anchored" data-anchor-id="bonus-daunting-snippet-but-that-makes-a-cool-figure-for-a-paper-modeling-pseudotime-dependent-gene-expression">
+<span class="header-section-number">15.2.3</span> BONUS: Daunting snippet but that makes a cool figure for a paper: modeling pseudotime-dependent gene expression</h3>
+<p>Using pseudotime / cell, one can model gene expression along the differentiation process. This alleviates the need to study gene expression <strong>per cell</strong>, and allows one to focus on process-related effects (e.g.&nbsp;gene expression during a developmental trajectory).</p>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try to do so for few markers of spermatogonia, spermatocytes and spermatids.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'ID4'</span>, <span class="st">'SYCP3'</span>, <span class="st">'DMC1'</span>, <span class="st">'ACR'</span>, <span class="st">'PRM1'</span>, <span class="st">'PGK2'</span><span class="op">)</span></span>
+<span><span class="va">fitExprs</span> <span class="op">&lt;-</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">germcells</span><span class="op">[</span><span class="va">genes</span>, <span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># ----------------------------------- Get norm. counts for genes of interest</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>  <span class="co"># ----------------------------------------------------------------- Add information for each cell</span></span>
+<span>        cellID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">)</span>,</span>
+<span>        annotation <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">annotation</span>,</span>
+<span>        pseudotime <span class="op">=</span> <span class="va">germcells</span><span class="op">$</span><span class="va">pseudotime</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu">all_of</span><span class="op">(</span><span class="va">genes</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">'gene'</span>, values_to <span class="op">=</span> <span class="st">'obs_expr'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># - Pivot in "long" tidy format</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>gene <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">gene</span>, <span class="va">genes</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">gene</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># ------------------------------------------------------- Group rows by genes</span></span>
+<span>    <span class="fu">nest</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># --------------------------------------------------------------- For each gene, extract the subtable into a column named data</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span></span>
+<span>        gamModel <span class="op">=</span> <span class="fu">map</span><span class="op">(</span><span class="va">data</span>, <span class="op">~</span><span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">obs_expr</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">pseudotime</span>, bs <span class="op">=</span> <span class="st">"cs"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">.</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        gamFitted_expr <span class="op">=</span> <span class="fu">map</span><span class="op">(</span><span class="va">gamModel</span>, <span class="va">predict</span><span class="op">)</span> <span class="co"># ------------------------------ For each gene, fit the expression values ~ pseudotime with a GAM</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu">ends_with</span><span class="op">(</span><span class="st">'Model'</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">unnest</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu">ends_with</span><span class="op">(</span><span class="st">'_expr'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># -------------------------------------- Unnest all the modelled expressions</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">fitExprs</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">pseudotime</span>, y <span class="op">=</span> <span class="va">obs_expr</span>, col <span class="op">=</span> <span class="va">annotation</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">pseudotime</span>, y <span class="op">=</span> <span class="va">gamFitted_expr</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">'white'</span>, linewidth <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">pseudotime</span>, y <span class="op">=</span> <span class="va">gamFitted_expr</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">'#af2d0c'</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">facet_grid</span><span class="op">(</span><span class="va">gene</span><span class="op">~</span><span class="va">.</span>, scales <span class="op">=</span> <span class="st">'free'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="st">'logcounts'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">ggtitle</span><span class="op">(</span><span class="st">'Fitted models of pseudotime-dependent gene expression'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab8_pseudotime_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section></section><section id="ordering-trajectory-with-rna-velocity" class="level2" data-number="15.3"><h2 data-number="15.3" class="anchored" data-anchor-id="ordering-trajectory-with-rna-velocity">
+<span class="header-section-number">15.3</span> Ordering trajectory with RNA velocity</h2>
+<p>As we saw earlier, TI does not necessarily know which direction is right for a given trajectory. This orientation can be sometimes refined using RNA velocity. Let’s see whether RNA velocity helps orientating our spermatocyte differentiation lineage trajectory here.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Spliced and unspliced counts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with <a href="https://velocyto.org/"><code>velocyto</code></a>, and the resulting <code>loom</code> file (<code>Guo_testis_full-counts.loom</code>) will be made available by your instructors during the workshop. The code below is therefore not run when the book is built.</p>
+</div>
+</div>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Read <code>velociraptor</code> documentation. What do you need to compute RNA velocity scores in R?</li>
+<li>Import <code>spliced</code> and <code>unspliced</code> counts computed with <code>velocyto</code> in R.</li>
+<li>Try and compute RNA velocity.</li>
+</ul>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Import entire GSE112013 dataset with spliced/unspliced counts</span></span>
+<span><span class="va">full_GSE112013_counts</span> <span class="op">&lt;-</span> <span class="fu">LoomExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="st">'Guo_testis_full-counts.loom'</span><span class="op">)</span></span>
+<span><span class="va">full_GSE112013_counts</span></span>
+<span></span>
+<span><span class="co">## - Filter `germcells` genes and cells to only retain those present in `full_GSE112013_counts`</span></span>
+<span><span class="va">germcells</span> <span class="op">&lt;-</span> <span class="va">germcells</span><span class="op">[</span></span>
+<span>    <span class="fu">rowData</span><span class="op">(</span><span class="va">germcells</span><span class="op">)</span><span class="op">$</span><span class="va">gene_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu">rowData</span><span class="op">(</span><span class="va">full_GSE112013_counts</span><span class="op">)</span><span class="op">$</span><span class="va">Accession</span>,</span>
+<span>    <span class="va">germcells</span><span class="op">$</span><span class="va">Barcode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">full_GSE112013_counts</span><span class="op">$</span><span class="va">Barcode</span></span>
+<span><span class="op">]</span></span>
+<span></span>
+<span><span class="co">## - Reorder rows of `full_GSE112013_counts_germcells` to match those of `germcells`</span></span>
+<span><span class="va">full_GSE112013_counts_germcells</span> <span class="op">&lt;-</span> <span class="va">full_GSE112013_counts</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">germcells</span><span class="op">)</span><span class="op">$</span><span class="va">gene_id</span>, <span class="fu">rowData</span><span class="op">(</span><span class="va">full_GSE112013_counts</span><span class="op">)</span><span class="op">$</span><span class="va">Accession</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">$</span><span class="va">Barcode</span>, <span class="va">full_GSE112013_counts</span><span class="op">$</span><span class="va">Barcode</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">germcells</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">full_GSE112013_counts_germcells</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## - Add spliced/unspliced counts to germcells</span></span>
+<span><span class="fu">assay</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'spliced'</span>, withDimnames<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">as</span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">full_GSE112013_counts_germcells</span>, <span class="st">'spliced'</span><span class="op">)</span>, <span class="st">'dgCMatrix'</span><span class="op">)</span></span>
+<span><span class="fu">assay</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'unspliced'</span>, withDimnames<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">as</span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">full_GSE112013_counts_germcells</span>, <span class="st">'unspliced'</span><span class="op">)</span>, <span class="st">'dgCMatrix'</span><span class="op">)</span></span>
+<span><span class="va">germcells</span></span>
+<span></span>
+<span><span class="co">## - Run velociraptor</span></span>
+<span><span class="va">velo_out</span> <span class="op">&lt;-</span> <span class="fu">velociraptor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/velociraptor/man/scvelo.html">scvelo</a></span><span class="op">(</span></span>
+<span>    <span class="va">germcells</span>,</span>
+<span>    assay.X <span class="op">=</span> <span class="st">"counts"</span>,</span>
+<span>    subset.row <span class="op">=</span> <span class="fu">rowData</span><span class="op">(</span><span class="va">germcells</span><span class="op">)</span><span class="op">$</span><span class="va">isHVG</span>,</span>
+<span>    use.dimred <span class="op">=</span> <span class="st">"corrected"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">velo_out</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Embed the velocity field in tSNE scRNAseq embedding and plot the RNA velocity field on top of tSNE projection. Conclude.</strong></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">embedded_velo</span> <span class="op">&lt;-</span> <span class="fu">velociraptor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/velociraptor/man/embedVelocity.html">embedVelocity</a></span><span class="op">(</span><span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">"TSNE"</span><span class="op">)</span>, <span class="va">velo_out</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">embedded_velo</span><span class="op">)</span></span>
+<span><span class="va">grid_df</span> <span class="op">&lt;-</span> <span class="fu">velociraptor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/velociraptor/man/gridVectors.html">gridVectors</a></span><span class="op">(</span><span class="fu">reducedDim</span><span class="op">(</span><span class="va">germcells</span>, <span class="st">"TSNE"</span><span class="op">)</span>, <span class="va">embedded_velo</span>, resolution <span class="op">=</span> <span class="fl">30</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">grid_df</span><span class="op">)</span></span>
+<span><span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/plotReducedDim.html">plotReducedDim</a></span><span class="op">(</span><span class="va">germcells</span>, <span class="st">'TSNE'</span>, colour_by <span class="op">=</span> <span class="st">"annotation"</span>, point_alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">geom_segment</span><span class="op">(</span></span>
+<span>        data <span class="op">=</span> <span class="va">grid_df</span>,</span>
+<span>        mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">start.1</span>, y <span class="op">=</span> <span class="va">start.2</span>, xend <span class="op">=</span> <span class="va">end.1</span>, yend <span class="op">=</span> <span class="va">end.2</span><span class="op">)</span>,</span>
+<span>        arrow <span class="op">=</span> <span class="fu">arrow</span><span class="op">(</span>length <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0.05</span>, <span class="st">"inches"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section><section id="session-info" class="level2" data-number="15.4"><h2 data-number="15.4" class="anchored" data-anchor-id="session-info">
+<span class="header-section-number">15.4</span> Session info</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
+##   setting  value
+##   version  R version 4.6.1 (2026-06-24)
+##   os       Ubuntu 24.04.5 LTS
+##   system   x86_64, linux-gnu
+##   ui       X11
+##   language (EN)
+##   collate  C
+##   ctype    en_US.UTF-8
+##   tz       Etc/UTC
+##   date     2026-11-06
+##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
+##   quarto   1.11.5 @ /usr/local/bin/quarto
+##  
+##  ─ Packages ────────────────────────────────────────────────────────────────
+##   package              * version   date (UTC) lib source
+##   abind                  1.4-8     2024-09-12 [2] RSPM (R 4.6.0)
+##   AnnotationDbi          1.75.2    2026-07-21 [2] Bioconductor 3.24 (R 4.6.1)
+##   batchelor              1.29.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   beachmat               2.29.3    2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)
+##   beeswarm               0.4.0     2021-06-01 [2] RSPM (R 4.6.0)
+##   Biobase              * 2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocFileCache        * 3.3.2     2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
+##   BiocGenerics         * 0.59.12   2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocNeighbors          2.7.3     2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocParallel           1.47.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocSingular           1.29.2    2026-10-08 [2] Bioconductor 3.24 (R 4.6.1)
+##   Biostrings             2.81.9    2026-09-06 [2] Bioconductor 3.24 (R 4.6.1)
+##   bit                    4.6.0     2025-03-06 [2] RSPM (R 4.6.0)
+##   bit64                  4.8.6     2026-09-01 [2] RSPM (R 4.6.0)
+##   bitops                 1.1-0     2026-07-30 [2] RSPM (R 4.6.0)
+##   blob                   1.3.0     2026-01-14 [2] RSPM (R 4.6.0)
+##   bluster                1.23.1    2026-08-25 [2] Bioconductor 3.24 (R 4.6.1)
+##   cachem                 1.1.0     2024-05-16 [2] RSPM (R 4.6.0)
+##   cigarillo              1.3.1     2026-07-13 [2] Bioconductor 3.24 (R 4.6.1)
+##   cli                    3.6.6     2026-04-09 [2] RSPM (R 4.6.0)
+##   cluster                2.1.8.3   2026-07-30 [2] RSPM (R 4.6.1)
+##   codetools              0.2-20    2024-03-31 [3] CRAN (R 4.6.1)
+##   cowplot                1.2.0     2025-07-07 [2] RSPM (R 4.6.0)
+##   crayon                 1.5.3     2024-06-20 [2] RSPM (R 4.6.0)
+##   curl                   8.1.0     2026-10-14 [2] RSPM (R 4.6.0)
+##   data.table             1.18.6.1  2026-08-24 [2] RSPM (R 4.6.0)
+##   DBI                    1.3.0     2026-02-25 [2] RSPM (R 4.6.0)
+##   dbplyr               * 2.6.0     2026-06-17 [2] RSPM (R 4.6.0)
+##   DelayedArray           0.39.8    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   DelayedMatrixStats     1.35.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   dichromat              2.0-1     2026-07-22 [2] RSPM (R 4.6.0)
+##   digest                 0.6.39    2025-11-19 [2] RSPM (R 4.6.0)
+##   dplyr                * 1.2.1     2026-04-03 [2] RSPM (R 4.6.0)
+##   dqrng                  0.4.1     2024-05-28 [2] RSPM (R 4.6.0)
+##   edgeR                  4.99.12   2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+##   evaluate               1.0.5     2025-08-27 [2] RSPM (R 4.6.0)
+##   farver                 2.1.2     2024-05-13 [2] RSPM (R 4.6.0)
+##   fastmap                1.2.0     2024-05-15 [2] RSPM (R 4.6.0)
+##   filelock               1.0.3     2023-12-11 [2] RSPM (R 4.6.0)
+##   forcats              * 1.0.1     2025-09-25 [2] RSPM (R 4.6.0)
+##   generics             * 0.1.4     2025-05-09 [2] RSPM (R 4.6.0)
+##   GenomeInfoDb           1.49.1    2026-05-24 [2] Bioconductor 3.24 (R 4.6.1)
+##   GenomicAlignments      1.49.2    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+##   GenomicRanges        * 1.65.4    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+##   ggbeeswarm             0.7.3     2025-11-29 [2] RSPM (R 4.6.0)
+##   ggplot2              * 4.0.3     2026-04-22 [2] RSPM (R 4.6.0)
+##   ggrepel                0.9.8     2026-03-17 [2] RSPM (R 4.6.0)
+##   glue                   1.8.1     2026-04-17 [2] RSPM (R 4.6.0)
+##   gridExtra              2.3.1     2026-06-25 [2] RSPM (R 4.6.0)
+##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
+##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
+##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
+##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
+##   httr                   1.4.9     2026-09-01 [2] RSPM (R 4.6.0)
+##   httr2                  1.3.0     2026-07-13 [2] RSPM (R 4.6.0)
+##   igraph                 2.3.4     2026-09-30 [2] RSPM (R 4.6.0)
+##   IRanges              * 2.47.5    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   irlba                  2.4.1     2026-10-05 [2] RSPM (R 4.6.0)
+##   jsonlite               2.0.0     2025-03-27 [2] RSPM (R 4.6.0)
+##   KEGGREST               1.53.6    2026-07-23 [2] Bioconductor 3.24 (R 4.6.1)
+##   knitr                  1.52      2026-09-06 [2] RSPM (R 4.6.0)
+##   labeling               0.4.3     2023-08-29 [2] RSPM (R 4.6.0)
+##   lattice                0.23-1    2026-08-12 [2] RSPM (R 4.6.1)
+##   lifecycle              1.0.5     2026-01-08 [2] RSPM (R 4.6.0)
+##   limma                  3.99.4    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+##   lubridate            * 1.9.5     2026-02-04 [2] RSPM (R 4.6.0)
+##   magrittr               2.0.5     2026-04-04 [2] RSPM (R 4.6.0)
+##   MASS                   7.3-66    2026-07-15 [2] RSPM (R 4.6.1)
+##   Matrix                 1.7-6     2026-07-25 [2] RSPM (R 4.6.1)
+##   MatrixGenerics       * 1.25.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   matrixStats          * 1.5.0     2025-01-07 [2] RSPM (R 4.6.0)
+##   memoise                2.0.1     2021-11-26 [2] RSPM (R 4.6.0)
+##   metapod                1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   mgcv                   1.9-4     2025-11-07 [3] CRAN (R 4.6.1)
+##   nlme                   3.1-171   2026-09-01 [2] RSPM (R 4.6.1)
+##   org.Hs.eg.db           3.24.4    2026-11-06 [2] Bioconductor
+##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
+##   pillar                 1.11.1    2025-09-17 [2] RSPM (R 4.6.0)
+##   pkgconfig              2.0.3     2019-09-22 [2] RSPM (R 4.6.0)
+##   png                    0.1-9     2026-03-15 [2] RSPM (R 4.6.0)
+##   princurve              2.1.6     2021-01-18 [2] RSPM (R 4.6.0)
+##   purrr                * 1.2.2     2026-04-10 [2] RSPM (R 4.6.0)
+##   R.methodsS3            1.8.2     2022-06-13 [2] RSPM (R 4.6.0)
+##   R.oo                   1.27.1    2025-05-02 [2] RSPM (R 4.6.0)
+##   R.utils                2.13.0    2025-02-24 [2] RSPM (R 4.6.0)
+##   R6                     2.6.1     2025-02-15 [2] RSPM (R 4.6.0)
+##   RColorBrewer           1.1-3     2022-04-03 [2] RSPM (R 4.6.0)
+##   Rcpp                   1.1.2     2026-07-05 [2] RSPM (R 4.6.0)
+##   RCurl                  1.98-1.20 2026-08-21 [2] RSPM (R 4.6.0)
+##   readr                * 2.2.0     2026-02-19 [2] RSPM (R 4.6.0)
+##   ResidualMatrix         1.23.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   restfulr               0.0.17    2026-06-11 [2] RSPM (R 4.6.0)
+##   rjson                  0.2.23    2024-09-16 [2] RSPM (R 4.6.0)
+##   rlang                  1.3.0     2026-07-05 [2] RSPM (R 4.6.0)
+##   rmarkdown              2.32      2026-09-01 [2] RSPM (R 4.6.0)
+##   Rsamtools              2.29.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   RSQLite                3.53.3    2026-06-30 [2] RSPM (R 4.6.0)
+##   rsvd                   1.0.6     2026-10-17 [2] RSPM (R 4.6.0)
+##   rtracklayer            1.73.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   Rtsne                  0.17      2023-12-07 [2] RSPM (R 4.6.0)
+##   S4Arrays               1.13.2    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   S4Vectors            * 0.51.10   2026-09-16 [2] Bioconductor 3.24 (R 4.6.1)
+##   S7                     0.2.2     2026-04-22 [2] RSPM (R 4.6.0)
+##   ScaledMatrix           1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   scales                 1.4.0     2025-04-24 [2] RSPM (R 4.6.0)
+##   scater                 1.41.3    2026-10-25 [2] Bioconductor 3.24 (R 4.6.1)
+##   scDblFinder            1.27.12   2026-10-14 [2] Bioconductor 3.24 (R 4.6.1)
+##   scran                  1.41.1    2026-05-20 [2] Bioconductor 3.24 (R 4.6.1)
+##   scrapper               1.7.11    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   Seqinfo              * 1.3.2     2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   sessioninfo            1.2.4     2026-06-04 [2] RSPM (R 4.6.0)
+##   SingleCellExperiment * 1.35.2    2026-07-16 [2] Bioconductor 3.24 (R 4.6.1)
+##   SingleR                2.15.4    2026-09-10 [2] Bioconductor 3.24 (R 4.6.1)
+##   slingshot              2.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   SparseArray            1.13.4    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   sparseMatrixStats      1.25.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   statmod                1.5.2     2026-05-17 [2] RSPM (R 4.6.0)
+##   stringi                1.8.9     2026-08-04 [2] RSPM (R 4.6.0)
+##   stringr              * 1.6.0     2025-11-04 [2] RSPM (R 4.6.0)
+##   SummarizedExperiment * 1.43.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   tibble               * 3.3.1     2026-01-11 [2] RSPM (R 4.6.0)
+##   tidyr                * 1.3.2     2025-12-19 [2] RSPM (R 4.6.0)
+##   tidyselect             1.2.1     2024-03-11 [2] RSPM (R 4.6.0)
+##   tidyverse            * 2.0.0     2023-02-22 [2] RSPM (R 4.6.0)
+##   timechange             0.4.0     2026-01-29 [2] RSPM (R 4.6.0)
+##   TrajectoryUtils        1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   tzdb                   0.5.0     2025-03-15 [2] RSPM (R 4.6.0)
+##   UCSC.utils             1.9.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   vctrs                  0.7.3     2026-04-11 [2] RSPM (R 4.6.0)
+##   vipor                  0.4.7     2023-12-18 [2] RSPM (R 4.6.0)
+##   viridis                0.6.5     2024-01-29 [2] RSPM (R 4.6.0)
+##   viridisLite            0.4.3     2026-02-04 [2] RSPM (R 4.6.0)
+##   vroom                  1.7.1     2026-03-31 [2] RSPM (R 4.6.0)
+##   withr                  3.0.3     2026-06-19 [2] RSPM (R 4.6.0)
+##   xfun                   0.62      2026-10-16 [2] RSPM (R 4.6.0)
+##   xgboost                3.2.1.1   2026-03-18 [2] RSPM (R 4.6.0)
+##   XML                    3.99-0.25 2026-09-27 [2] RSPM (R 4.6.0)
+##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
+##  
+##   [1] /tmp/RtmpsJU3Cv/Rinstb4c23f413
+##   [2] /usr/local/lib/R/site-library
+##   [3] /usr/local/lib/R/library
+##   * ── Packages attached to the search path.
+##  
+##  ───────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/js2264\.github\.io\/scRNAseq_Physalia_2026\/devel\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
+      <a href="../../pages/day4/Lecture7_pseudotime.html" class="pagination-link" aria-label="Lecture 7 - Trajectories and pseudotimes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Lecture 7 - Trajectories and pseudotimes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../pages/day5/group_projects.html" class="pagination-link" aria-label="Group projects">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Group projects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Single-cell RNA-seq analysis with R/Bioconductor (Physalia 2026) |<br>
+J. Serizay, O. Ashenberg, F. Almeida-Silva</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>
