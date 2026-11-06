@@ -231,7 +231,7 @@ reducedDims(sce)
 :::
 :::
 
-<!-- 
+<!--
 ::: {.callout-question}
 ::: {.callout-note title="Question"}
 
@@ -336,27 +336,27 @@ plot(
 :::
 :::
 
-Several QCs can be automatically computed using `quickRnaQc.se()` from the 
-`scrapper` package. `scrapper` provides fast `C++` implementations of most 
-steps of a scRNA-seq analysis (QC, normalization, variance modelling, PCA, 
-clustering, marker detection...). 
+Several QCs can be automatically computed using `quickRnaQc.se()` from the
+`scrapper` package. `scrapper` provides fast `C++` implementations of most
+steps of a scRNA-seq analysis (QC, normalization, variance modelling, PCA,
+clustering, marker detection...).
 
 ::: {.callout-note icon='true'}
 ## `scuttle` and `scran` are being replaced by `scrapper`
 
-In previous `Bioconductor` releases, quality control metrics were computed 
-with `scuttle::quickPerCellQC()` or `scuttle::addPerCellQCMetrics()`. Since 
-`Bioconductor 3.24`, these functions (and most of `scuttle` and `scran`) are 
-deprecated in favour of `scrapper`. You will still find them in many tutorials 
+In previous `Bioconductor` releases, quality control metrics were computed
+with `scuttle::quickPerCellQC()` or `scuttle::addPerCellQCMetrics()`. Since
+`Bioconductor 3.24`, these functions (and most of `scuttle` and `scran`) are
+deprecated in favour of `scrapper`. You will still find them in many tutorials
 and in the [OSCA book](https://bioconductor.org/books/release/OSCA/).
 :::
 
-`quickRnaQc.se()` computes, for each cell, the total number of counts (`sum`), 
-the number of detected genes (`detected`) and the proportion of counts 
-assigned to any `subsets` of genes (e.g. mitochondrial genes). It then 
-suggests filtering thresholds (cells with too few counts or detected genes, 
-or with a too high proportion of mitochondrial counts, compared to the bulk of 
-cells), and adds a `keep` column to the `colData()`. 
+`quickRnaQc.se()` computes, for each cell, the total number of counts (`sum`),
+the number of detected genes (`detected`) and the proportion of counts
+assigned to any `subsets` of genes (e.g. mitochondrial genes). It then
+suggests filtering thresholds (cells with too few counts or detected genes,
+or with a too high proportion of mitochondrial counts, compared to the bulk of
+cells), and adds a `keep` column to the `colData()`.
 
 ```{r filename = "R"}
 toy_sce <- scrapper::quickRnaQc.se(toy_sce, subsets = list())
@@ -368,8 +368,8 @@ table(toy_sce$keep)
 ::: {.callout-question}
 ::: {.callout-note title="Question"}
 
-Run `quickRnaQc.se()` on the `SingleCellExperiment` object, providing the list 
-of mitochondrial genes as a subset. Inspect the new `colData` of the object. 
+Run `quickRnaQc.se()` on the `SingleCellExperiment` object, providing the list
+of mitochondrial genes as a subset. Inspect the new `colData` of the object.
 How many cells would be filtered out? Why?
 
 ::: {.callout-answer}
@@ -440,11 +440,11 @@ from Bioconductor packages (e.g. `scater`, `scrapper`, ...).
 
 For example, one can compute PCA and store it in a new slot.
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 library(scater)
 
 logcounts(toy_sce) <- log10(counts(toy_sce) + 1)
-toy_sce <- scater::runPCA(toy_sce, ncomponents = 5)
+toy_sce <- scater::runPCA(toy_sce, ncomponents = 2)
 reducedDims(toy_sce)
 reducedDim(toy_sce, 'PCA')[1:10, ]
 plotReducedDim(toy_sce, 'PCA')
@@ -477,7 +477,7 @@ plotReducedDim(sce, "UMAP", colour_by = 'detected')
 :::
 :::
 
-<!-- 
+<!--
 ### Multiple modalities
 
 Alternative 'modalities' can be stored in the same `SingleCellExperiment` object
