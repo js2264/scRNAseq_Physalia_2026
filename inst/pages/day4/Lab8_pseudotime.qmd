@@ -476,10 +476,11 @@ differentiation lineage trajectory here.
 
 RNA velocity requires the counts of spliced and unspliced reads, for each gene
 in each cell. These counts are not provided in GEO: they were computed from the
-raw reads of the study with [`velocyto`](https://velocyto.org/), and the
-resulting `loom` file (`Guo_testis_full-counts.loom`) will be made available by
-your instructors during the workshop. The code below is therefore not run when
-the book is built.
+raw reads of the study with [`velocyto`](https://velocyto.org/). The
+resulting `loom` file (`Guo_testis_full-counts.loom`, 38 MB) is shipped with
+this book, and installed in your workshop session: its path is given by
+`system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")`.
+The code below is not run when the book is built.
 :::
 
 ::: {.callout-question}
@@ -492,7 +493,8 @@ the book is built.
 ::: {.callout-note title="Answer" collapse="true"}
 ```{r eval = FALSE, filename = "R"}
 ## - Import entire GSE112013 dataset with spliced/unspliced counts
-full_GSE112013_counts <- LoomExperiment::import('Guo_testis_full-counts.loom')
+loom_file <- system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")
+full_GSE112013_counts <- LoomExperiment::import(loom_file)
 full_GSE112013_counts
 
 ## - Filter `germcells` genes and cells to only retain those present in `full_GSE112013_counts`
