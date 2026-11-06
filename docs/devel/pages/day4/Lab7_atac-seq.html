@@ -418,14 +418,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>timeout <span class="op">=</span> <span class="fl">3600</span><span class="op">)</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://cf.10xgenomics.com/samples/cell-atac/1.0.1/atac_v1_pbmc_10k/"</span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5"</span>, </span>
-<span>    <span class="st">"atac_v1_pbmc_10k_peaks.bed"</span>, </span>
-<span>    <span class="st">"atac_v1_pbmc_10k_singlecell.csv"</span>, </span>
-<span>    <span class="st">"atac_v1_pbmc_10k_fragments.tsv.gz"</span>, </span>
+<span>    <span class="st">"atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5"</span>,</span>
+<span>    <span class="st">"atac_v1_pbmc_10k_peaks.bed"</span>,</span>
+<span>    <span class="st">"atac_v1_pbmc_10k_singlecell.csv"</span>,</span>
+<span>    <span class="st">"atac_v1_pbmc_10k_fragments.tsv.gz"</span>,</span>
 <span>    <span class="st">"atac_v1_pbmc_10k_fragments.tsv.gz.tbi"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">f</span> <span class="kw">in</span> <span class="va">files</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">url</span>, <span class="va">f</span><span class="op">)</span>, destfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="va">f</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">scatac_dir</span><span class="op">)</span></span>
@@ -714,7 +714,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span></span>
 <span><span class="va">PBMC</span><span class="op">[[</span><span class="st">'ATAC'</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/genomic-range-squeezers.html">granges</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://stuartlab.org/signac/reference/Annotation.html">Annotation</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://stuartlab.org/signac/reference/Annotation.html">Annotation</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## - Free some memory: the intermediate objects are no longer needed</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">scatac</span>, <span class="va">cnts</span>, <span class="va">assay</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -782,8 +785,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">PBMC</span></span>
 <span></span>
 <span><span class="co"># compute TSS enrichment score per cell</span></span>
-<span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu">Signac</span><span class="fu">::</span><span class="fu"><a href="https://stuartlab.org/signac/reference/TSSEnrichment.html">TSSEnrichment</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, fast <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">PBMC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu">Signac</span><span class="fu">::</span><span class="fu"><a href="https://stuartlab.org/signac/reference/TSSEnrichment.html">TSSEnrichment</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="va">PBMC</span></span>
+<span></span>
+<span><span class="co"># plot TSS enrichment vs. number of fragments in peaks</span></span>
+<span><span class="fu"><a href="https://stuartlab.org/signac/reference/DensityScatter.html">DensityScatter</a></span><span class="op">(</span><span class="va">PBMC</span>, x <span class="op">=</span> <span class="st">'nCount_ATAC'</span>, y <span class="op">=</span> <span class="st">'TSS.enrichment'</span>, log_x <span class="op">=</span> <span class="cn">TRUE</span>, quantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -793,16 +799,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The <code>TSSPlot</code> function from <code>Signac</code> can be used to plot the fragment count per peak ~ TSS enrichment.</p>
+<p>Let’s compare the distributions of the different QC metrics, for cells with a high or a low TSS enrichment score.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">3.5</span>, <span class="st">'High'</span>, <span class="st">'Low'</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://stuartlab.org/signac/reference/TSSPlot.html">TSSPlot</a></span><span class="op">(</span><span class="va">PBMC</span>, group.by <span class="op">=</span> <span class="st">'high.tss'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">2.5</span>, <span class="st">'High'</span>, <span class="st">'Low'</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://stuartlab.org/signac/reference/TSSPlot.html">TSSPlot</a></span><span class="op">(</span><span class="va">PBMC</span>, group.by <span class="op">=</span> <span class="st">'high.tss'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">2.5</span>, <span class="st">'High'</span>, <span class="st">'Low'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op">(</span></span>
+<span>    object <span class="op">=</span> <span class="va">PBMC</span>,</span>
+<span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'nCount_ATAC'</span>, <span class="st">'FRiP'</span>, <span class="st">'TSS.enrichment'</span>, <span class="st">'nucleosome_signal'</span><span class="op">)</span>,</span>
+<span>    group.by <span class="op">=</span> <span class="st">'high.tss'</span>,</span>
+<span>    pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    ncol <span class="op">=</span> <span class="fl">4</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Accessibility profiles around TSSs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code><a href="https://stuartlab.org/signac/reference/TSSPlot.html">TSSPlot()</a></code> function from <code>Signac</code> plots the average accessibility profile around TSSs, for groups of cells. It requires running <code><a href="https://stuartlab.org/signac/reference/TSSEnrichment.html">TSSEnrichment()</a></code> with <code>fast = FALSE</code>, which stores the accessibility of each position around each TSS: this takes a lot of memory (&gt; 16 GB for this dataset), so we do not run it in the workshop sessions.</p>
 </div>
 </div>
 <p>The <code>FragmentHistogram</code> function from <code>Signac</code> can be used to plot the fragment size distribution in peaks with different nucleosome signals.</p>
@@ -820,7 +844,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Group genomic loci by their nucleosome signal (&gt; 4 or &lt; 4) and plot the fragment size distribution.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -829,7 +853,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -864,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Filter the <code>Seurat</code> object (cells and features) as deemed appropriate.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -873,7 +897,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -917,7 +941,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Normalize then further reduce the dimensionality for visualization purposes.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -926,7 +950,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -1006,7 +1030,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Assess the expression of known markers across clusters, projecting the cells in a 2D UMAP.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1015,7 +1039,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -1064,7 +1088,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="find-peaks-differentially-accessible-across-clusters" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="find-peaks-differentially-accessible-across-clusters">
 <span class="header-section-number">13.3</span> Find peaks differentially accessible across clusters</h2>
-<p>Finally, we can perform differential peak accessibility analysis to identify peaks that are differentially accessible between clusters. This is done using the <code>FindMarkers</code> function from <code>Seurat</code>, run on the <code>ATAC</code> assay.</p>
+<p>Finally, we can perform differential peak accessibility analysis to identify peaks that are differentially accessible between clusters. This is done using the <code>FindMarkers</code> function from <code>Seurat</code>, run on the <code>ATAC</code> assay. By default, <code>FindMarkers</code> uses a (fast) Wilcoxon rank sum test.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Accounting for sequencing depth
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>Signac</code> documentation recommends a logistic regression test, using the total number of fragments per cell as a latent variable to account for differences in sequencing depth (<code>test.use = 'LR', latent.vars = 'nCount_ATAC'</code>). This is more rigorous, but much slower (&gt; 30 minutes for this comparison): try it after the workshop!</p>
+</div>
+</div>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1076,8 +1113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>  ident.1 <span class="op">=</span> <span class="st">"Monocytes"</span>,</span>
 <span>  ident.2 <span class="op">=</span> <span class="st">"B-cells"</span>,</span>
-<span>  test.use <span class="op">=</span> <span class="st">'LR'</span>,</span>
-<span>  latent.vars <span class="op">=</span> <span class="st">'nCount_ATAC'</span></span>
+<span>  min.pct <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">da_peaks</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op">(</span></span>
@@ -1097,7 +1133,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="session-info" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="session-info">
 <span class="header-section-number">13.4</span> Session info</h2>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1106,7 +1142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
@@ -1139,7 +1175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   sessioninfo   1.2.4   2026-06-04 [2] RSPM (R 4.6.0)
 ##   xfun          0.62    2026-10-16 [2] RSPM (R 4.6.0)
 ##  
-##   [1] /tmp/RtmpYDUaaM/Rinstca9466ba
+##   [1] /tmp/Rtmpf3sVJv/Rinstc7708f5d3
 ##   [2] /usr/local/lib/R/site-library
 ##   [3] /usr/local/lib/R/library
 ##  

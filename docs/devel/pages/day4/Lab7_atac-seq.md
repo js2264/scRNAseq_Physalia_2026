@@ -32,14 +32,14 @@ dir.create(scatac_dir, recursive = TRUE, showWarnings = FALSE)
 options(timeout = 3600)
 url <- "https://cf.10xgenomics.com/samples/cell-atac/1.0.1/atac_v1_pbmc_10k/"
 files <- c(
-    "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5", 
-    "atac_v1_pbmc_10k_peaks.bed", 
-    "atac_v1_pbmc_10k_singlecell.csv", 
-    "atac_v1_pbmc_10k_fragments.tsv.gz", 
+    "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5",
+    "atac_v1_pbmc_10k_peaks.bed",
+    "atac_v1_pbmc_10k_singlecell.csv",
+    "atac_v1_pbmc_10k_fragments.tsv.gz",
     "atac_v1_pbmc_10k_fragments.tsv.gz.tbi"
 )
 for (f in files) {
-    if (!file.exists(file.path(scatac_dir, f))) 
+    if (!file.exists(file.path(scatac_dir, f)))
         download.file(paste0(url, f), destfile = file.path(scatac_dir, f))
 }
 list.files(scatac_dir)
@@ -167,6 +167,9 @@ It’s finally time to wrap the `ChromatinAssay` into a `Seurat` standard object
 > > PBMC[['ATAC']]
 > > granges(PBMC)
 > > Annotation(PBMC)
+> >
+> > ## - Free some memory: the intermediate objects are no longer needed
+> > rm(scatac, cnts, assay); invisible(gc())
 > > ```
 
 ### 13.1.4 Check QCs
@@ -203,18 +206,30 @@ quantile(PBMC$nFeature_ATAC, seq(0, 1, 0.1))
 > > PBMC
 > >
 > > # compute TSS enrichment score per cell
-> > PBMC <- Signac::TSSEnrichment(object = PBMC, fast = FALSE)
+> > PBMC <- Signac::TSSEnrichment(object = PBMC)
 > > PBMC
+> >
+> > # plot TSS enrichment vs. number of fragments in peaks
+> > DensityScatter(PBMC, x = 'nCount_ATAC', y = 'TSS.enrichment', log_x = TRUE, quantiles = TRUE)
 > > ```
 
-The `TSSPlot` function from `Signac` can be used to plot the fragment count per peak ~ TSS enrichment.
+Let’s compare the distributions of the different QC metrics, for cells with a high or a low TSS enrichment score.
 
 ``` r
-PBMC$high.tss <- ifelse(PBMC$TSS.enrichment > 3.5, 'High', 'Low')
-TSSPlot(PBMC, group.by = 'high.tss') + NoLegend()
 PBMC$high.tss <- ifelse(PBMC$TSS.enrichment > 2.5, 'High', 'Low')
-TSSPlot(PBMC, group.by = 'high.tss') + NoLegend()
+table(PBMC$high.tss)
+VlnPlot(
+    object = PBMC,
+    features = c('nCount_ATAC', 'FRiP', 'TSS.enrichment', 'nucleosome_signal'),
+    group.by = 'high.tss',
+    pt.size = 0,
+    ncol = 4
+)
 ```
+
+> **TIP:**
+>
+> The [`TSSPlot()`](https://stuartlab.org/signac/reference/TSSPlot.html) function from `Signac` plots the average accessibility profile around TSSs, for groups of cells. It requires running [`TSSEnrichment()`](https://stuartlab.org/signac/reference/TSSEnrichment.html) with `fast = FALSE`, which stores the accessibility of each position around each TSS: this takes a lot of memory (\> 16 GB for this dataset), so we do not run it in the workshop sessions.
 
 The `FragmentHistogram` function from `Signac` can be used to plot the fragment size distribution in peaks with different nucleosome signals.
 
@@ -351,7 +366,11 @@ One can now visualize expression of individual markers across clusters to infer 
 
 ## 13.3 Find peaks differentially accessible across clusters
 
-Finally, we can perform differential peak accessibility analysis to identify peaks that are differentially accessible between clusters. This is done using the `FindMarkers` function from `Seurat`, run on the `ATAC` assay.
+Finally, we can perform differential peak accessibility analysis to identify peaks that are differentially accessible between clusters. This is done using the `FindMarkers` function from `Seurat`, run on the `ATAC` assay. By default, `FindMarkers` uses a (fast) Wilcoxon rank sum test.
+
+> **TIP:**
+>
+> The `Signac` documentation recommends a logistic regression test, using the total number of fragments per cell as a latent variable to account for differences in sequencing depth (`test.use = 'LR', latent.vars = 'nCount_ATAC'`). This is more rigorous, but much slower (\> 30 minutes for this comparison): try it after the workshop!
 
 ``` r
 DefaultAssay(PBMC) <- 'ATAC'
@@ -360,8 +379,7 @@ da_peaks <- FindMarkers(
   object = PBMC,
   ident.1 = "Monocytes",
   ident.2 = "B-cells",
-  test.use = 'LR',
-  latent.vars = 'nCount_ATAC'
+  min.pct = 0.05
 )
 head(da_peaks)
 VlnPlot(
@@ -412,7 +430,7 @@ CoveragePlot(
 >     ##   sessioninfo   1.2.4   2026-06-04 [2] RSPM (R 4.6.0)
 >     ##   xfun          0.62    2026-10-16 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/RtmpYDUaaM/Rinstca9466ba
+>     ##   [1] /tmp/Rtmpf3sVJv/Rinstc7708f5d3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##  

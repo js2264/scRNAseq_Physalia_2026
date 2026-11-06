@@ -20,7 +20,7 @@ Everything will be performed in the cloud, on the Orchestra platform (see [Getti
 - A Google account (personal or institutional), to sign in to the Orchestra platform;
 - The Zoom visioconference software.
 
-Optionally, if you wish to run the labs on your own computer after the workshop, you will need to install [Docker](https://docs.docker.com/get-docker/) (with at least 8 GB of RAM available to it).
+Optionally, if you wish to run the labs on your own computer after the workshop, you will need to install [Docker](https://docs.docker.com/get-docker/) (with at least 16 GB of RAM available to it).
 
 ## Remote configuration
 

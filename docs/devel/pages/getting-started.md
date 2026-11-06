@@ -37,7 +37,7 @@ Then open <http://localhost:8787> in your web browser, and log in with user `rst
 
 > **TIP:**
 >
-> Some labs load fairly large datasets in memory: we recommend giving at least 8 GB of RAM to Docker (in `Docker Desktop`: `Settings` \> `Resources`).
+> Some labs load fairly large datasets in memory (the scATAC-seq lab needs ~12 GB): we recommend giving at least 16 GB of RAM to Docker (in `Docker Desktop`: `Settings` \> `Resources`).
 
 Alternatively, you can install all the packages used in this workshop in your own `R` installation (`R >= 4.6` and a current version of `Bioconductor` are required):
 

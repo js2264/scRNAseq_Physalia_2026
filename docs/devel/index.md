@@ -393,6 +393,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   polyclip               1.10-7    2024-07-23 [2] RSPM (R 4.6.0)
 > ##   praise                 1.0.0     2015-08-11 [2] RSPM (R 4.6.0)
 > ##   preprocessCore         1.75.1    2026-08-31 [2] Bioconductor 3.24 (R 4.6.1)
+> ##   presto                 1.1.0     2026-09-30 [2] RSPM (R 4.6.0)
 > ##   prettyunits            1.2.0     2023-09-24 [2] RSPM (R 4.6.0)
 > ##   princurve              2.1.6     2021-01-18 [2] RSPM (R 4.6.0)
 > ##   pROC                   1.19.1    2026-08-27 [2] RSPM (R 4.6.0)
@@ -558,7 +559,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   zip                    3.0.2     2026-08-04 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpYDUaaM/Rinstca9466ba
+> ##   [1] /tmp/Rtmpf3sVJv/Rinstc7708f5d3
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.
