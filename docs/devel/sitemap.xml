@@ -2,86 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/index.html</loc>
-    <lastmod>2026-11-06T11:54:15.474Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.462Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/program.html</loc>
-    <lastmod>2026-11-06T11:54:15.703Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.727Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/getting-started.html</loc>
-    <lastmod>2026-11-06T11:54:15.702Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.727Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/prerequisites.html</loc>
-    <lastmod>2026-11-06T11:54:15.703Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.727Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lecture1_introduction.html</loc>
-    <lastmod>2026-11-06T11:54:15.500Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.492Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lecture2_Bcl2matrix.html</loc>
-    <lastmod>2026-11-06T11:54:15.534Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.532Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lab1_Intro.html</loc>
-    <lastmod>2026-11-06T11:54:15.474Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.462Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day1/Lab2_processingreads.html</loc>
-    <lastmod>2026-11-06T11:54:15.474Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.462Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lecture3_qualitycontrol.html</loc>
-    <lastmod>2026-11-06T11:54:15.556Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.557Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lab3_Rbioc.html</loc>
-    <lastmod>2026-11-06T11:54:15.534Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.532Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day2/Lab4_data_wrangling_scRNAseq.html</loc>
-    <lastmod>2026-11-06T11:54:15.535Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.533Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lecture4_clustering.html</loc>
-    <lastmod>2026-11-06T11:54:15.587Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.593Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lab5_clustering.html</loc>
-    <lastmod>2026-11-06T11:54:15.558Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.560Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lecture5_batchcorrection.html</loc>
-    <lastmod>2026-11-06T11:54:15.620Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.633Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day3/Lab6_batch_correction.html</loc>
-    <lastmod>2026-11-06T11:54:15.559Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.560Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lecture6_ATAC.html</loc>
-    <lastmod>2026-11-06T11:54:15.634Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.649Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lab7_atac-seq.html</loc>
-    <lastmod>2026-11-06T11:54:15.620Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.633Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lecture7_pseudotime.html</loc>
-    <lastmod>2026-11-06T11:54:15.650Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.667Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day4/Lab8_pseudotime.html</loc>
-    <lastmod>2026-11-06T11:54:15.621Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.633Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/day5/group_projects.html</loc>
-    <lastmod>2026-11-06T11:54:15.702Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.726Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/scRNAseq_Physalia_2026/devel/pages/extra.html</loc>
-    <lastmod>2026-11-06T11:54:15.702Z</lastmod>
+    <lastmod>2026-11-06T11:55:44.726Z</lastmod>
   </url>
 </urlset>
