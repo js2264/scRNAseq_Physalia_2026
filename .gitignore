@@ -10,3 +10,7 @@
 /*_files/
 /docs/
 NOTES.md
+## Workshop files (`~/Share` in the Docker image), distributed as a release
+## asset of the repository: see README
+/Share/
+/Share.tar.gz

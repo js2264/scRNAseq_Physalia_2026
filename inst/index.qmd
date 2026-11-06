@@ -83,8 +83,7 @@ used to analyse datasets and learn new approaches.
 
 ## When {-}
 
-<!-- TODO: update with the dates of the 2026 edition -->
-**Dates of the 2026 edition: to be announced.** Classes run from 14:00 to
+w**Dates of the 2026 edition: 16–20 November 2026.** Classes run from 14:00 to
 20:00 (Paris time), over five days.
 
 ## Where {-}
@@ -142,8 +141,6 @@ Throughout the course, we will also have a focus on reproducible research,
 documented content and interactive reports.
 
 ## Instructors {-}
-
-<!-- TODO: update the list of instructors for the 2026 edition -->
 
 [Jacques Serizay](mailto:jacques.serizay@pasteur.fr)
 

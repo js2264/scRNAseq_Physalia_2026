@@ -32,9 +32,11 @@ datasets of the labs.
 The lecture slides (PDF) are in `inst/pages/day*/`. The `R` labs are run
 (and their outputs shown) when the book is built, with public datasets fetched
 from GEO, 10x Genomics, the Human Protein Atlas, `ExperimentHub` and the
-`scRNAseq`/`celldex` packages. The labs relying on command-line tools (Labs 1-2,
-`cellranger`) and on large scATAC-seq `fragments` files (Lab 7) are displayed
-but not run.
+`scRNAseq`/`celldex` packages. The terminal commands of Lab 1 and the
+scATAC-seq lab (Lab 7, large `fragments` files) are displayed but not run.
+`cellranger` is not run at all (Lab 2): its recorded output is shown, and the
+files it produced are provided in `~/Share` (see below), which the other
+commands of Lab 2 read when the book is built.
 
 The labs follow the current Bioconductor devel (3.24) recommendations: most of
 `scuttle` and `scran` is deprecated in favour of `scrapper` (QC, normalization,
@@ -97,17 +99,36 @@ hand, so they must be done once in the GitHub settings:
    a session duration covering a day of class (e.g. `8h`), and the
    **X-Large** size: Lab 7 (scATAC-seq) peaks at ~12 GB of RAM, Lab 8 at ~8 GB.
 
-## TODO before the workshop
+## Workshop files (`~/Share`)
 
-- [ ] Dates of the 2026 edition and list of instructors (`inst/index.qmd`, `DESCRIPTION`, `inst/assets/_book.yml`).
-- [ ] Update the lecture slides (`inst/pages/day*/*.pdf`, currently the 2025 ones).
-- [ ] Labs 1-2: decide how `cellranger`, `bcl2fastq` and the `cellranger` transcriptome
-      reference (~10 GB) are provided on Orchestra. `cellranger` is distributed under a
-      10x Genomics license and is not included in the (public) Docker image.
-- [ ] Lab 8: provide the `Guo_testis_full-counts.loom` file (spliced/unspliced
-      counts) for the RNA velocity section.
-- [ ] Remove the temporary `BiocFileCache` fix from the `Dockerfile` once
-      BiocFileCache >= 3.3.2 is available from the Bioconductor devel repositories.
+Files which cannot be produced in a workshop session, or are too large for
+this git repository, are distributed as the `Share.tar.gz` asset of the
+[`share` release](https://github.com/js2264/scRNAseq_Physalia_2026/releases/tag/share)
+of this repository. The `Dockerfile` extracts it (read-only) in `/opt/Share`,
+linked to `~/Share` for the RStudio user (and for `root`, which renders the
+book). Its content is described in `Share/README.md`:
+
+- Lab 1: first 25,000 read pairs of `SRR11575369` (a backup of the files
+  streamed from the ENA in the lab);
+- Lab 2: inputs (`cellranger-tiny-bcl-1.2.0` run folder and samplesheet) and
+  outputs of `cellranger mkfastq` and `cellranger count` (`cellranger` 7.1.0,
+  run by the instructors for the 2025 edition);
+- Day 5: WT and mutant datasets of the group projects (in vitro
+  differentiation of multiciliated cells, from Khoury Damaa, Serizay et al.,
+  Cell Reports 2025, doi:10.1016/j.celrep.2024.115117, GEO GSE201773).
+
+To update it, edit the (git-ignored) `Share/` folder at the root of the
+repository, then re-upload the archive (this replaces the asset; the next
+image build picks it up):
+
+```sh
+COPYFILE_DISABLE=1 tar --no-mac-metadata --no-xattrs --uid 0 --gid 0 -czf Share.tar.gz -C Share .  # (macOS tar)
+gh release create share --title "Workshop files (~/Share)" --notes "Files extracted in ~/Share in the Docker image" Share.tar.gz  # first time
+gh release upload share Share.tar.gz --clobber                                                                                       # updates
+```
+
+The RNA velocity `loom` file of Lab 8 (38 MB) is in `inst/extdata/`, and
+read with `system.file()`.
 
 ## Licence
 

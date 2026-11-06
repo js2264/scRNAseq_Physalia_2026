@@ -6,3 +6,6 @@
 ^NOTES\.md$
 ^README\.Rmd$
 ^Dockerfile$
+^\.dockerignore$
+^Share$
+^Share\.tar\.gz$

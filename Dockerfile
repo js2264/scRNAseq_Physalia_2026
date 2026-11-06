@@ -55,6 +55,30 @@ RUN Rscript -e 'BiocBook::setup_python(requirements = "/opt/pkg/inst/requirement
     Rscript -e 'stopifnot(nzchar(Sys.getenv("RETICULATE_PYTHON"))); cat("book python:", reticulate::py_config()$python, "\n")' && \
     bash -lc 'samtools --version | head -n 1 && seqkit version && fastqc --version && ffq --version'
 
+## Workshop files that cannot be produced in a session: inputs and outputs of
+## `cellranger` (Lab 2), reads streamed from the ENA (Lab 1), group project
+## datasets (Day 5). They are distributed as a release asset of this
+## repository (see README), extracted read-only in `/opt/Share`, and linked to
+## `~/Share`, for RStudio users and for the book rendering (as root). The link
+## is also created when the container starts, in case the home folder is
+## mounted from a volume
+ARG SHARE_URL=https://github.com/js2264/scRNAseq_Physalia_2026/releases/download/share/Share.tar.gz
+RUN mkdir -p /opt/Share && \
+    curl -fsSL --retry 5 --retry-delay 10 "${SHARE_URL}" | tar -xz --no-same-owner -C /opt/Share && \
+    chmod -R a+rX,go-w /opt/Share && \
+    ln -sfn /opt/Share /root/Share && \
+    ln -sfn /opt/Share /home/rstudio/Share && \
+    ls -l /opt/Share/ /opt/Share/data_wrangling/ /opt/Share/group_exercises/
+COPY --chmod=755 <<'EOF' /etc/cont-init.d/03_share
+#!/usr/bin/with-contenv bash
+## Link the workshop files to the home folder of the RStudio user
+USER_HOME="$(getent passwd "${DEFAULT_USER:-rstudio}" | cut -d: -f6)"
+if [ -d "${USER_HOME}" ] && [ ! -e "${USER_HOME}/Share" ]; then
+    ln -s /opt/Share "${USER_HOME}/Share"
+fi
+exit 0
+EOF
+
 ## Build/install using same approach than BBS
 RUN R CMD INSTALL /opt/pkg
 RUN R CMD build --keep-empty-dirs --no-resave-data /opt/pkg
