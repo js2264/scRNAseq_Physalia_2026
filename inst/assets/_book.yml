@@ -1,0 +1,17 @@
+book:
+  title: "scRNAseqPhysalia2026"
+  chapters:
+    - index.qmd
+  cover-image: assets/cover.png
+  favicon: assets/favicon.png
+  sidebar: 
+    tools:
+      - icon: git
+        menu:
+          - text: Source Code
+            url:  https://github.com/js2264/scRNAseqPhysalia2026/
+          - text: Browse version `devel`
+            url:  https://js2264.github.io/scRNAseqPhysalia2026/devel/
+    style: "docked"
+    background: "light"
+    collapse-level: 5
