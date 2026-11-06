@@ -3,9 +3,9 @@
 > Course material for the 2026 edition of the Physalia workshop "Single-cell RNA-seq analysis with R/Bioconductor". This BiocBook gathers the lectures and hands-on labs of the five-day course: from sequencing reads to count matrices, quality control, normalisation, dimensionality reduction, clustering and cell annotation, batch correction, single-cell ATAC-seq and trajectory inference. A Docker image providing every tool, package and dataset used in the labs is built for each version of the book, and is used to run the workshop on the Bioconductor Orchestra platform.
 
 <!-- biocbook:start -->
-- Book package: `scRNAseqPhysalia2026` 1.0.1 (Bioconductor 3.24), source: <https://github.com/js2264/scRNAseq_Physalia_2026>
+- Book package: `scRNAseqPhysalia2026` 1.0.0 (Bioconductor 3.24), source: <https://github.com/js2264/scRNAseq_Physalia_2026>
 - Install: `BiocManager::install("scRNAseqPhysalia2026")` (Bioconductor) or `BiocManager::install("js2264/scRNAseq_Physalia_2026")` (GitHub)
-- Docker image with every dependency: `docker run -it ghcr.io/js2264/scrnaseqphysalia2026:1.0.1 R`
+- Docker image with every dependency: `docker run -it ghcr.io/js2264/scrnaseqphysalia2026:1.0.0 R`
 - Other versions of this book: one per Bioconductor release, at `https://js2264.github.io/scRNAseq_Physalia_2026/<version>/` (e.g. <https://js2264.github.io/scRNAseq_Physalia_2026/devel/>), indexed in <https://js2264.github.io/scRNAseq_Physalia_2026/llms.txt>
 <!-- biocbook:end -->
 

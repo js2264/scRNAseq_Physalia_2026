@@ -865,8 +865,8 @@ Then, differential gene expression is performed between clusters, using a *pseud
 > > ##           baseMean log2FoldChange     lfcSE      stat      pvalue        padj
 > > ##          <numeric>      <numeric> <numeric> <numeric>   <numeric>   <numeric>
 > > ##  GLS     1166.7423        3.54686  0.284002   12.4888 8.59116e-36 1.23438e-31
-> > ##  NPY1R     22.7093      -25.66317  2.121928  -12.0943 1.13239e-33 8.13509e-30
-> > ##  FXYD5    525.5051        4.96155  0.432435   11.4735 1.79221e-30 8.58348e-27
+> > ##  NPY1R     22.7093      -26.03353  2.121906  -12.2689 1.32989e-34 9.55389e-31
+> > ##  FXYD5    525.5051        4.96155  0.432435   11.4735 1.79221e-30 8.58349e-27
 > > ##  SYNE2   1046.8371       -3.63234  0.335651  -10.8218 2.71439e-27 9.75008e-24
 > > ##  HADH    1133.6204       -5.84007  0.544800  -10.7197 8.23040e-27 2.36509e-23
 > > ##  ...           ...            ...       ...       ...         ...         ...
@@ -1050,7 +1050,7 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/RtmpANpAGi/Rinstb79b5a400
+>     ##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

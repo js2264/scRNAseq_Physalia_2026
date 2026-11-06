@@ -15,7 +15,7 @@ Fabrício Almeida-Silva
 **Package:** scRNAseqPhysalia2026\
 **Authors:** Jacques Serizay \[aut, cre\], Orr Ashenberg \[aut\], Fabricio Almeida-Silva \[aut\]\
 **Compiled:** 2026-11-06\
-**Package version:** 1.0.1\
+**Package version:** 1.0.0\
 **R version:** **R version 4.6.1 (2026-06-24)**\
 **BioC version:** **3.24**\
 **License:** MIT + file LICENSE\
@@ -475,7 +475,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   scran                  1.41.1    2026-05-20 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scrapper               1.7.11    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scRNAseq               2.27.0    2026-04-30 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   scRNAseqPhysalia2026   1.0.1     2026-11-06 [1] local
+> ##   scRNAseqPhysalia2026   1.0.0     2026-11-06 [1] local
 > ##   sctransform            0.4.3     2026-01-10 [2] RSPM (R 4.6.0)
 > ##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   selectr                0.8-0     2026-09-27 [2] RSPM (R 4.6.0)
@@ -559,7 +559,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   zip                    3.0.2     2026-08-04 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpANpAGi/Rinstb79b5a400
+> ##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.
