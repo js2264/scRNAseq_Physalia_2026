@@ -49,10 +49,10 @@ The dataset contains roughly ~ 10,000 cells.
 
 ### Download data
 
-The files we need are directly available from the 10x Genomics website. We 
-download them in a `~/data/scATAC` folder (this may take a few minutes, the 
-`fragments` file weighs ~2 GB). Note that the `fragments` file and its index 
-(`.tbi`) must sit next to each other, with matching names. 
+The files we need are directly available from the 10x Genomics website. We
+download them in a `~/data/scATAC` folder (this may take a few minutes, the
+`fragments` file weighs ~2 GB). Note that the `fragments` file and its index
+(`.tbi`) must sit next to each other, with matching names.
 
 ```{r filename = "R"}
 scatac_dir <- file.path(path.expand("~"), "data", "scATAC")
@@ -60,14 +60,14 @@ dir.create(scatac_dir, recursive = TRUE, showWarnings = FALSE)
 options(timeout = 3600)
 url <- "https://cf.10xgenomics.com/samples/cell-atac/1.0.1/atac_v1_pbmc_10k/"
 files <- c(
-    "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5", 
-    "atac_v1_pbmc_10k_peaks.bed", 
-    "atac_v1_pbmc_10k_singlecell.csv", 
-    "atac_v1_pbmc_10k_fragments.tsv.gz", 
+    "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5",
+    "atac_v1_pbmc_10k_peaks.bed",
+    "atac_v1_pbmc_10k_singlecell.csv",
+    "atac_v1_pbmc_10k_fragments.tsv.gz",
     "atac_v1_pbmc_10k_fragments.tsv.gz.tbi"
 )
 for (f in files) {
-    if (!file.exists(file.path(scatac_dir, f))) 
+    if (!file.exists(file.path(scatac_dir, f)))
         download.file(paste0(url, f), destfile = file.path(scatac_dir, f))
 }
 list.files(scatac_dir)
@@ -241,6 +241,9 @@ PBMC
 PBMC[['ATAC']]
 granges(PBMC)
 Annotation(PBMC)
+
+## - Free some memory: the intermediate objects are no longer needed
+rm(scatac, cnts, assay); invisible(gc())
 ```
 
 :::
@@ -288,8 +291,11 @@ PBMC <- NucleosomeSignal(object = PBMC)
 PBMC
 
 # compute TSS enrichment score per cell
-PBMC <- Signac::TSSEnrichment(object = PBMC, fast = FALSE)
+PBMC <- Signac::TSSEnrichment(object = PBMC)
 PBMC
+
+# plot TSS enrichment vs. number of fragments in peaks
+DensityScatter(PBMC, x = 'nCount_ATAC', y = 'TSS.enrichment', log_x = TRUE, quantiles = TRUE)
 ```
 
 :::
@@ -298,15 +304,30 @@ PBMC
 :::
 :::
 
-The `TSSPlot` function from `Signac` can be used to plot the fragment count per
-peak ~ TSS enrichment.
+Let's compare the distributions of the different QC metrics, for cells with
+a high or a low TSS enrichment score.
 
 ```{r filename = "R"}
-PBMC$high.tss <- ifelse(PBMC$TSS.enrichment > 3.5, 'High', 'Low')
-TSSPlot(PBMC, group.by = 'high.tss') + NoLegend()
 PBMC$high.tss <- ifelse(PBMC$TSS.enrichment > 2.5, 'High', 'Low')
-TSSPlot(PBMC, group.by = 'high.tss') + NoLegend()
+table(PBMC$high.tss)
+VlnPlot(
+    object = PBMC,
+    features = c('nCount_ATAC', 'FRiP', 'TSS.enrichment', 'nucleosome_signal'),
+    group.by = 'high.tss',
+    pt.size = 0,
+    ncol = 4
+)
 ```
+
+::: {.callout-tip icon='true'}
+## Accessibility profiles around TSSs
+
+The `TSSPlot()` function from `Signac` plots the average accessibility profile
+around TSSs, for groups of cells. It requires running `TSSEnrichment()` with
+`fast = FALSE`, which stores the accessibility of each position around each
+TSS: this takes a lot of memory (> 16 GB for this dataset), so we do not run it
+in the workshop sessions.
+:::
 
 The `FragmentHistogram` function from `Signac` can be used to plot the fragment
 size distribution in peaks with different nucleosome signals.
@@ -491,7 +512,18 @@ DimPlot(PBMC, group.by = 'annotation', label = TRUE) + NoLegend()
 
 Finally, we can perform differential peak accessibility analysis to identify
 peaks that are differentially accessible between clusters. This is done using
-the `FindMarkers` function from `Seurat`, run on the `ATAC` assay.
+the `FindMarkers` function from `Seurat`, run on the `ATAC` assay. By default,
+`FindMarkers` uses a (fast) Wilcoxon rank sum test.
+
+::: {.callout-tip icon='true'}
+## Accounting for sequencing depth
+
+The `Signac` documentation recommends a logistic regression test, using the
+total number of fragments per cell as a latent variable to account for
+differences in sequencing depth (`test.use = 'LR', latent.vars = 'nCount_ATAC'`).
+This is more rigorous, but much slower (> 30 minutes for this comparison): try
+it after the workshop!
+:::
 
 ```{r filename = "R"}
 DefaultAssay(PBMC) <- 'ATAC'
@@ -500,8 +532,7 @@ da_peaks <- FindMarkers(
   object = PBMC,
   ident.1 = "Monocytes",
   ident.2 = "B-cells",
-  test.use = 'LR',
-  latent.vars = 'nCount_ATAC'
+  min.pct = 0.05
 )
 head(da_peaks)
 VlnPlot(

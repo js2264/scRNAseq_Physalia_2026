@@ -61,6 +61,7 @@ Suggests:
     hdf5r,
     Seurat,
     SeuratObject,
+    presto,
     Signac,
     rliger,
     harmony,

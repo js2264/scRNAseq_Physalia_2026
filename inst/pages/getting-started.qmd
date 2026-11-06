@@ -62,8 +62,9 @@ as `~/work`: save your files there to keep them after the container stops.
 ::: {.callout-tip icon='true'}
 ## Memory requirements
 
-Some labs load fairly large datasets in memory: we recommend giving at least
-8 GB of RAM to Docker (in `Docker Desktop`: `Settings` > `Resources`).
+Some labs load fairly large datasets in memory (the scATAC-seq lab needs
+~12 GB): we recommend giving at least 16 GB of RAM to Docker (in
+`Docker Desktop`: `Settings` > `Resources`).
 :::
 
 Alternatively, you can install all the packages used in this workshop in your

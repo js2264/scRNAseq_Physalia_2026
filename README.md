@@ -52,7 +52,8 @@ docker run -e PASSWORD=physalia -p 8787:8787 ghcr.io/js2264/scrnaseqphysalia2026
 ```
 
 then open <http://localhost:8787> and log in as `rstudio` / `physalia`. The
-datasets of the `R` labs are already cached in the image.
+datasets of the `R` labs are already cached in the image. Give Docker at least
+12 GB of RAM (16 GB recommended) to run every lab.
 
 **Locally**: `BiocManager::install("js2264/scRNAseq_Physalia_2026", dependencies = TRUE)`
 (R >= 4.6, Bioconductor devel).
@@ -93,8 +94,8 @@ hand, so they must be done once in the GitHub settings:
    [Orchestra submission form](https://orchestraplatform.org/docs/contribute/submit/),
    with image `ghcr.io/js2264/scrnaseqphysalia2026:devel`, app port `8787`
    (no env/args needed: Bioconductor images start without login on Orchestra),
-   a session duration covering a day of class (e.g. `8h`), and a
-   **Large / X-Large** size: Labs 7 and 8 need ~8 GB of RAM.
+   a session duration covering a day of class (e.g. `8h`), and the
+   **X-Large** size: Lab 7 (scATAC-seq) peaks at ~12 GB of RAM, Lab 8 at ~8 GB.
 
 ## TODO before the workshop
 
