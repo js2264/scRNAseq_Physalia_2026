@@ -379,7 +379,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><p class="biocbook-md-link small"><a href="index.md" type="text/markdown"><i class="bi bi-markdown" aria-hidden="true"></i> View as Markdown</a></p><p><img src="assets/cover.png" title="Single-cell RNA-seq analysis with R/Bioconductor" class="quarto-cover-image nolightbox img-fluid"></p>
-<p><strong>Package:</strong> scRNAseqPhysalia2026<br><strong>Authors:</strong> Jacques Serizay [aut, cre], Orr Ashenberg [aut], Fabricio Almeida-Silva [aut]<br><strong>Compiled:</strong> 2026-11-06<br><strong>Package version:</strong> 1.0.0<br><strong>R version:</strong> <b style="color:red;">R version 4.6.1 (2026-06-24)</b><br><strong>BioC version:</strong> <b style="color:red;">3.24</b><br><strong>License:</strong> MIT + file LICENSE<br></p>
+<p><strong>Package:</strong> scRNAseqPhysalia2026<br><strong>Authors:</strong> Jacques Serizay [aut, cre], Orr Ashenberg [aut], Fabricio Almeida-Silva [aut]<br><strong>Compiled:</strong> 2026-11-06<br><strong>Package version:</strong> 1.0.1<br><strong>R version:</strong> <b style="color:red;">R version 4.6.1 (2026-06-24)</b><br><strong>BioC version:</strong> <b style="color:red;">3.24</b><br><strong>License:</strong> MIT + file LICENSE<br></p>
 <section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1>
 <p>This is the landing page for the <strong>“Single-cell RNA-seq analysis with R/Bioconductor”</strong> workshop organised by <a href="https://www.physalia-courses.org/">Physalia</a>, <strong>2026 edition</strong>.</p>
 <p>It gathers all the lectures and hands-on labs of the course. Every lab can be run in the cloud, in your web browser, with nothing to install: see <a href="./pages/getting-started.html">Getting started</a>.</p>
@@ -532,8 +532,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We will start by introducing general concepts about single-cell RNA-sequencing. From there, we will then continue to describe the main analysis steps to go from raw sequencing data to processed and usable data. We will present classical analysis workflows, their output and the possible paths to investigate downstream of this.</p>
 <p>Throughout the workshop, <code>bash</code> tools and <code>R/Bioconductor</code> packages will be used to analyse datasets and learn new approaches.</p>
 </section><section id="when" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="when">When</h2>
-<!-- TODO: update with the dates of the 2026 edition -->
-<p><strong>Dates of the 2026 edition: to be announced.</strong> Classes run from 14:00 to 20:00 (Paris time), over five days.</p>
+<p>w<strong>Dates of the 2026 edition: 16–20 November 2026.</strong> Classes run from 14:00 to 20:00 (Paris time), over five days.</p>
 </section><section id="where" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="where">Where</h2>
 <p>This course will be held online. All the hands-on labs run in the cloud, on the <a href="https://orchestraplatform.org/">Bioconductor Orchestra platform</a>: each participant gets their own <code>RStudio</code> session, in their web browser, started from the Docker image built from this book.</p>
 </section><section id="how" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="how">How</h2>
@@ -563,7 +562,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Throughout the course, we will also have a focus on reproducible research, documented content and interactive reports.</p>
 </section><section id="instructors" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="instructors">Instructors</h2>
-<!-- TODO: update the list of instructors for the 2026 edition -->
 <p><a href="mailto:jacques.serizay@pasteur.fr">Jacques Serizay</a></p>
 <p><a href="mailto:orr@broadinstitute.org">Orr Ashenberg</a></p>
 <p><a href="mailto:fabricio_almeidasilva@hotmail.com">Fabrício Almeida-Silva</a></p>
@@ -865,7 +863,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">##   png                    0.1-9     2026-03-15 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   polyclip               1.10-7    2024-07-23 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   praise                 1.0.0     2015-08-11 [2] RSPM (R 4.6.0)</span></span>
-<span><span class="co">##   preprocessCore         1.75.1    2026-08-31 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   preprocessCore         1.75.3    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   presto                 1.1.0     2026-09-30 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   prettyunits            1.2.0     2023-09-24 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   princurve              2.1.6     2021-01-18 [2] RSPM (R 4.6.0)</span></span>
@@ -948,7 +946,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">##   scran                  1.41.1    2026-05-20 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   scrapper               1.7.11    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   scRNAseq               2.27.0    2026-04-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
-<span><span class="co">##   scRNAseqPhysalia2026   1.0.0     2026-11-06 [1] local</span></span>
+<span><span class="co">##   scRNAseqPhysalia2026   1.0.1     2026-11-06 [1] local</span></span>
 <span><span class="co">##   sctransform            0.4.3     2026-01-10 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   selectr                0.8-0     2026-09-27 [2] RSPM (R 4.6.0)</span></span>
@@ -1032,7 +1030,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">##   zip                    3.0.2     2026-08-04 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e</span></span>
+<span><span class="co">##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642</span></span>
 <span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
 <span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
 <span><span class="co">##   * ── Packages attached to the search path.</span></span>

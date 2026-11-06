@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <p>The estimated time for this lab is around 1h15.</p>
-<p>This lab only uses command-line tools (<code>cellranger</code>) from the <code>terminal</code>: none of the code on this page is run when the book is built. The outputs shown below were obtained by the instructors when preparing the lab.</p>
+<p><strong>We will not run <code>cellranger</code> in this lab</strong>: it is not available in the workshop environment (see below). The two <code>cellranger</code> commands of this lab (<code>cellranger mkfastq</code> and <code>cellranger count</code>) were run beforehand by the instructors, with <code>cellranger</code> 7.1.0, on the same data. Their output is shown below, and <strong>all the files they produced are available in your session</strong>, in the (read-only) <code>~/Share/data_wrangling/</code> folder. All the other commands of this lab read these files: run them in your terminal!</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -382,6 +382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Learn how to demultiplex sequencing data using <code>cellranger mkfastq</code>.</li>
 <li>Learn how to generate gene count matrices using <code>cellranger count</code>.</li>
+<li>Explore the outputs of both commands.</li>
 </ul>
 </div>
 </div>
@@ -391,12 +392,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span><code>cellranger</code> and its references
+<span class="screen-reader-only">Warning</span>Running <code>cellranger</code> on your own data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><a href="https://www.10xgenomics.com/support/software/cell-ranger/latest"><code>cellranger</code></a> is distributed by 10x Genomics under its own end-user license agreement, and <code>cellranger mkfastq</code> additionally relies on Illumina’s <code>bcl2fastq</code>. Your instructors will tell you where to find both tools, as well as the pre-built <code>cellranger</code> transcriptome reference used in this lab (~10 GB), in your workshop session. On your own machine, <code>cellranger</code> can be downloaded from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">10x Genomics website</a> and pre-built references are listed <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads#reference-downloads">here</a>.</p>
-<p>Recent <code>cellranger</code> releases deprecate <code>cellranger mkfastq</code> in favour of Illumina’s <code>BCL Convert</code>: check the documentation of the version you use.</p>
+<p><a href="https://www.10xgenomics.com/support/software/cell-ranger/latest"><code>cellranger</code></a> is distributed by 10x Genomics under its own end-user license agreement, and requires a pre-built transcriptome reference (~10 GB for the mouse reference used here): neither is included in the workshop environment. To run it on your own machine, download <code>cellranger</code> from the <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads">10x Genomics website</a> and a pre-built reference from <a href="https://www.10xgenomics.com/support/software/cell-ranger/downloads#reference-downloads">here</a>.</p>
+<p><code>cellranger mkfastq</code> additionally relies on Illumina’s <code>bcl2fastq</code>, and recent <code>cellranger</code> releases deprecate it in favour of Illumina’s <code>BCL Convert</code>. Check the documentation of the version you use: e.g., since <code>cellranger</code> 8.0, <code>cellranger count</code> also requires a <code>--create-bam true</code> (or <code>false</code>) argument.</p>
 </div>
 </div>
 <section id="demultiplexing-sequencing-data-with-cellranger-mkfastq" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="demultiplexing-sequencing-data-with-cellranger-mkfastq">
@@ -404,16 +405,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </h2>
 <p>Navigate to your terminal in <code>RStudio</code>.</p>
 <p>Go to the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/inputs/cr-mkfastq">cellranger mkfastq page</a> and read the <strong>Overview</strong>.</p>
-<p>For this workshop, we are going to look at a toy dataset provided by 10x Genomics: <code>cellranger-tiny-bcl-1.2.0</code>. It comes with a samplesheet file, <code>cellranger-tiny-bcl-simple-1.2.0.csv</code>, which contains the sample information.</p>
+<p>For this workshop, we are going to look at a toy dataset provided by 10x Genomics: <code>cellranger-tiny-bcl-1.2.0</code>, a sequencing run folder containing <code>.bcl</code> files. It comes with a samplesheet file, <code>cellranger-tiny-bcl-simple-1.2.0.csv</code>, which contains the sample information. Both are available in the <code>~/Share/data_wrangling/</code> folder, along with the outputs of <code>cellranger mkfastq</code> (<code>tiny-bcl/</code>) and of <code>cellranger count</code> (<code>counts/</code>):</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/data/data_wrangling <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/data/data_wrangling</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-simple-1.2.0.csv</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> cellranger-tiny-bcl-1.2.0.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/Share/data_wrangling/</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 16</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 5 root root 4096 Nov  6 18:55 cellranger-tiny-bcl-1.2.0</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root   41 Nov  6 18:09 cellranger-tiny-bcl-simple-1.2.0.csv</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 3 root root 4096 Nov  6 18:09 counts</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 3 root root 4096 Nov  6 18:55 tiny-bcl</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where do these files come from?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The run folder was downloaded from 10x Genomics (no need to run this):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xzf</span> cellranger-tiny-bcl-1.2.0.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>Note that the samplesheet currently distributed by 10x Genomics (<a href="https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-simple-1.2.0.csv" class="uri">https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-simple-1.2.0.csv</a>) lists a different sample index set (<code>SI-P03-C9</code>) from the one used to produce the outputs of this lab (<code>SI-GA-E3</code>, in <code>~/Share/data_wrangling/</code>).</p>
 </div>
 </div>
 <div class="callout-question">
@@ -430,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Go to the Terminal tab in your <code>RStudio</code> and take a look at the 10x samplesheet <code>.csv</code> file</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -439,18 +465,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/data/data_wrangling/cellranger-tiny-bcl-simple-1.2.0.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/Share/data_wrangling/cellranger-tiny-bcl-simple-1.2.0.csv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  Lane,Sample,Index</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  1,test_sample,SI-GA-E3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<pre class="text"><code>Lane,Sample,Index
-1,test_sample,SI-P03-C9</code></pre>
+<p>The reads of lane <code>1</code> tagged with one of the 4 index sequences of the 10x sample index set <code>SI-GA-E3</code> (<code>AGGTATTG</code>, <code>CTCCTAGT</code>, <code>TCAAGGCC</code>, <code>GATGCCAA</code>) belong to the sample <code>test_sample</code>.</p>
 </div>
 </div>
 </div>
@@ -472,7 +499,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Next, explore the contents of the sequencing directory:</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -481,23 +508,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/data/data_wrangling/cellranger-tiny-bcl-1.2.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/Share/data_wrangling/cellranger-tiny-bcl-1.2.0</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/Share/data_wrangling/cellranger-tiny-bcl-1.2.0/RunInfo.xml</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 28</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 2 root root 4096 Nov  6 18:55 Config</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 3 root root 4096 Nov  6 18:55 Data</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 2 root root 4096 Nov  6 18:55 InterOp</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root   48 Nov  3  2025 RTAComplete.txt</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  673 Nov  3  2025 RunInfo.xml</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 5366 Nov  3  2025 runParameters.xml</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  &lt;?xml version="1.0"?&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  &lt;RunInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="2"&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;Run Id="161020_D00547_0905_BH35KCBCXY" Number="905"&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;Flowcell&gt;H35KCBCXY&lt;/Flowcell&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;Instrument&gt;D00547&lt;/Instrument&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;Date&gt;161020&lt;/Date&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;Reads&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">##        &lt;Read Number="1" NumCycles="26" IsIndexedRead="N" /&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">##        &lt;Read Number="2" NumCycles="8" IsIndexedRead="Y" /&gt;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">##        &lt;Read Number="3" NumCycles="98" IsIndexedRead="N" /&gt;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;/Reads&gt;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;FlowcellLayout LaneCount="1" SurfaceCount="1" SwathCount="1" TileCount="1" /&gt;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;AlignToPhiX&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">##        &lt;Lane&gt;1&lt;/Lane&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">##      &lt;/AlignToPhiX&gt;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;/Run&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">##  &lt;/RunInfo&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<pre class="text"><code>total 28
-drwxr-xr-x 2 rstudio rstudio 4096 Nov 12  2016 Config
-drwxr-xr-x 3 rstudio rstudio 4096 Nov 12  2016 Data
-drwxr-xr-x 2 rstudio rstudio 4096 Nov 12  2016 InterOp
--rw-r--r-- 1 rstudio rstudio   48 Nov 12  2016 RTAComplete.txt
--rw-r--r-- 1 rstudio rstudio  673 Nov 12  2016 RunInfo.xml
--rw-r--r-- 1 rstudio rstudio 5366 Nov 12  2016 runParameters.xml</code></pre>
 </div>
 </div>
 </div>
@@ -505,15 +550,7 @@ drwxr-xr-x 2 rstudio rstudio 4096 Nov 12  2016 InterOp
 </div>
 </div>
 </div>
-<p>Now we can demultiplex our bcl files by running the following command in the terminal. To do that, we will use the <code>cellranger mkfastq</code> command.</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> mkfastq <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
+<p>The <code>.bcl</code> files are demultiplexed into <code>fastq</code> files with the <code>cellranger mkfastq</code> command. Its arguments are listed in the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/inputs/cr-mkfastq">cellranger mkfastq documentation</a> (or with <code>cellranger mkfastq --help</code>, if <code>cellranger</code> is installed).</p>
 <div class="callout-question">
 <div class="callout callout-style-default callout-note callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -526,10 +563,10 @@ drwxr-xr-x 2 rstudio rstudio 4096 Nov 12  2016 InterOp
 </div>
 <div class="callout-body-container callout-body">
 <p>What is the purpose of <code>--id</code>, <code>--run</code>, and <code>--csv</code> arguments ?</p>
-<p>Choose these arguments wisely and execute the command to demultiplex the sequencing data.</p>
+<p>Choose these arguments wisely to demultiplex the sequencing data.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -538,20 +575,31 @@ drwxr-xr-x 2 rstudio rstudio 4096 Nov 12  2016 InterOp
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<ul>
+<li>
+<code>--id</code>: the name of the pipeline run, and of the folder created to store its outputs;</li>
+<li>
+<code>--run</code>: the path to the Illumina run folder, containing the <code>.bcl</code> files;</li>
+<li>
+<code>--csv</code>: the path to the samplesheet, assigning sample index(es) to each sample, in each lane.</li>
+</ul>
+<p>This is the command that was run by the instructors, from the folder containing the run folder and the samplesheet:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data/data_wrangling</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> mkfastq <span class="dt">\</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--id</span> tiny-bcl <span class="dt">\</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--run</span> ~/data/data_wrangling/cellranger-tiny-bcl-1.2.0 <span class="dt">\</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--csv</span> ~/data/data_wrangling/cellranger-tiny-bcl-simple-1.2.0.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Not run: `cellranger` is not available in your session, and its outputs</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">## are already in ~/Share/data_wrangling/tiny-bcl/</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> mkfastq <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--id</span> tiny-bcl <span class="dt">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--run</span> cellranger-tiny-bcl-1.2.0 <span class="dt">\</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--csv</span> cellranger-tiny-bcl-simple-1.2.0.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+<p>And here is its output (abridged, and with the paths edited to the location of the files in your session):</p>
 <pre class="text"><code>cellranger mkfastq (cellranger-7.1.0)
 Copyright (c) 2021 10x Genomics, Inc.  All rights reserved.
 -------------------------------------------------------------------------------
@@ -563,16 +611,22 @@ Checking system environment...
 Emitting run information...
 Checking read specification...
 Checking samplesheet specs...
-
+2025-11-13 18:54:42 [runtime] (ready)           ID.tiny-bcl.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET
+2025-11-13 18:54:42 [runtime] (run:local)       ID.tiny-bcl.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET.fork0.chnk0.main
+2025-11-13 18:54:44 [runtime] (chunks_complete) ID.tiny-bcl.MAKE_FASTQS_CS.MAKE_FASTQS.PREPARE_SAMPLESHEET
+2025-11-13 18:54:44 [runtime] (ready)           ID.tiny-bcl.MAKE_FASTQS_CS.MAKE_FASTQS.BCL2FASTQ_WITH_SAMPLESHEET
 ...
+2025-11-13 18:54:56 [runtime] (join_complete)   ID.tiny-bcl.MAKE_FASTQS_CS.MAKE_FASTQS.MERGE_FASTQS_BY_LANE_SAMPLE
 
 Outputs:
-- FASTQ output folder:   ~/data/data_wrangling/tiny-bcl/outs/fastq_path
-- Interop output folder: ~/data/data_wrangling/tiny-bcl/outs/interop_path
-- Input samplesheet:     ~/data/data_wrangling/tiny-bcl/outs/input_samplesheet.csv
+- FASTQ output folder:   ~/Share/data_wrangling/tiny-bcl/outs/fastq_path
+- Interop output folder: ~/Share/data_wrangling/tiny-bcl/outs/interop_path
+- Input samplesheet:     ~/Share/data_wrangling/tiny-bcl/outs/input_samplesheet.csv
 
 Waiting 6 seconds for UI to do final refresh.
-Pipestance completed successfully!</code></pre>
+Pipestance completed successfully!
+
+Saving pipestance info to "tiny-bcl/tiny-bcl.mri.tgz"</code></pre>
 </div>
 </div>
 </div>
@@ -586,12 +640,19 @@ Pipestance completed successfully!</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/data/data_wrangling/tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/Share/data_wrangling/tiny-bcl/outs/fastq_path</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/Share/data_wrangling/tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 12</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 3 root root 4096 Nov  6 18:55 H35KCBCXY</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 3 root root 4096 Nov  3  2025 Reports</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 2 root root 4096 Nov  6 18:55 Stats</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 48148</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  3930346 Nov  3  2025 test_sample_S1_L001_I1_001.fastq.gz</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 11093755 Nov  3  2025 test_sample_S1_L001_R1_001.fastq.gz</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 34273874 Nov  3  2025 test_sample_S1_L001_R2_001.fastq.gz</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<pre class="text"><code>-rw-r--r-- 1 rstudio rstudio test_sample_S1_L001_I1_001.fastq.gz
--rw-r--r-- 1 rstudio rstudio test_sample_S1_L001_R1_001.fastq.gz
--rw-r--r-- 1 rstudio rstudio test_sample_S1_L001_R2_001.fastq.gz</code></pre>
+<p><code>cellranger mkfastq</code> also writes the reads which could not be assigned to any sample in <code>Undetermined_*.fastq.gz</code> files: these were removed from <code>~/Share/data_wrangling/tiny-bcl/</code> to save space.</p>
 <div class="callout-question">
 <div class="callout callout-style-default callout-note callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -603,11 +664,11 @@ Pipestance completed successfully!</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Look at the first reads listed in index read (<code>I1</code>), read 1 (<code>R1</code>), and read (<code>R2</code>) files.</p>
-<p>What is the purpose of the index read? What does it contain?</p>
+<p>Look at the first reads listed in index read (<code>I1</code>), read 1 (<code>R1</code>), and read 2 (<code>R2</code>) files.</p>
+<p>What is the purpose of the index read? What does it contain? And read 1?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -616,28 +677,40 @@ Pipestance completed successfully!</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/data/data_wrangling/tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample/test_sample_S1_L001_I1_001.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Share/data_wrangling/tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> test_sample_S1_L001_I1_001.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> test_sample_S1_L001_R1_001.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> test_sample_S1_L001_R2_001.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  @D00547:905:H35KCBCXY:1:1101:1284:1973 1:N:0:AGGTATTG</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  AGGTATTG</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  GGGGGIII</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  @D00547:905:H35KCBCXY:1:1101:1729:1981 1:N:0:AGGTATTG</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  AGGTATTG</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  GAGGGIIG</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  @D00547:905:H35KCBCXY:1:1101:2005:1944 1:N:0:AGGTATTG</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  AGGTATTG</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  AA&lt;G.A.G</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">##  @D00547:905:H35KCBCXY:1:1101:1284:1973 1:N:0:AGGTATTG</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">##  CGGGTCACAAGCGAGTGTTTTTAGTN</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">##  GGGGGIIIIIIIIGIGGGIIIIIII#</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">##  @D00547:905:H35KCBCXY:1:1101:1284:1973 2:N:0:AGGTATTG</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">##  TCAGCCCTAACCGCTACTGGCTGTGTGCTGCCACAGGCCCCAGCATCAAGATCTGGGATTTAGAGGGAAAGATCATTGTAGATGAACTGAAGCAAGAN</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">##  AGGGGIIIGIIIIIGGIIIIIGIGGIIIIIGGIIIIIIIIIGGIIIIGIGIIIGIGGGGGIIIGGGIIIIIIIIIGGGIGIGIGIIIIIIIIIIIIG#</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<pre class="text"><code>@D00547:905:H35KCBCXY:1:1101:1284:1973 1:N:0:AGGTATTG
-AGGTATTG
-+
-GGGGGIII
-@D00547:905:H35KCBCXY:1:1101:1729:1981 1:N:0:AGGTATTG
-AGGTATTG
-+
-GAGGGIIG
-@D00547:905:H35KCBCXY:1:1101:2005:1944 1:N:0:AGGTATTG
-AGGTATTG
-+
-AA&lt;G.A.G</code></pre>
+<p>The index read (<code>I1</code>) contains the sample index (here, <code>AGGTATTG</code>, one of the 4 sequences of the <code>SI-GA-E3</code> index set): it identifies the library, i.e. the sample, each read comes from. Read 1 (<code>R1</code>, 26 bp here) contains the cell barcode (first 16 bp) and the UMI (next 10 bp). Read 2 (<code>R2</code>) contains the sequence of the transcript (cDNA).</p>
 </div>
 </div>
 </div>
@@ -645,21 +718,13 @@ AA&lt;G.A.G</code></pre>
 </div>
 </div>
 </div>
-<p>Open the html file <code>tiny-bcl/outs/fastq_path/Reports/html/index.html</code> by navigating to the file in RStudio, using the Files Tab. When you click on the file, select the option to View in Web Browser. Take some time to explore the demultiplexed outputs.</p>
+<p>Open the html file <code>~/Share/data_wrangling/tiny-bcl/outs/fastq_path/Reports/html/index.html</code> by navigating to the file in RStudio, using the Files Tab. When you click on the file, select the option to View in Web Browser. Take some time to explore the demultiplexed outputs.</p>
 </section><section id="generating-gene-count-matrices-with-cellranger-count" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="generating-gene-count-matrices-with-cellranger-count">
 <span class="header-section-number">4.2</span> Generating gene count matrices with <code>cellranger count</code>
 </h2>
 <p>Go to the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/algorithms-overview/cr-gex-algorithm">cellranger count algorithm overview</a> and read the section on <strong>Alignment</strong> (Read Trimming, Genome Alignment, MAPQ adjustment, Transcriptome Alignment, UMI Counting).</p>
-<p>In bash, the <code>cellranger count</code> command is used to generate gene count matrices from the demultiplexed reads.</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> count <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-<p>Now, we will generate a gene count matrix for the <code>test_sample</code> reads using <code>cellranger count</code> and the <code>refdata-gex-mm10-2020-A</code> transcriptome reference provided by 10x Genomics.</p>
+<p>The <code>cellranger count</code> command generates gene count matrices from the demultiplexed reads. Its arguments are described in the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest">cellranger documentation</a> (or with <code>cellranger count --help</code>, if <code>cellranger</code> is installed).</p>
+<p>The gene count matrix of the <code>test_sample</code> reads was generated with <code>cellranger count</code> and the <code>refdata-gex-mm10-2020-A</code> mouse transcriptome reference provided by 10x Genomics.</p>
 <div class="callout-question">
 <div class="callout callout-style-default callout-note callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -671,10 +736,10 @@ AA&lt;G.A.G</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>What is the purpose of the <code>--id</code>, <code>--transcriptome</code>, <code>--fastqs</code>, <code>--sample</code>, and <code>--create-bam</code> arguments?</p>
+<p>What is the purpose of the <code>--id</code>, <code>--transcriptome</code>, <code>--fastqs</code> and <code>--sample</code> arguments?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -683,47 +748,76 @@ AA&lt;G.A.G</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<ul>
+<li>
+<code>--id</code>: the name of the pipeline run, and of the folder created to store its outputs;</li>
+<li>
+<code>--transcriptome</code>: the path to the <code>cellranger</code>-compatible transcriptome reference (genome index and gene annotations);</li>
+<li>
+<code>--fastqs</code>: the path to the folder containing the <code>fastq</code> files;</li>
+<li>
+<code>--sample</code>: the prefix of the names of the <code>fastq</code> files to use (<code>test_sample</code> for <code>test_sample_S1_L001_R1_001.fastq.gz</code>, …).</li>
+</ul>
+<p>This is the command that was run by the instructors (from the same folder as <code>cellranger mkfastq</code>):</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Change this path to the location of the pre-built reference in your session</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="va">REF</span><span class="op">=</span>~/data/refdata-gex-mm10-2020-A</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data/data_wrangling</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> count <span class="dt">\</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--id</span> counts <span class="dt">\</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--transcriptome</span> <span class="va">${REF}</span> <span class="dt">\</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqs</span> tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample <span class="dt">\</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--sample</span> test_sample <span class="dt">\</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--create-bam</span> true</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Not run: `cellranger` is not available in your session, and its outputs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">## are already in ~/Share/data_wrangling/counts/</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> count <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--id</span> counts <span class="dt">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--transcriptome</span> refdata-gex-mm10-2020-A <span class="dt">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqs</span> tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample <span class="dt">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--sample</span> test_sample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+<p>And here is its output (abridged, and with the paths edited to the location of the files in your session):</p>
 <pre class="text"><code>Martian Runtime - v4.0.10
 Checking sample info...
 Checking FASTQ folder...
 Checking reference...
+Checking reference_path (refdata-gex-mm10-2020-A)...
 Checking optional arguments...
-
+mro: v4.0.10
+mrp: v4.0.10
+Anaconda: Python 3.9.7
+numpy: 1.22.3
+scipy: 1.9.1
+pysam: 0.17.0
+h5py: 3.6.0
+pandas: 1.3.5
+STAR: 2.7.2a
+samtools: samtools 1.12
+2025-11-13 19:17:53 [runtime] (ready)           ID.counts.SC_RNA_COUNTER_CS.WRITE_GENE_INDEX
+2025-11-13 19:17:53 [runtime] (run:local)       ID.counts.SC_RNA_COUNTER_CS.WRITE_GENE_INDEX.fork0.chnk0.main
 ...
 
 Outputs:
-- Run summary HTML:                         ~/data/data_wrangling/counts/outs/web_summary.html
-- Run summary CSV:                          ~/data/data_wrangling/counts/outs/metrics_summary.csv
-- BAM:                                      ~/data/data_wrangling/counts/outs/possorted_genome_bam.bam
-- BAM BAI index:                            ~/data/data_wrangling/counts/outs/possorted_genome_bam.bam.bai
-- Filtered feature-barcode matrices MEX:    ~/data/data_wrangling/counts/outs/filtered_feature_bc_matrix
-- Filtered feature-barcode matrices HDF5:   ~/data/data_wrangling/counts/outs/filtered_feature_bc_matrix.h5
-- Unfiltered feature-barcode matrices MEX:  ~/data/data_wrangling/counts/outs/raw_feature_bc_matrix
-- Unfiltered feature-barcode matrices HDF5: ~/data/data_wrangling/counts/outs/raw_feature_bc_matrix.h5
-- Secondary analysis output CSV:            ~/data/data_wrangling/counts/outs/analysis
-- Per-molecule read information:            ~/data/data_wrangling/counts/outs/molecule_info.h5
-- Loupe Browser file:                       ~/data/data_wrangling/counts/outs/cloupe.cloupe
+- Run summary HTML:                         ~/Share/data_wrangling/counts/outs/web_summary.html
+- Run summary CSV:                          ~/Share/data_wrangling/counts/outs/metrics_summary.csv
+- BAM:                                      ~/Share/data_wrangling/counts/outs/possorted_genome_bam.bam
+- BAM BAI index:                            ~/Share/data_wrangling/counts/outs/possorted_genome_bam.bam.bai
+- BAM CSI index:                            null
+- Filtered feature-barcode matrices MEX:    ~/Share/data_wrangling/counts/outs/filtered_feature_bc_matrix
+- Filtered feature-barcode matrices HDF5:   ~/Share/data_wrangling/counts/outs/filtered_feature_bc_matrix.h5
+- Unfiltered feature-barcode matrices MEX:  ~/Share/data_wrangling/counts/outs/raw_feature_bc_matrix
+- Unfiltered feature-barcode matrices HDF5: ~/Share/data_wrangling/counts/outs/raw_feature_bc_matrix.h5
+- Secondary analysis output CSV:            ~/Share/data_wrangling/counts/outs/analysis
+- Per-molecule read information:            ~/Share/data_wrangling/counts/outs/molecule_info.h5
+- CRISPR-specific analysis:                 null
+- Antibody aggregate barcodes:              null
+- Loupe Browser file:                       ~/Share/data_wrangling/counts/outs/cloupe.cloupe
+- Feature Reference:                        null
+- Target Panel File:                        null
+- Probe Set File:                           null
 
 Waiting 6 seconds for UI to do final refresh.
 Pipestance completed successfully!</code></pre>
+<p>With this version of <code>cellranger</code>, reads mapped to introns are also counted by default (<code>--include-introns true</code>), and a <code>BAM</code> file is created by default.</p>
 </div>
 </div>
 </div>
@@ -731,14 +825,26 @@ Pipestance completed successfully!</code></pre>
 </div>
 </div>
 </div>
-<p>While the count command is running, read about the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices">format of the feature-barcode matrices</a>.</p>
-<p>Once the count command is finished running, the pipeline outputs can be viewed with <code>ls</code>:</p>
+<p>Read about the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-mex-matrices">format of the feature-barcode matrices</a>.</p>
+<p>The pipeline outputs can be viewed with <code>ls</code>:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/data/data_wrangling/counts/outs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/Share/data_wrangling/counts/outs</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 56900</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 7 root root     4096 Nov  6 18:55 analysis</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  2782024 Nov  3  2025 cloupe.cloupe</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 2 root root     4096 Nov  6 18:55 filtered_feature_bc_matrix</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root   506767 Nov  3  2025 filtered_feature_bc_matrix.h5</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root      627 Nov  3  2025 metrics_summary.csv</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  1806311 Nov  3  2025 molecule_info.h5</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 47960294 Nov  3  2025 possorted_genome_bam.bam</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  1744976 Nov  3  2025 possorted_genome_bam.bam.bai</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  drwxr-xr-x 2 root root     4096 Nov  6 18:55 raw_feature_bc_matrix</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root   921409 Nov  3  2025 raw_feature_bc_matrix.h5</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  2513806 Nov  3  2025 web_summary.html</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="callout-question">
@@ -768,8 +874,22 @@ Tip
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/data/data_wrangling/counts/outs/raw_feature_bc_matrix.h5</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> ~/data/data_wrangling/counts/outs/filtered_feature_bc_matrix.h5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/Share/data_wrangling/counts/outs</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> raw_feature_bc_matrix.h5 filtered_feature_bc_matrix.h5</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> raw_feature_bc_matrix/ filtered_feature_bc_matrix/</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 506767 Nov  3  2025 filtered_feature_bc_matrix.h5</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 921409 Nov  3  2025 raw_feature_bc_matrix.h5</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  filtered_feature_bc_matrix/:</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 748</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root   3981 Nov  3  2025 barcodes.tsv.gz</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 290896 Nov  3  2025 features.tsv.gz</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 465525 Nov  3  2025 matrix.mtx.gz</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  raw_feature_bc_matrix/:</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 1100</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 186199 Nov  3  2025 barcodes.tsv.gz</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 260194 Nov  3  2025 features.tsv.gz</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 674205 Nov  3  2025 matrix.mtx.gz</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -777,7 +897,7 @@ Tip
 <p>How many cells and genes are stored in each matrix? Comment.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -786,27 +906,101 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of genes</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/data/data_wrangling/counts/outs/filtered_feature_bc_matrix/features.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/data/data_wrangling/counts/outs/raw_feature_bc_matrix/features.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of cells</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/data/data_wrangling/counts/outs/filtered_feature_bc_matrix/barcodes.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/data/data_wrangling/counts/outs/raw_feature_bc_matrix/barcodes.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of genes</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/data_wrangling/counts/outs/filtered_feature_bc_matrix/features.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/data_wrangling/counts/outs/raw_feature_bc_matrix/features.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of cells</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/data_wrangling/counts/outs/filtered_feature_bc_matrix/barcodes.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/data_wrangling/counts/outs/raw_feature_bc_matrix/barcodes.tsv.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  32285</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  32285</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  686</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  42543</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>Both matrices list the same genes. The raw matrix contains every barcode with at least one UMI (i.e.&nbsp;mostly empty droplets), while the filtered matrix only contains the barcodes <code>cellranger</code> called as cells.</p>
 </div>
 </div>
 </div>
 </div>
+<p>Now open the html file <code>~/Share/data_wrangling/counts/outs/web_summary.html</code> by navigating to the file in RStudio, using the Files Tab. When you click on the file, select the option to View in Web Browser. Take some time to explore the gene expression matrix outputs.</p>
 </div>
 </div>
-<p>Now open the html file <code>counts/outs/web_summary.html</code> by navigating to the file in RStudio, using the Files Tab. When you click on the file, select the option to View in Web Browser. Take some time to explore the gene expression matrix outputs.</p>
+</div>
+<div class="callout-question">
+<div class="callout callout-style-default callout-note callout-titled" title="Bonus question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Bonus question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>cellranger count</code> also produced a <code>BAM</code> file, containing the alignment of every read. Use <code>samtools</code> (see <a href="../../pages/day1/Lab1_Intro.html">Lab 1</a>) to look at one of the reads assigned to a gene. Where are the cell barcode, the UMI and the gene of the read stored?</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-d</span> GN ~/Share/data_wrangling/counts/outs/possorted_genome_bam.bam <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 1 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">'\t'</span> <span class="st">'\n'</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  D00547:905:H35KCBCXY:1:1101:2865:43071</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  16</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  chr1</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  4774072</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  255</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  98M</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  *</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  0</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  0</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  CAGCTCCAAGCATGTAACGAGCAAGCTAGAGTGTAGTGGTCTGCCTACAGCAAGTTATCACGAAAGACAACCGTCATGGGACTCACACTAACATCAGA</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  GGGGAGIGGGIIIIIIIIIIIIIIIGGIIIIIGIIIIIIGIIIIGIIIIIIIIGGAGGGIIIIIIIIGGGGIGGGG.IIGIIGIGGGIIIGGGAGGGG</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  NH:i:1</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  HI:i:1</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  AS:i:96</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  nM:i:0</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">##  RG:Z:counts:0:1:H35KCBCXY:1</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co">##  TX:Z:ENSMUST00000130201,+930,98M;ENSMUST00000156816,+3244,98M</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">##  GX:Z:ENSMUSG00000033845</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co">##  GN:Z:Mrpl15</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">##  fx:Z:ENSMUSG00000033845</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co">##  RE:A:E</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co">##  xf:i:25</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co">##  CR:Z:GTTAAGCCAGCCTGTG</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co">##  CY:Z:GGGGGIIIIIIIIIII</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="co">##  CB:Z:GTTAAGCCAGCCTGTG-1</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co">##  UR:Z:ATCGGTCAGC</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="co">##  UY:Z:IIIIIIIIII</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">##  UB:Z:ATCGGTCAGC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>After the 11 mandatory fields of each alignment, <code>cellranger</code> adds tags to each read: <code>CR</code>/<code>CB</code> are the raw/corrected cell barcode, <code>UR</code>/<code>UB</code> the raw/corrected UMI, and <code>GX</code>/<code>GN</code> the ID/name of the gene the read is assigned to. Their description is available in the <a href="https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/outputs/cr-outputs-bam">cellranger documentation</a>.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

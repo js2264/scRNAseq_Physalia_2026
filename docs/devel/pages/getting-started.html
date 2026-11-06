@@ -423,6 +423,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Don’t forget, you can run a <code>bash</code> terminal from within RStudio! This may come handy if you want to process some data with command-line tools (e.g.&nbsp;<code>seqkit</code>, <code>samtools</code> or <code>cellranger</code>), for example. To do this, simply go to <code>Tools</code> &gt; <code>Terminal</code> &gt; <code>New terminal</code>: a new <code>Terminal</code> tab opens next to the <code>R</code> console. You should now be in your own home directory (<code>~</code>).</p>
 </section><section id="datasets" class="level2"><h2 class="anchored" data-anchor-id="datasets">Datasets</h2>
 <p>The labs download public datasets from GEO, ENA, 10x Genomics or Bioconductor’s <code>ExperimentHub</code>, using <code>BiocFileCache</code> (or the dedicated data packages): a dataset is only downloaded the first time it is requested, then read from a local cache. The datasets used in the <code>R</code> labs are already cached in the Docker image, so they are immediately available in your workshop session.</p>
+<p>The files that cannot be produced in a session (e.g.&nbsp;the outputs of <code>cellranger</code>, in Lab 2) or that are specific to this workshop (e.g.&nbsp;the datasets of the group projects) are available in the <code>~/Share/</code> folder of your session (read-only: copy the files you want to modify to your home folder).</p>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

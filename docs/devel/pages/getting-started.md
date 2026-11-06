@@ -55,3 +55,5 @@ Don’t forget, you can run a `bash` terminal from within RStudio! This may come
 ## Datasets
 
 The labs download public datasets from GEO, ENA, 10x Genomics or Bioconductor’s `ExperimentHub`, using `BiocFileCache` (or the dedicated data packages): a dataset is only downloaded the first time it is requested, then read from a local cache. The datasets used in the `R` labs are already cached in the Docker image, so they are immediately available in your workshop session.
+
+The files that cannot be produced in a session (e.g. the outputs of `cellranger`, in Lab 2) or that are specific to this workshop (e.g. the datasets of the group projects) are available in the `~/Share/` folder of your session (read-only: copy the files you want to modify to your home folder).

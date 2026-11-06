@@ -72,10 +72,10 @@ pwd
 history
 ```
 
-- put history into a `history.txt` file
+- put history into a `history.txt` file, in your home folder (`~`)
 
 ``` sh
-history > history.txt
+history > ~/history.txt
 ```
 
 - make a new folder called data
@@ -96,11 +96,15 @@ cd ~/data
 mv ../history.txt ./
 ```
 
-- check manual page of `wget` command (hit `q` to exit)
+- check the help of the `wget` command
 
 ``` sh
-man wget
+wget --help
 ```
+
+> **NOTE:**
+>
+> On most Linux and macOS computers, `man <command>` shows the full manual page of a command (e.g. `man wget`, hit `q` to exit). Like in most Docker images, manual pages are not installed in the workshop environment: use `<command> --help` instead.
 
 - check specific help for `samtools` command and subcommands
 
@@ -165,7 +169,7 @@ There are several ways to find this information, e.g. `ffq` command line tool, 
 
 > **NOTE:**
 >
-> The [`ffq` tool](https://github.com/pachterlab/ffq) from the Pachter lab is already installed in your workshop session. Check `ffq` help and try fetching metadata for the GSE ID `GSE148963`.
+> The [`ffq` tool](https://github.com/pachterlab/ffq) from the Pachter lab is already installed in your workshop session. Check `ffq` help and try fetching the metadata of the sequencing run of sample `AXH009` (`GSM4486714`): `SRR11575369`.
 >
 > > **TIP:**
 > >
@@ -179,9 +183,13 @@ There are several ways to find this information, e.g. `ffq` command line tool, 
 > >
 > > ``` sh
 > > ffq --help
-> > ffq -t GSE GSE148963 > GSE148963_search.txt
-> > head -n 30 GSE148963_search.txt
+> > ffq SRR11575369 > SRR11575369_ffq.json
+> > head -n 30 SRR11575369_ffq.json
 > > ```
+> >
+> > `ffq` returns the metadata of the run in `JSON` format: the experiment, study and sample it belongs to, and the download links of its files.
+> >
+> > `ffq` can, in principle, also be queried with GEO accessions directly (e.g. `ffq GSE148963`). With the current release of `ffq` (0.3.1), these queries (as well as queries of SRA studies, `SRP...`) fail, as NCBI changed the GEO web pages `ffq` reads. Queries of SRA runs (`SRR...`) work fine.
 
 > **NOTE:**
 >
@@ -189,45 +197,64 @@ There are several ways to find this information, e.g. `ffq` command line tool, 
 >
 > > **NOTE:**
 > >
-> > You can use a `grep` command: `grep` returns the lines which match a given pattern (e.g. a link…)!
+> > `ffq` lists the download links of the files of the run, from several mirrors (`ftp`: the ENA, `aws`, `gcp` and `ncbi`). You can use a `grep` command: `grep` returns the lines which match a given pattern (e.g. a link…)!
 > >
 > > ``` sh
-> > grep 'ftp://' GSE148963_search.txt
+> > grep '"url": "ftp://' SRR11575369_ffq.json
 > > ```
 > >
 > > And with a bit of `sed` magick…
 > >
 > > ``` sh
-> > grep 'ftp://' GSE148963_search.txt | sed 's,.*ftp:,ftp:,' | sed 's,".*,,' | grep ".fastq" > GSE148963_fastqlist.txt
-> > ## `ffq` looks through GEO repository to fing metadata associated with the `GSE148963` entry (including downloading links)
-> > ## grep 'ftp://' recovers the text lines that contain downloading links
+> > grep '"url": "ftp://' SRR11575369_ffq.json | sed 's,.*"ftp://,ftp://,' | sed 's,".*,,' > SRR11575369_fastqlist.txt
+> > cat SRR11575369_fastqlist.txt
+> > ## `ffq` looks through the SRA/ENA databases to find metadata associated with the `SRR11575369` run (including download links)
+> > ## grep '"url": "ftp://' recovers the text lines that contain FTP download links
 > > ## the `sed` commands clean up the text lines
-> > ## the `wget` command downloads locally the links listed in the generated file (GSE148963_fastqlist.txt)
-> > # wget -i GSE148963_fastqlist.txt ## Do not run, it would take too long...
+> > ## the `wget` command downloads locally the links listed in the generated file (SRR11575369_fastqlist.txt)
+> > # wget -i SRR11575369_fastqlist.txt ## Do not run, it would take too long (2 x 35 GB)...
 > > ```
 > >
-> > The ENA also directly serves download links for any run accession:
+> > To get the runs of every sample of the study at once, you can directly query the [ENA portal API](https://www.ebi.ac.uk/ena/portal/api/) with the SRA study ID of `GSE148963`: `SRP257542` (listed in the `Relations` section of the GEO page, and in the `study` field returned by `ffq`).
 > >
 > > ``` sh
-> > curl -s "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRR11575369&result=read_run&fields=fastq_ftp,fastq_bytes,read_count"
+> > curl -s "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRP257542&result=read_run&fields=run_accession,sample_alias,sample_title,fastq_bytes,fastq_ftp" > SRP257542_runs.tsv
+> > cut -f 1-4 SRP257542_runs.tsv
+> > cut -f 5 SRP257542_runs.tsv | tail -n +2 | tr ';' '\n' > GSE148963_fastqlist.txt
+> > cat GSE148963_fastqlist.txt
 > > ```
 
 > **NOTE:**
 >
-> The full `fastq` files for a single run of this study weigh ~35 GB each… Let’s only download the first 25,000 reads of the `SRR11575369` run (sample `AXH009`), by streaming the file from the ENA and stopping after 100,000 lines. Have a look at it!
+> The full `fastq` files for a single run of this study weigh ~35 GB each… Let’s only download the first 25,000 reads of the `SRR11575369` run (sample `AXH009`), by streaming the file from the ENA and stopping after 100,000 lines (each read spans 4 lines). Have a look at it!
 >
 > > **NOTE:**
 > >
 > > ``` sh
 > > mkdir -p ~/data && cd ~/data
+> > URL=https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369
 > > for READ in 1 2; do
-> >     curl -s https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_${READ}.fastq.gz \
+> >     echo "Streaming the first 25,000 reads of SRR11575369_${READ}.fastq.gz..."
+> >     curl -s ${URL}/SRR11575369_${READ}.fastq.gz \
 > >         | zcat 2>/dev/null \
 > >         | head -n 100000 \
 > >         | gzip > SRR11575369_${READ}.fq.gz
 > > done
+> > ls -lh SRR11575369_*.fq.gz
 > > zcat SRR11575369_1.fq.gz | head -n 12
 > > ```
+> >
+> > `curl` streams the compressed file, `zcat` decompresses it on the fly, `head` stops the stream after 100,000 lines and `gzip` compresses these lines into a new file. When `head` stops, `curl` and `zcat` complain that they cannot write anymore: `-s` and `2>/dev/null` silence these (expected) errors.
+> >
+> > Each file takes ~30 seconds to download and weighs ~2 MB. If a file only weighs a few bytes, the download failed (e.g. the ENA server is busy): a copy of both files is available in `~/Share/`.
+> >
+> > ``` sh
+> > cp ~/Share/SRR11575369_*.fq.gz ~/data/
+> > ```
+>
+> > **TIP:**
+> >
+> > Running these commands on your own Mac? There, `zcat file.gz` looks for a `file.gz.Z` file and fails: use `gzcat file.gz` (or `gunzip -c file.gz`) instead. Reading a stream (`... | zcat`) works as on Linux.
 
 > **NOTE:**
 >

@@ -622,12 +622,12 @@ An important question in scRNAseq field of research is: how to identify a cell t
 > > tsne_curve <- tsne_curve[order(tsne_curve$Order), ]
 > > head(tsne_curve)
 > > ##                                TSNE1     TSNE2 Order Lineage
-> > ##  Donor1-CGACCTTGTAGCGTCC-2 -9.962902 -32.59378     1       1
-> > ##  Donor1-GTGTGCGGTGGAAAGA-1 -9.962902 -32.59378     2       1
-> > ##  Donor1-GTTAAGCGTTTGACTG-1 -9.962902 -32.59378     3       1
-> > ##  Donor1-CGGACACTCAGCAACT-1 -9.962902 -32.59378     4       1
-> > ##  Donor1-CGCTTCATCTAACTGG-1 -9.962902 -32.59378     5       1
-> > ##  Donor1-TCATTTGTCTTGGGTA-1 -9.962902 -32.59378     6       1
+> > ##  Donor1-CGACCTTGTAGCGTCC-2 -10.02767 -32.94658     1       1
+> > ##  Donor1-GCGCCAAAGTATGACA-1 -10.02767 -32.94658     2       1
+> > ##  Donor1-GGACAGAAGAATAGGG-2 -10.02767 -32.94658     3       1
+> > ##  Donor1-AGCGTCGAGTGAACGC-1 -10.02767 -32.94658     4       1
+> > ##  Donor1-GGCTCGATCCTAGAAC-1 -10.02767 -32.94658     5       1
+> > ##  Donor1-GTCATTTCACAGACAG-1 -10.02767 -32.94658     6       1
 > > ```
 >
 > Plot PCA and tSNE embeddings, coloring cells by either their annotation or their pseudotime value. Overlay the principal curves to each embedding.
@@ -757,7 +757,7 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 
 > **WARNING:**
 >
-> RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with [`velocyto`](https://velocyto.org/), and the resulting `loom` file (`Guo_testis_full-counts.loom`) will be made available by your instructors during the workshop. The code below is therefore not run when the book is built.
+> RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with [`velocyto`](https://velocyto.org/). The resulting `loom` file (`Guo_testis_full-counts.loom`, 38 MB) is shipped with this book, and installed in your workshop session: its path is given by `system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")`. The code below is not run when the book is built.
 
 > **NOTE:**
 >
@@ -769,7 +769,8 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 > >
 > > ``` r
 > > ## - Import entire GSE112013 dataset with spliced/unspliced counts
-> > full_GSE112013_counts <- LoomExperiment::import('Guo_testis_full-counts.loom')
+> > loom_file <- system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")
+> > full_GSE112013_counts <- LoomExperiment::import(loom_file)
 > > full_GSE112013_counts
 > >
 > > ## - Filter `germcells` genes and cells to only retain those present in `full_GSE112013_counts`
@@ -976,7 +977,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
+>     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

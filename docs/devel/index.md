@@ -15,7 +15,7 @@ Fabrício Almeida-Silva
 **Package:** scRNAseqPhysalia2026\
 **Authors:** Jacques Serizay \[aut, cre\], Orr Ashenberg \[aut\], Fabricio Almeida-Silva \[aut\]\
 **Compiled:** 2026-11-06\
-**Package version:** 1.0.0\
+**Package version:** 1.0.1\
 **R version:** **R version 4.6.1 (2026-06-24)**\
 **BioC version:** **3.24**\
 **License:** MIT + file LICENSE\
@@ -65,7 +65,7 @@ Throughout the workshop, `bash` tools and `R/Bioconductor` packages will be used
 
 ## When
 
-**Dates of the 2026 edition: to be announced.** Classes run from 14:00 to 20:00 (Paris time), over five days.
+w**Dates of the 2026 edition: 16–20 November 2026.** Classes run from 14:00 to 20:00 (Paris time), over five days.
 
 ## Where
 
@@ -392,7 +392,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   png                    0.1-9     2026-03-15 [2] RSPM (R 4.6.0)
 > ##   polyclip               1.10-7    2024-07-23 [2] RSPM (R 4.6.0)
 > ##   praise                 1.0.0     2015-08-11 [2] RSPM (R 4.6.0)
-> ##   preprocessCore         1.75.1    2026-08-31 [2] Bioconductor 3.24 (R 4.6.1)
+> ##   preprocessCore         1.75.3    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   presto                 1.1.0     2026-09-30 [2] RSPM (R 4.6.0)
 > ##   prettyunits            1.2.0     2023-09-24 [2] RSPM (R 4.6.0)
 > ##   princurve              2.1.6     2021-01-18 [2] RSPM (R 4.6.0)
@@ -475,7 +475,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   scran                  1.41.1    2026-05-20 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scrapper               1.7.11    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scRNAseq               2.27.0    2026-04-30 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   scRNAseqPhysalia2026   1.0.0     2026-11-06 [1] local
+> ##   scRNAseqPhysalia2026   1.0.1     2026-11-06 [1] local
 > ##   sctransform            0.4.3     2026-01-10 [2] RSPM (R 4.6.0)
 > ##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   selectr                0.8-0     2026-09-27 [2] RSPM (R 4.6.0)
@@ -559,7 +559,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   zip                    3.0.2     2026-08-04 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
+> ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

@@ -126,7 +126,7 @@ genes_file <- bfcrpath(bfc, "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn
 ##  adding rname 'https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl/GSM4486714_AXH009_genes.tsv.gz'
 genes_file
 ##                                                                       BFC1 
-##  "/opt/R-cache/R/BiocFileCache/1c41889319e_GSM4486714_AXH009_genes.tsv.gz"
+##  "/opt/R-cache/R/BiocFileCache/1f026b611f3_GSM4486714_AXH009_genes.tsv.gz"
 genes <- read_tsv(genes_file, col_names = c('ID', 'Symbol'))
 ##  Rows: 32738 Columns: 2
 ##  ── Column specification ─────────────────────────────────────────────────────
@@ -230,12 +230,12 @@ mutate(genes, chr = sample(1:22, n(), replace = TRUE))
 ##  # A tibble: 32,738 × 3
 ##    ID              Symbol         chr
 ##    <chr>           <chr>        <int>
-##  1 ENSG00000243485 MIR1302-10      11
-##  2 ENSG00000237613 FAM138A          1
-##  3 ENSG00000186092 OR4F5            4
-##  4 ENSG00000238009 RP11-34P13.7     4
-##  5 ENSG00000239945 RP11-34P13.8    15
-##  6 ENSG00000237683 AL627309.1      21
+##  1 ENSG00000243485 MIR1302-10      16
+##  2 ENSG00000237613 FAM138A         16
+##  3 ENSG00000186092 OR4F5            2
+##  4 ENSG00000238009 RP11-34P13.7     2
+##  5 ENSG00000239945 RP11-34P13.8    21
+##  6 ENSG00000237683 AL627309.1      20
 ##  # ℹ 32,732 more rows
 ```
 
@@ -259,9 +259,9 @@ read_tsv(genes_file, col_names = c('ID', 'Symbol')) |>
 ##  # A tibble: 3 × 1
 ##    ID             
 ##    <chr>          
-##  1 ENSG00000203952
-##  2 ENSG00000147419
-##  3 ENSG00000255994
+##  1 ENSG00000115355
+##  2 ENSG00000135637
+##  3 ENSG00000181378
 ```
 
 ### 6.2.2 Important Bioconductor concepts:
@@ -524,17 +524,17 @@ gr
 ##  GRanges object with 32738 ranges and 2 metadata columns:
 ##            seqnames    ranges strand |              ID       Symbol
 ##               <Rle> <IRanges>  <Rle> |     <character>  <character>
-##        [1]        7 141-14658      - | ENSG00000243485   MIR1302-10
-##        [2]        8 327-11756      + | ENSG00000237613      FAM138A
-##        [3]        8 235-18900      - | ENSG00000186092        OR4F5
-##        [4]        1 597-14567      + | ENSG00000238009 RP11-34P13.7
-##        [5]        4 734-13616      - | ENSG00000239945 RP11-34P13.8
+##        [1]        8 782-16592      + | ENSG00000243485   MIR1302-10
+##        [2]       20 297-12283      + | ENSG00000237613      FAM138A
+##        [3]        9 645-15598      + | ENSG00000186092        OR4F5
+##        [4]        5  51-11075      - | ENSG00000238009 RP11-34P13.7
+##        [5]       15 183-16121      + | ENSG00000239945 RP11-34P13.8
 ##        ...      ...       ...    ... .             ...          ...
-##    [32734]       12 722-16091      + | ENSG00000215635   AC145205.1
-##    [32735]       16  26-11571      - | ENSG00000268590        BAGE5
-##    [32736]       11 360-16430      - | ENSG00000251180   CU459201.1
-##    [32737]       18 691-17182      + | ENSG00000215616   AC002321.2
-##    [32738]       11 212-11389      + | ENSG00000215611   AC002321.1
+##    [32734]        9 142-14663      + | ENSG00000215635   AC145205.1
+##    [32735]       18 169-15400      + | ENSG00000268590        BAGE5
+##    [32736]       15 250-12906      - | ENSG00000251180   CU459201.1
+##    [32737]       22 628-11977      - | ENSG00000215616   AC002321.2
+##    [32738]        8 352-17577      + | ENSG00000215611   AC002321.1
 ##    -------
 ##    seqinfo: 22 sequences from an unspecified genome; no seqlengths
 mcols(gr)
@@ -568,9 +568,9 @@ gr |>
     seqnames() |>
     table()
 ##    1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19 
-##  182 181 170 200 201 184 165 182 196 153 197 178 201 186 156 175 173 177 173 
+##  172 201 191 153 173 209 167 189 187 161 158 163 203 182 193 171 185 165 180 
 ##   20  21  22 
-##  178 175 172
+##  172 197 180
 ```
 
 > **NOTE:**
@@ -1790,17 +1790,17 @@ Note that we had to remove the alternative experiments (`altExps`) before conver
 > > ##  DataFrame with 1876 rows and 2 columns
 > > ##                                     Sample            Barcode
 > > ##                                <character>        <character>
-> > ##  AAACGGGAGATGGGTC-1 /tmp/Rtmp76lv2k/AXH009 AAACGGGAGATGGGTC-1
-> > ##  AAACGGGAGCTAGTTC-1 /tmp/Rtmp76lv2k/AXH009 AAACGGGAGCTAGTTC-1
-> > ##  AAACGGGGTTACCAGT-1 /tmp/Rtmp76lv2k/AXH009 AAACGGGGTTACCAGT-1
-> > ##  AAACGGGGTTGGGACA-1 /tmp/Rtmp76lv2k/AXH009 AAACGGGGTTGGGACA-1
-> > ##  AAACGGGTCCTAGTGA-1 /tmp/Rtmp76lv2k/AXH009 AAACGGGTCCTAGTGA-1
+> > ##  AAACGGGAGATGGGTC-1 /tmp/RtmpPm1FjL/AXH009 AAACGGGAGATGGGTC-1
+> > ##  AAACGGGAGCTAGTTC-1 /tmp/RtmpPm1FjL/AXH009 AAACGGGAGCTAGTTC-1
+> > ##  AAACGGGGTTACCAGT-1 /tmp/RtmpPm1FjL/AXH009 AAACGGGGTTACCAGT-1
+> > ##  AAACGGGGTTGGGACA-1 /tmp/RtmpPm1FjL/AXH009 AAACGGGGTTGGGACA-1
+> > ##  AAACGGGTCCTAGTGA-1 /tmp/RtmpPm1FjL/AXH009 AAACGGGTCCTAGTGA-1
 > > ##  ...                                   ...                ...
-> > ##  TTTGTCACACCGTTGG-1 /tmp/Rtmp76lv2k/AXH009 TTTGTCACACCGTTGG-1
-> > ##  TTTGTCACACGAGAGT-1 /tmp/Rtmp76lv2k/AXH009 TTTGTCACACGAGAGT-1
-> > ##  TTTGTCACAGGTCTCG-1 /tmp/Rtmp76lv2k/AXH009 TTTGTCACAGGTCTCG-1
-> > ##  TTTGTCAGTAGGGACT-1 /tmp/Rtmp76lv2k/AXH009 TTTGTCAGTAGGGACT-1
-> > ##  TTTGTCATCCTGCAGG-1 /tmp/Rtmp76lv2k/AXH009 TTTGTCATCCTGCAGG-1
+> > ##  TTTGTCACACCGTTGG-1 /tmp/RtmpPm1FjL/AXH009 TTTGTCACACCGTTGG-1
+> > ##  TTTGTCACACGAGAGT-1 /tmp/RtmpPm1FjL/AXH009 TTTGTCACACGAGAGT-1
+> > ##  TTTGTCACAGGTCTCG-1 /tmp/RtmpPm1FjL/AXH009 TTTGTCACAGGTCTCG-1
+> > ##  TTTGTCAGTAGGGACT-1 /tmp/RtmpPm1FjL/AXH009 TTTGTCAGTAGGGACT-1
+> > ##  TTTGTCATCCTGCAGG-1 /tmp/RtmpPm1FjL/AXH009 TTTGTCATCCTGCAGG-1
 > > rowData(sce)
 > > ##  DataFrame with 32738 rows and 2 columns
 > > ##                               ID       Symbol
@@ -2408,7 +2408,7 @@ To compare the two different approaches, try preparing both a `SingleCellExperim
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 >     ##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
+>     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

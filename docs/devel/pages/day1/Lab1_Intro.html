@@ -485,14 +485,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ul>
-<li>put history into a <code>history.txt</code> file</li>
+<li>put history into a <code>history.txt</code> file, in your home folder (<code>~</code>)</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span> <span class="op">&gt;</span> history.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span> <span class="op">&gt;</span> ~/history.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -529,14 +529,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ul>
-<li>check manual page of <code>wget</code> command (hit <code>q</code> to exit)</li>
+<li>check the help of the <code>wget</code> command</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> wget</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Manual pages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On most Linux and macOS computers, <code>man &lt;command&gt;</code> shows the full manual page of a command (e.g.&nbsp;<code>man wget</code>, hit <code>q</code> to exit). Like in most Docker images, manual pages are not installed in the workshop environment: use <code>&lt;command&gt; --help</code> instead.</p>
 </div>
 </div>
 <ul>
@@ -673,7 +686,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <a href="https://github.com/pachterlab/ffq"><code>ffq</code> tool</a> from the Pachter lab is already installed in your workshop session. Check <code>ffq</code> help and try fetching metadata for the GSE ID <code>GSE148963</code>.</p>
+<p>The <a href="https://github.com/pachterlab/ffq"><code>ffq</code> tool</a> from the Pachter lab is already installed in your workshop session. Check <code>ffq</code> help and try fetching the metadata of the sequencing run of sample <code>AXH009</code> (<code>GSM4486714</code>): <code>SRR11575369</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -697,7 +710,7 @@ Tip
 </div>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -706,7 +719,7 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -714,10 +727,12 @@ Tip
 <pre><strong>bash</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> <span class="at">--help</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> <span class="at">-t</span> GSE GSE148963 <span class="op">&gt;</span> GSE148963_search.txt</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 30 GSE148963_search.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> SRR11575369 <span class="op">&gt;</span> SRR11575369_ffq.json</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 30 SRR11575369_ffq.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+<p><code>ffq</code> returns the metadata of the run in <code>JSON</code> format: the experiment, study and sample it belongs to, and the download links of its files.</p>
+<p><code>ffq</code> can, in principle, also be queried with GEO accessions directly (e.g. <code>ffq GSE148963</code>). With the current release of <code>ffq</code> (0.3.1), these queries (as well as queries of SRA studies, <code>SRP...</code>) fail, as NCBI changed the GEO web pages <code>ffq</code> reads. Queries of SRA runs (<code>SRR...</code>) work fine.</p>
 </div>
 </div>
 </div>
@@ -739,7 +754,7 @@ Tip
 <p>Can you find the links to raw data associated with the <code>GSE148963</code> GEO ID?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -748,15 +763,15 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You can use a <code>grep</code> command: <code>grep</code> returns the lines which match a given pattern (e.g.&nbsp;a link…)!</p>
+<p><code>ffq</code> lists the download links of the files of the run, from several mirrors (<code>ftp</code>: the ENA, <code>aws</code>, <code>gcp</code> and <code>ncbi</code>). You can use a <code>grep</code> command: <code>grep</code> returns the lines which match a given pattern (e.g.&nbsp;a link…)!</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'ftp://'</span> GSE148963_search.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>And with a bit of <code>sed</code> magick…</p>
@@ -765,21 +780,25 @@ Tip
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'ftp://'</span> GSE148963_search.txt <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,.*ftp:,ftp:,'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,".*,,'</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">".fastq"</span> <span class="op">&gt;</span> GSE148963_fastqlist.txt</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">## `ffq` looks through GEO repository to fing metadata associated with the `GSE148963` entry (including downloading links)</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">## grep 'ftp://' recovers the text lines that contain downloading links</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## the `sed` commands clean up the text lines</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">## the `wget` command downloads locally the links listed in the generated file (GSE148963_fastqlist.txt)</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># wget -i GSE148963_fastqlist.txt ## Do not run, it would take too long...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,.*"ftp://,ftp://,'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,".*,,'</span> <span class="op">&gt;</span> SRR11575369_fastqlist.txt</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> SRR11575369_fastqlist.txt</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">## `ffq` looks through the SRA/ENA databases to find metadata associated with the `SRR11575369` run (including download links)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## grep '"url": "ftp://' recovers the text lines that contain FTP download links</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">## the `sed` commands clean up the text lines</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">## the `wget` command downloads locally the links listed in the generated file (SRR11575369_fastqlist.txt)</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># wget -i SRR11575369_fastqlist.txt ## Do not run, it would take too long (2 x 35 GB)...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>The ENA also directly serves download links for any run accession:</p>
+<p>To get the runs of every sample of the study at once, you can directly query the <a href="https://www.ebi.ac.uk/ena/portal/api/">ENA portal API</a> with the SRA study ID of <code>GSE148963</code>: <code>SRP257542</code> (listed in the <code>Relations</code> section of the GEO page, and in the <code>study</code> field returned by <code>ffq</code>).</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="st">"https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRR11575369&amp;result=read_run&amp;fields=fastq_ftp,fastq_bytes,read_count"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="st">"https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRP257542&amp;result=read_run&amp;fields=run_accession,sample_alias,sample_title,fastq_bytes,fastq_ftp"</span> <span class="op">&gt;</span> SRP257542_runs.tsv</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 1-4 SRP257542_runs.tsv</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 5 SRP257542_runs.tsv <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">';'</span> <span class="st">'\n'</span> <span class="op">&gt;</span> GSE148963_fastqlist.txt</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> GSE148963_fastqlist.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -800,10 +819,10 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The full <code>fastq</code> files for a single run of this study weigh ~35 GB each… Let’s only download the first 25,000 reads of the <code>SRR11575369</code> run (sample <code>AXH009</code>), by streaming the file from the ENA and stopping after 100,000 lines. Have a look at it!</p>
+<p>The full <code>fastq</code> files for a single run of this study weigh ~35 GB each… Let’s only download the first 25,000 reads of the <code>SRR11575369</code> run (sample <code>AXH009</code>), by streaming the file from the ENA and stopping after 100,000 lines (each read spans 4 lines). Have a look at it!</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -812,7 +831,7 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
@@ -820,17 +839,43 @@ Tip
 <pre><strong>bash</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/data <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/data</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> READ <span class="kw">in</span> 1 2<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">curl</span> <span class="at">-s</span> https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_<span class="va">${READ}</span>.fastq.gz <span class="dt">\</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">zcat</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="dt">\</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 100000 <span class="dt">\</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> SRR11575369_<span class="va">${READ}</span>.fq.gz</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> SRR11575369_1.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> READ <span class="kw">in</span> 1 2<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Streaming the first 25,000 reads of SRR11575369_</span><span class="va">${READ}</span><span class="st">.fastq.gz..."</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">curl</span> <span class="at">-s</span> <span class="va">${URL}</span>/SRR11575369_<span class="va">${READ}</span>.fastq.gz <span class="dt">\</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">zcat</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="dt">\</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 100000 <span class="dt">\</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> SRR11575369_<span class="va">${READ}</span>.fq.gz</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> SRR11575369_<span class="pp">*</span>.fq.gz</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> SRR11575369_1.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p><code>curl</code> streams the compressed file, <code>zcat</code> decompresses it on the fly, <code>head</code> stops the stream after 100,000 lines and <code>gzip</code> compresses these lines into a new file. When <code>head</code> stops, <code>curl</code> and <code>zcat</code> complain that they cannot write anymore: <code>-s</code> and <code>2&gt;/dev/null</code> silence these (expected) errors.</p>
+<p>Each file takes ~30 seconds to download and weighs ~2 MB. If a file only weighs a few bytes, the download failed (e.g.&nbsp;the ENA server is busy): a copy of both files is available in <code>~/Share/</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz ~/data/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><code>zcat</code> on macOS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Running these commands on your own Mac? There, <code>zcat file.gz</code> looks for a <code>file.gz.Z</code> file and fails: use <code>gzcat file.gz</code> (or <code>gunzip -c file.gz</code>) instead. Reading a stream (<code>... | zcat</code>) works as on Linux.</p>
 </div>
 </div>
 </div>
@@ -851,7 +896,7 @@ Tip
 <p>How many reads are there in the <code>fq.gz</code> file? And how long are they? Can you get a summary of what is in this file? All of these questions can be quickly answered using the <a href="https://bioinf.shenwei.me/seqkit/usage/"><code>seqkit</code></a> tool:</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -860,16 +905,16 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> <span class="at">--help</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--help</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats ~/data/SRR11575369_<span class="pp">*</span>.fq.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> <span class="at">--help</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--help</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats ~/data/SRR11575369_<span class="pp">*</span>.fq.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -897,7 +942,7 @@ Tip
 <p>Find GEO-hosted processed files for the <code>Leir et al</code> study.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -906,7 +951,7 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Check the <a href="https://www.ncbi.nlm.nih.gov/gds/">Geo Dataset search page</a>.</p>
 <p><a href="https://www.ncbi.nlm.nih.gov/gds/?term=leir+2020+CFTR">Search for <code>Leir 2020 CFTF</code></a>. You should find the <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148963">following entry</a>.</p>
@@ -919,7 +964,7 @@ Tip
 <p>What type of information does each file contain? How is it formatted? is it easily imported in R?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -928,22 +973,22 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> FILE <span class="kw">in</span> matrix.mtx genes.tsv barcodes.tsv<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">wget</span> <span class="va">${URL}</span>/GSM4486714_AXH009_<span class="va">${FILE}</span>.gz</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> GSM4486714_AXH009_<span class="pp">*</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_genes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_barcodes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_matrix.mtx.gz <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> FILE <span class="kw">in</span> matrix.mtx genes.tsv barcodes.tsv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">wget</span> <span class="va">${URL}</span>/GSM4486714_AXH009_<span class="va">${FILE}</span>.gz</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> GSM4486714_AXH009_<span class="pp">*</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_genes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_barcodes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_matrix.mtx.gz <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>These three files are the standard output of <code>cellranger</code> (a “Matrix Market” sparse matrix, see <a href="../../pages/day1/Lab2_processingreads.html">Lab 2</a>): the <code>.mtx</code> file only lists the non-zero entries of the count matrix, one per line, as <code>&lt;gene index&gt; &lt;cell index&gt; &lt;count&gt;</code>, after a 3-line header. The genes and barcodes files give the names of the rows and of the columns of the matrix. We will see how to import them in <code>R</code> in <a href="../../pages/day2/Lab3_Rbioc.html">Lab 3</a>.</p>

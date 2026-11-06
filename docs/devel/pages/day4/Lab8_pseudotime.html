@@ -1207,12 +1207,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">tsne_curve</span> <span class="op">&lt;-</span> <span class="va">tsne_curve</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">tsne_curve</span><span class="op">$</span><span class="va">Order</span><span class="op">)</span>, <span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tsne_curve</span><span class="op">)</span></span>
 <span><span class="co">##                                TSNE1     TSNE2 Order Lineage</span></span>
-<span><span class="co">##  Donor1-CGACCTTGTAGCGTCC-2 -9.962902 -32.59378     1       1</span></span>
-<span><span class="co">##  Donor1-GTGTGCGGTGGAAAGA-1 -9.962902 -32.59378     2       1</span></span>
-<span><span class="co">##  Donor1-GTTAAGCGTTTGACTG-1 -9.962902 -32.59378     3       1</span></span>
-<span><span class="co">##  Donor1-CGGACACTCAGCAACT-1 -9.962902 -32.59378     4       1</span></span>
-<span><span class="co">##  Donor1-CGCTTCATCTAACTGG-1 -9.962902 -32.59378     5       1</span></span>
-<span><span class="co">##  Donor1-TCATTTGTCTTGGGTA-1 -9.962902 -32.59378     6       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co">##  Donor1-CGACCTTGTAGCGTCC-2 -10.02767 -32.94658     1       1</span></span>
+<span><span class="co">##  Donor1-GCGCCAAAGTATGACA-1 -10.02767 -32.94658     2       1</span></span>
+<span><span class="co">##  Donor1-GGACAGAAGAATAGGG-2 -10.02767 -32.94658     3       1</span></span>
+<span><span class="co">##  Donor1-AGCGTCGAGTGAACGC-1 -10.02767 -32.94658     4       1</span></span>
+<span><span class="co">##  Donor1-GGCTCGATCCTAGAAC-1 -10.02767 -32.94658     5       1</span></span>
+<span><span class="co">##  Donor1-GTCATTTCACAGACAG-1 -10.02767 -32.94658     6       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1447,7 +1447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with <a href="https://velocyto.org/"><code>velocyto</code></a>, and the resulting <code>loom</code> file (<code>Guo_testis_full-counts.loom</code>) will be made available by your instructors during the workshop. The code below is therefore not run when the book is built.</p>
+<p>RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with <a href="https://velocyto.org/"><code>velocyto</code></a>. The resulting <code>loom</code> file (<code>Guo_testis_full-counts.loom</code>, 38 MB) is shipped with this book, and installed in your workshop session: its path is given by <code>system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")</code>. The code below is not run when the book is built.</p>
 </div>
 </div>
 <div class="callout-question">
@@ -1485,7 +1485,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><strong>R</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Import entire GSE112013 dataset with spliced/unspliced counts</span></span>
-<span><span class="va">full_GSE112013_counts</span> <span class="op">&lt;-</span> <span class="fu">LoomExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="st">'Guo_testis_full-counts.loom'</span><span class="op">)</span></span>
+<span><span class="va">loom_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Guo_testis_full-counts.loom"</span>, package <span class="op">=</span> <span class="st">"scRNAseqPhysalia2026"</span><span class="op">)</span></span>
+<span><span class="va">full_GSE112013_counts</span> <span class="op">&lt;-</span> <span class="fu">LoomExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">loom_file</span><span class="op">)</span></span>
 <span><span class="va">full_GSE112013_counts</span></span>
 <span></span>
 <span><span class="co">## - Filter `germcells` genes and cells to only retain those present in `full_GSE112013_counts`</span></span>
@@ -1715,7 +1716,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 ##  
-##   [1] /tmp/RtmpRxjHW4/Rinstb736f428e
+##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
 ##   [2] /usr/local/lib/R/site-library
 ##   [3] /usr/local/lib/R/library
 ##   * ── Packages attached to the search path.

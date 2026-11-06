@@ -333,9 +333,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#choose-a-dataset" id="toc-choose-a-dataset" class="nav-link active" data-scroll-target="#choose-a-dataset"><span class="header-section-number">16.1</span> Choose a dataset</a></li>
-  <li><a href="#analyse-it" id="toc-analyse-it" class="nav-link" data-scroll-target="#analyse-it"><span class="header-section-number">16.2</span> Analyse it</a></li>
-  <li><a href="#present-it" id="toc-present-it" class="nav-link" data-scroll-target="#present-it"><span class="header-section-number">16.3</span> Present it</a></li>
+<li><a href="#the-dataset-multiciliated-cell-differentiation" id="toc-the-dataset-multiciliated-cell-differentiation" class="nav-link active" data-scroll-target="#the-dataset-multiciliated-cell-differentiation"><span class="header-section-number">16.1</span> The dataset: multiciliated cell differentiation</a></li>
+  <li><a href="#suggestions" id="toc-suggestions" class="nav-link" data-scroll-target="#suggestions"><span class="header-section-number">16.2</span> Suggestions</a></li>
+  <li><a href="#analyse-it" id="toc-analyse-it" class="nav-link" data-scroll-target="#analyse-it"><span class="header-section-number">16.3</span> Analyse it</a></li>
+  <li><a href="#present-it" id="toc-present-it" class="nav-link" data-scroll-target="#present-it"><span class="header-section-number">16.4</span> Present it</a></li>
+  <li><a href="#working-on-another-dataset" id="toc-working-on-another-dataset" class="nav-link" data-scroll-target="#working-on-another-dataset"><span class="header-section-number">16.5</span> Working on another dataset</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -383,31 +385,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Analyse a public single-cell RNA-seq dataset by yourself, from A to Z</li>
+<li>Analyse a single-cell RNA-seq dataset by yourself, from A to Z</li>
 <li>Make (and justify!) your own analysis choices</li>
 <li>Present and discuss your results with the other participants</li>
 </ul>
 </div>
 </div>
-<section id="choose-a-dataset" class="level2" data-number="16.1"><h2 data-number="16.1" class="anchored" data-anchor-id="choose-a-dataset">
-<span class="header-section-number">16.1</span> Choose a dataset</h2>
-<p>Each group picks one dataset. It can be a dataset from your own research, a dataset from a paper you like, or one of the many datasets distributed by the <code>scRNAseq</code> package:</p>
+<section id="the-dataset-multiciliated-cell-differentiation" class="level2" data-number="16.1"><h2 data-number="16.1" class="anchored" data-anchor-id="the-dataset-multiciliated-cell-differentiation">
+<span class="header-section-number">16.1</span> The dataset: multiciliated cell differentiation</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="img/MCC_differentiation.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+<p>Multiciliated cells (MCCs) line the brain ventricles, the airways and the reproductive tracts: each of them grows dozens to hundreds of motile cilia, which beat to move fluids. MCCs differentiate from progenitors which exit the cell cycle, become post-mitotic, then amplify their centrioles (in <em>deuterosomal</em> cells) to template the motile cilia of mature MCCs.</p>
+<p>Each group will analyse scRNA-seq datasets of the <strong>in vitro differentiation of mouse radial glial cell progenitors into multiciliated cells</strong>:</p>
+<ul>
+<li>
+<strong>WT</strong>: 2 replicates (4,111 + 11,316 filtered cells), from two different genetic backgrounds (<code>C57Bl6J</code> and <code>C57Bl6N</code>);</li>
+<li>
+<strong>Mutant</strong>: a single replicate (6,639 filtered cells, <code>C57Bl6J</code> background).</li>
+</ul>
+<p>The data is available in your session, in the <code>~/Share/group_exercises/</code> folder: for each dataset, a count matrix (<code>*_counts.mtx.gz</code>, in Matrix Market format), the genes (<code>*_genes.tsv.gz</code>) and the cells (<code>*_barcodes.tsv.gz</code>, with their sample, genetic background, total UMI counts and number of detected genes).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> ~/Share/group_exercises/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>Import both datasets in <code>R</code> as <code>SingleCellExperiment</code> objects (this takes ~30 seconds and ~4 GB of memory):</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span></span>
-<span><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/surveyDatasets.html">surveyDatasets</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">datasets</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/searchDatasets.html">searchDatasets</a></span><span class="op">(</span><span class="st">"pancreas"</span><span class="op">)</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/fetchDataset.html">fetchDataset</a></span><span class="op">(</span><span class="st">"baron-pancreas-2016"</span>, <span class="st">"2023-12-14"</span>, path <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/drisso/SingleCellExperiment">SingleCellExperiment</a></span><span class="op">)</span></span>
+<span><span class="va">read_sample</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sample</span>, <span class="va">dir</span> <span class="op">=</span> <span class="st">"~/Share/group_exercises"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu">Matrix</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/externalFormats.html">readMM</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sample</span>, <span class="st">"_counts.mtx.gz"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sample</span>, <span class="st">"_genes.tsv.gz"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">sample</span>, <span class="st">"_barcodes.tsv.gz"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html">SingleCellExperiment</a></span><span class="op">(</span></span>
+<span>        assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu">as</span><span class="op">(</span><span class="va">counts</span>, <span class="st">"CsparseMatrix"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        rowData <span class="op">=</span> <span class="va">genes</span>,</span>
+<span>        colData <span class="op">=</span> <span class="va">cells</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">rowData</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">ID</span></span>
+<span>    <span class="co">## The two WT replicates share some barcodes: prefix them with the</span></span>
+<span>    <span class="co">## sample and genetic background</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample</span>, <span class="va">sce</span><span class="op">$</span><span class="va">background</span>, <span class="va">sce</span><span class="op">$</span><span class="va">barcode</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
+<span>    <span class="va">sce</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">WT</span> <span class="op">&lt;-</span> <span class="fu">read_sample</span><span class="op">(</span><span class="st">"WT"</span><span class="op">)</span></span>
+<span><span class="va">mutant</span> <span class="op">&lt;-</span> <span class="fu">read_sample</span><span class="op">(</span><span class="st">"mutant"</span><span class="op">)</span></span>
+<span><span class="va">WT</span></span>
+<span><span class="va">mutant</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">WT</span><span class="op">$</span><span class="va">background</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>The <a href="https://cellxgene.cziscience.com/datasets">CZ CELLxGENE Discover</a> and <a href="https://data.humancellatlas.org/explore/projects">Human Cell Atlas</a> portals, as well as <a href="https://www.ncbi.nlm.nih.gov/geo/">GEO</a>, are other good places to find processed count matrices.</p>
-</section><section id="analyse-it" class="level2" data-number="16.2"><h2 data-number="16.2" class="anchored" data-anchor-id="analyse-it">
-<span class="header-section-number">16.2</span> Analyse it</h2>
-<p>Here is a checklist of the analysis steps we covered during the week. Not all of them will be relevant to your dataset: decide which ones are, and why.</p>
+</section><section id="suggestions" class="level2" data-number="16.2"><h2 data-number="16.2" class="anchored" data-anchor-id="suggestions">
+<span class="header-section-number">16.2</span> Suggestions</h2>
+<ul>
+<li>Is there a strong batch bias in the WT dataset?</li>
+<li>Can a trajectory be inferred from the in vitro WT differentiation scRNA-seq experiment?</li>
+<li>Annotate the putative cell cycle phase of each cell in the WT dataset, using the algorithm of your choice.</li>
+<li>Which cyclins are expressed in differentiating cells?</li>
+<li>Which cyclins are missing in differentiating cells in the mutant dataset, compared to the WT dataset?</li>
+</ul></section><section id="analyse-it" class="level2" data-number="16.3"><h2 data-number="16.3" class="anchored" data-anchor-id="analyse-it">
+<span class="header-section-number">16.3</span> Analyse it</h2>
+<p>Here is a checklist of the analysis steps we covered during the week. Not all of them will be relevant to your questions: decide which ones are, and why.</p>
 <ol type="1">
 <li>Import the data into a <code>SingleCellExperiment</code> object (<a href="../../pages/day2/Lab3_Rbioc.html">Lab 3</a>, <a href="../../pages/day2/Lab4_data_wrangling_scRNAseq.html">Lab 4</a>)</li>
 <li>Quality control and filtering of cells and genes (<a href="../../pages/day2/Lab4_data_wrangling_scRNAseq.html">Lab 4</a>)</li>
@@ -415,9 +461,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Batch correction, if required (<a href="../../pages/day3/Lab6_batch_correction.html">Lab 6</a>)</li>
 <li>Clustering, marker genes and cell annotation (<a href="../../pages/day3/Lab5_clustering.html">Lab 5</a>)</li>
 <li>Differential expression analysis between conditions, with pseudobulk (<a href="../../pages/day3/Lab6_batch_correction.html">Lab 6</a>)</li>
-<li>Trajectory inference and pseudotime, if relevant (<a href="../../pages/day4/Lab8_pseudotime.html">Lab 8</a>)</li>
-</ol></section><section id="present-it" class="level2" data-number="16.3"><h2 data-number="16.3" class="anchored" data-anchor-id="present-it">
-<span class="header-section-number">16.3</span> Present it</h2>
+<li>Trajectory inference and pseudotime (<a href="../../pages/day4/Lab8_pseudotime.html">Lab 8</a>)</li>
+</ol></section><section id="present-it" class="level2" data-number="16.4"><h2 data-number="16.4" class="anchored" data-anchor-id="present-it">
+<span class="header-section-number">16.4</span> Present it</h2>
 <p>Prepare a short presentation (10 minutes, max 5 slides), covering:</p>
 <ul>
 <li>
@@ -428,7 +474,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <strong>Where / When / How</strong>: which analysis steps did you perform, and which choices did you make?</li>
 <li>
 <strong>Conclusions</strong>: what did you learn, and what would you do next?</li>
-</ul>
+</ul></section><section id="working-on-another-dataset" class="level2" data-number="16.5"><h2 data-number="16.5" class="anchored" data-anchor-id="working-on-another-dataset">
+<span class="header-section-number">16.5</span> Working on another dataset</h2>
+<p>Groups who would rather analyse another dataset (e.g.&nbsp;from their own research, or from a paper they like) can do so: discuss it with the instructors first. The <code>scRNAseq</code> package distributes many processed datasets:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span></span>
+<span><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/surveyDatasets.html">surveyDatasets</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">datasets</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/searchDatasets.html">searchDatasets</a></span><span class="op">(</span><span class="st">"pancreas"</span><span class="op">)</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/fetchDataset.html">fetchDataset</a></span><span class="op">(</span><span class="st">"baron-pancreas-2016"</span>, <span class="st">"2023-12-14"</span>, path <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>The <a href="https://cellxgene.cziscience.com/datasets">CZ CELLxGENE Discover</a> and <a href="https://data.humancellatlas.org/explore/projects">Human Cell Atlas</a> portals, as well as <a href="https://www.ncbi.nlm.nih.gov/geo/">GEO</a>, are other good places to find processed count matrices.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where does the multiciliated cell data come from? (Spoiler alert: read this after your presentation!)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>These datasets were published in <a href="https://doi.org/10.1016/j.celrep.2024.115117">Khoury Damaa, Serizay et al., <em>Cyclin O controls entry into the cell-cycle variant required for multiciliated cell differentiation</em>, Cell Reports 2025</a> (GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE201773">GSE201773</a>).</p>
+</div>
+</div>
+</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
