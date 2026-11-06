@@ -1,3 +1,9 @@
 /.quarto/
 /docs/
 *rds
+
+**/*.quarto_ipynb
+*.rmarkdown
+*_files/
+*.knit.md
+/doc/

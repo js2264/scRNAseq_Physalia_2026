@@ -1,14 +1,17 @@
 format: 
   html:
     grid:
-      sidebar-width: 500px
-      body-width: 800px
+      sidebar-width: 450px
+      body-width: 900px
     theme: 
       - cosmo
       - assets/book.scss
     mainfont: "Atkinson Hyperlegible, sans-serif"
     highlight-style: atom-one
     code-link: true
+    code-copy: true
+    toc: true
+    toc-depth: 3
     editor: visual
     bibliography: assets/bibliography.bib
     from: markdown+emoji

@@ -1,7 +1,46 @@
 book:
-  title: "scRNAseqPhysalia2026"
+  title: "Single-cell RNA-seq analysis with R/Bioconductor"
+  subtitle: "Physalia workshop, 2026 edition"
+  author: 
+    - Jacques Serizay
+    - Orr Ashenberg
+    - Fabrício Almeida-Silva
+  repo-url: https://github.com/js2264/scRNAseq_Physalia_2026/
+  repo-subdir: inst
+  site-url: https://js2264.github.io/scRNAseq_Physalia_2026/devel/
   chapters:
     - index.qmd
+    - pages/program.qmd
+    - pages/getting-started.qmd
+    - pages/prerequisites.qmd
+    - part: "Day 1"
+      chapters:
+        - pages/day1/Lecture1_introduction.qmd
+        - pages/day1/Lecture2_Bcl2matrix.qmd
+        - pages/day1/Lab1_Intro.qmd
+        - pages/day1/Lab2_processingreads.qmd
+    - part: "Day 2"
+      chapters:
+        - pages/day2/Lecture3_qualitycontrol.qmd
+        - pages/day2/Lab3_Rbioc.qmd
+        - pages/day2/Lab4_data_wrangling_scRNAseq.qmd
+    - part: "Day 3"
+      chapters:
+        - pages/day3/Lecture4_clustering.qmd
+        - pages/day3/Lab5_clustering.qmd
+        - pages/day3/Lecture5_batchcorrection.qmd
+        - pages/day3/Lab6_batch_correction.qmd
+    - part: "Day 4"
+      chapters:
+        - pages/day4/Lecture6_ATAC.qmd
+        - pages/day4/Lab7_atac-seq.qmd
+        - pages/day4/Lecture7_pseudotime.qmd
+        - pages/day4/Lab8_pseudotime.qmd
+    - part: "Day 5"
+      chapters:
+        - pages/day5/group_projects.qmd
+        # - pages/day5/Lecture8_spatial-transcriptomics.qmd
+    - pages/extra.qmd
   cover-image: assets/cover.png
   favicon: assets/favicon.png
   sidebar: 
@@ -9,9 +48,11 @@ book:
       - icon: git
         menu:
           - text: Source Code
-            url:  https://github.com/js2264/scRNAseqPhysalia2026/
+            url:  https://github.com/js2264/scRNAseq_Physalia_2026/
           - text: Browse version `devel`
-            url:  https://js2264.github.io/scRNAseqPhysalia2026/devel/
+            url:  https://js2264.github.io/scRNAseq_Physalia_2026/devel/
+          - text: Docker image
+            url:  https://github.com/js2264/scRNAseq_Physalia_2026/pkgs/container/scrnaseqphysalia2026
     style: "docked"
     background: "light"
     collapse-level: 5

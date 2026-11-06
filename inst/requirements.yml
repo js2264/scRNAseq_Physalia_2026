@@ -26,9 +26,10 @@ channels:
     - nodefaults
 dependencies:
     - python=3.12
-    ## add the command-line tools your book runs, pinned, e.g.:
-    # - samtools=1.24
-    ## and the python packages it imports, pinned, e.g.:
-    # - pip:
-    #     - numpy==2.5.4
-    #     - matplotlib==3.11.2
+    ## command-line tools used in Labs 1 and 2
+    - samtools=1.21
+    - seqkit=2.9.0
+    - fastqc=0.12.1
+    ## python packages, from PyPI
+    - pip:
+        - ffq==0.3.1

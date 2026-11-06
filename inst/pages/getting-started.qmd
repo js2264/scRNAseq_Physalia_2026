@@ -1,0 +1,97 @@
+# Getting started {-}
+
+All the labs of this workshop run in `RStudio`, in a Linux environment
+providing `R`, `Bioconductor`, all the `R` packages, command-line tools and
+datasets we will use. This environment is distributed as a **Docker image**,
+built automatically from this book:
+
+👉 [`ghcr.io/js2264/scrnaseqphysalia2026`](https://github.com/js2264/scRNAseq_Physalia_2026/pkgs/container/scrnaseqphysalia2026) 🐳
+
+There are two ways to use it: in the cloud, on the Orchestra platform (this is
+what we will do during the workshop), or on your own computer.
+
+## During the workshop: the Orchestra platform
+
+[Orchestra](https://orchestraplatform.org/) is an open-source platform,
+supported by the Bioconductor community, which runs workshop environments in
+the cloud. Each participant gets their own, isolated `RStudio` session, in
+their web browser: there is nothing to install on your computer.
+
+1. Open the Orchestra dashboard: **the link will be given by your instructors
+   at the beginning of the workshop**.
+2. Sign in with a Google account (any Google account works, either a personal
+   Gmail address or an institutional account backed by Google).
+3. Pick the **"Single-cell RNA-seq analysis with R/Bioconductor (Physalia 2026)"**
+   workshop from the catalog and click on **Launch**. Starting the session can
+   take a few minutes the first time (the status moves from `Pending` to
+   `Starting` to `Ready`).
+4. When it's `Ready`, click on **Open**: `RStudio` opens in a new tab, already
+   logged in.
+
+::: {.callout-warning icon='true'}
+## Your session is temporary!
+
+Every session has a time limit, shown as a countdown on its card in the
+dashboard (you can extend it by clicking on `+1h`). **When a session expires
+(or when you terminate it), everything in it is removed**, including the files
+you created.
+
+Download anything you want to keep (scripts, notebooks, results) before the end
+of each day: in `RStudio`, tick the files in the `Files` pane, then click on
+`More` > `Export...`.
+:::
+
+## After the workshop: on your own computer
+
+If [Docker](https://docs.docker.com/get-docker/) is installed on your computer,
+you can start exactly the same environment locally. In a terminal:
+
+```{sh eval = FALSE, filename = "bash"}
+docker run \
+    --volume ~/scRNAseq_Physalia_2026:/home/rstudio/work \
+    -e PASSWORD=physalia \
+    -p 8787:8787 \
+    ghcr.io/js2264/scrnaseqphysalia2026:devel
+```
+
+Then open [http://localhost:8787](http://localhost:8787) in your web browser,
+and log in with user `rstudio` and password `physalia`. The
+`~/scRNAseq_Physalia_2026` folder of your computer is available in `RStudio`
+as `~/work`: save your files there to keep them after the container stops.
+
+::: {.callout-tip icon='true'}
+## Memory requirements
+
+Some labs load fairly large datasets in memory: we recommend giving at least
+8 GB of RAM to Docker (in `Docker Desktop`: `Settings` > `Resources`).
+:::
+
+Alternatively, you can install all the packages used in this workshop in your
+own `R` installation (`R >= 4.6` and a current version of `Bioconductor` are
+required):
+
+```{r eval = FALSE, filename = "R"}
+install.packages("BiocManager")
+BiocManager::install("js2264/scRNAseq_Physalia_2026", dependencies = TRUE)
+```
+
+## RStudio
+
+`RStudio` offers a graphical interface to facilitate the interaction between a
+user and an underlying programming language (this is sometimes called IDE, or
+integrated development environment). It can be very useful when a user is not
+necessarily proficent with command line-based computing.
+
+Don't forget, you can run a `bash` terminal from within RStudio! This may come
+handy if you want to process some data with command-line tools (e.g. `seqkit`,
+`samtools` or `cellranger`), for example. To do this, simply go to
+`Tools` > `Terminal` > `New terminal`: a new `Terminal` tab opens next to the
+`R` console. You should now be in your own home directory (`~`).
+
+## Datasets
+
+The labs download public datasets from GEO, ENA, 10x Genomics or
+Bioconductor's `ExperimentHub`, using `BiocFileCache` (or the dedicated data
+packages): a dataset is only downloaded the first time it is requested, then
+read from a local cache. The datasets used in the `R` labs are already cached
+in the Docker image, so they are immediately available in your workshop session.

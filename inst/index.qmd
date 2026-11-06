@@ -8,15 +8,15 @@ intro <- tryCatch(
         authors <- eval(parse(text = description$Authors))
         license <- description$License
         glue::glue(
-            "**Package:** {pkg}<br/>\n", 
-            "**Authors:** {paste(format(authors, include = c('given', 'family', 'role')), collapse = ', ')}<br/>\n", 
-            "**Compiled:** {as.character(Sys.Date())}<br/>\n", 
-            "**Package version:** {version}<br/>\n", 
-            "**R version:** <b style='color:red;'>{R.version.string}</b><br/>\n", 
-            "**BioC version:** <b style='color:red;'>{BiocManager::version()}</b><br/>\n", 
+            "**Package:** {pkg}<br/>\n",
+            "**Authors:** {paste(format(authors, include = c('given', 'family', 'role')), collapse = ', ')}<br/>\n",
+            "**Compiled:** {as.character(Sys.Date())}<br/>\n",
+            "**Package version:** {version}<br/>\n",
+            "**R version:** <b style='color:red;'>{R.version.string}</b><br/>\n",
+            "**BioC version:** <b style='color:red;'>{BiocManager::version()}</b><br/>\n",
             "**License:** {license}<br/>"
         )
-    }, 
+    },
     error = function(e) {"Local preview"}
 )
 ```
@@ -25,21 +25,147 @@ intro <- tryCatch(
 
 # Welcome {-}
 
-This is the landing page of the `BiocBook` entitled *...*.  
+This is the landing page for the **"Single-cell RNA-seq analysis with
+R/Bioconductor"** workshop organised by [Physalia](https://www.physalia-courses.org/),
+**2026 edition**.
 
-This book introduces the reader to *...*.  
+It gathers all the lectures and hands-on labs of the course. Every lab can be
+run in the cloud, in your web browser, with nothing to install: see
+[Getting started](pages/getting-started.qmd).
+
+## Program {-}
+
+| **Day**   | **Time**      | **Session**                                                                                                  | **Instructor** |
+|---------- |---------------|------------------------|----------------|
+| **Day 1** | 14:00 - 15:00 | [Lecture 1: Introduction to scRNAseq analysis](pages/day1/Lecture1_introduction.qmd)                         | Jacques        |
+|           | 15:10 - 16:10 | [Lecture 2: From sequencing reads to expression matrices](pages/day1/Lecture2_Bcl2matrix.qmd)                | Jacques        |
+|           | 16:10 - 17:10 | **Break**                                                                                                    |                |
+|           | 17:10 - 18:30 | [Lab 1: Familiarizing yourself with the workshop environment](pages/day1/Lab1_Intro.qmd)                     | Jacques        |
+|           | 18:40 - 20:00 | [Lab 2: From .bcl to count matrix](pages/day1/Lab2_processingreads.qmd)                                      | Fabricio       |
+| **Day 2** | 14:00 - 15:00 | [Lecture 3: Quality control for scRNAseq data](pages/day2/Lecture3_qualitycontrol.qmd)                       | Jacques        |
+|           | 15:10 - 16:30 | [Lab 3: Introduction to R/Bioconductor](pages/day2/Lab3_Rbioc.qmd)                                           | Fabricio       |
+|           | 16:30 - 17:30 | **Break**                                                                                                    |                |
+|           | 17:30 - 19:00 | [Lab 4: scRNAseq data wrangling](pages/day2/Lab4_data_wrangling_scRNAseq.qmd)                                | Fabricio       |
+|           | 19:10 - 20:00 | Flash talks                                                                                                  | All            |
+| **Day 3** | 14:00 - 15:30 | [Lecture 4: Identifying cell populations](pages/day3/Lecture4_clustering.qmd)                                | Jacques        |
+|           | 15:40 - 17:00 | [Lab 5: Dimension reduction, clustering, and annotations](pages/day3/Lab5_clustering.qmd)                    | Fabricio       |
+|           | 17:00 - 18:00 | **Break**                                                                                                    |                |
+|           | 18:00 - 19:00 | [Lecture 5: Data integration and batch effect correction](pages/day3/Lecture5_batchcorrection.qmd)           | Jacques        |
+|           | 19:10 - 20:00 | [Lab 6: Batch correction](pages/day3/Lab6_batch_correction.qmd)                                              | Jacques        |
+| **Day 4** | 14:00 - 15:00 | [Lecture 6: Advances in single-cell genomics - The epigenome](pages/day4/Lecture6_ATAC.qmd)                  | Jacques        |
+|           | 15:10 - 16:20 | [Lab 7: scATACseq analysis workflow](pages/day4/Lab7_atac-seq.qmd)                                           | Jacques        |
+|           | 16:20 - 17:20 | **Break**                                                                                                    |                |
+|           | 17:20 - 18:20 | [Lecture 7: Trajectories and pseudotimes](pages/day4/Lecture7_pseudotime.qmd)                                | Jacques        |
+|           | 18:30 - 20:00 | [Lab 8: Pseudotime analyses](pages/day4/Lab8_pseudotime.qmd)                                                 | Fabricio       |
+| **Day 5** | 14:00 - 18:00 | [Group projects: project work](pages/day5/group_projects.qmd)                                                | Jacques        |
+|           | 18:00 - 20:00 | Wrap-Up: Finalize Projects and Discussion                                                                    |                |
+
+More details about the program can be found [here](pages/program.qmd). All
+the times are in Paris time (CET).
+
+## What {-}
+
+This course will introduce biologists and bioinformaticians to the field of
+single-cell RNA sequencing. We will cover a range of software and analysis
+workflows that extend over the spectrum from the best practices in the
+filtering scRNA-seq data to the downstream analysis of cell clusters and
+temporal ordering. This course will help the attendees gain accurate insights
+in pre-processing, analysis and interpretation of scRNA-seq data.
+
+We will start by introducing general concepts about single-cell RNA-sequencing.
+From there, we will then continue to describe the main analysis steps to go
+from raw sequencing data to processed and usable data. We will present
+classical analysis workflows, their output and the possible paths to
+investigate downstream of this.
+
+Throughout the workshop, `bash` tools and `R/Bioconductor` packages will be
+used to analyse datasets and learn new approaches.
+
+## When {-}
+
+<!-- TODO: update with the dates of the 2026 edition -->
+**Dates of the 2026 edition: to be announced.** Classes run from 14:00 to
+20:00 (Paris time), over five days.
+
+## Where {-}
+
+This course will be held online. All the hands-on labs run in the cloud, on
+the [Bioconductor Orchestra platform](https://orchestraplatform.org/):
+each participant gets their own `RStudio` session, in their web browser,
+started from the Docker image built from this book.
+
+## How {-}
+
+The course is structured in modules over five days. Each day will include
+formal lectures covering the key concepts required to understand scRNA-seq
+analysis. The remainder of each day will consist in practical hands-on sessions
+focusing on analysis of scRNA-seq data. These sessions will involve a
+combination of both mirroring exercises with the instructor to demonstrate a
+skill, as well as applying these skills on your own to complete individual
+exercises. During and after each exercise, interpretation of results will be
+discussed as a group.
+
+## Who {-}
+
+The course will be mostly beneficial to those who have, or will shortly have,
+scRNA-seq data ready to analyse.
+
+The material is suitable both for experimentalists who want to learn more about
+data-analysis as well as computational biologists who want to learn about
+scRNA-seq methods.
+
+Examples demonstrated in this course can be applied to any experimental
+protocol or biological system.
+
+The requirements for this course are:
+
+1.  Working knowledge of Unix / command line interface (managing files, running programs, reading manuals!). Basic bash commands (`cd`, `ls`, `...`) and CLI usage will *not* be covered in this course. We advice attendees to not register if they lack fundamental experience in CLI.
+2.  Programming experience in `R` (writing a function, basic I/O operations, variable types, using packages). `Bioconductor` experience is a plus.
+3.  Familiarity with next-generation sequencing data and its analyses (using alignment and quantification tools for bulk sequencing data)
+
+See the [Prerequisites](pages/prerequisites.qmd) page for refresher material.
+
+## Why {-}
+
+At the end of this course, you should be able to:
+
+-   Understand the pros/cons of different single-cell RNA-seq methods
+-   Process and QC of scRNA-seq data
+-   Normalize scRNA-seq data
+-   Correct for batch effects
+-   Visualise the data and applying dimensionality reduction
+-   Perform cell clustering and annotation
+-   Perform differential gene expression analysis
+-   Infer cell trajectory and pseudotime, and perform temporal differential expression
+
+Throughout the course, we will also have a focus on reproducible research,
+documented content and interactive reports.
+
+## Instructors {-}
+
+<!-- TODO: update the list of instructors for the 2026 edition -->
+
+[Jacques Serizay](mailto:jacques.serizay@pasteur.fr)
+
+[Orr Ashenberg](mailto:orr@broadinstitute.org)
+
+[Fabrício Almeida-Silva](mailto:fabricio_almeidasilva@hotmail.com)
 
 # Docker image {-}
 
-A `Docker` image built from this repository is available here: 
+This book is a [`BiocBook`](https://github.com/js2264/BiocBook): every
+version of the book comes with a `Docker` image providing `R`, `Bioconductor`,
+every package and command-line tool used in the labs, and the datasets they
+use. This is the image the workshop sessions run on Orchestra. It is available
+here:
 
-👉 [ghcr.io/js2264/scrnaseqphysalia2026](https://ghcr.io/js2264/scrnaseqphysalia2026) 🐳
+👉 [ghcr.io/js2264/scrnaseqphysalia2026](https://github.com/js2264/scRNAseq_Physalia_2026/pkgs/container/scrnaseqphysalia2026) 🐳
 
 ::: {.callout-tip icon='true'}
 ## Get started now 🎉
 
-You can get access to all the packages used in this book in < 1 minute, 
-using this command in a terminal: 
+You can get access to all the packages used in this book in < 1 minute,
+using this command in a terminal:
 
 ```{sh "docker", filename="bash"}
 #| eval: false
@@ -50,45 +176,20 @@ docker run -it ghcr.io/js2264/scrnaseqphysalia2026:devel R
 
 # RStudio Server {-}
 
-An RStudio Server instance can be initiated from the `Docker` image as follows: 
+An RStudio Server instance can be initiated from the `Docker` image as follows:
 
 ```{sh "rstudio", filename="bash"}
 #| eval: false
 docker run \
     --volume <local_folder>:<destination_folder> \
-    -e PASSWORD=OHCA \
+    -e PASSWORD=physalia \
     -p 8787:8787 \
     ghcr.io/js2264/scrnaseqphysalia2026:devel
 ```
 
-The initiated RStudio Server instance will be available at 
-[https://localhost:8787](https://localhost:8787).
-
-# `python` support {-}
-
-The `Docker` image ships the book's `conda` environment, holding everything
-listed in `inst/requirements.yml`. It is created at build time by
-`BiocBook::setup_python()`, which fetches a pinned `micromamba` if the machine
-has no `conda` at all.
-
-`reticulate` picks it up automatically, so `python` just works in any `R`
-session started from the image:
-
-```{sh "python-env", filename="bash"}
-#| eval: false
-docker run -it ghcr.io/js2264/scrnaseqphysalia2026:devel R
-```
-
-``` r
-library(reticulate)
-py_config()          # already points at the book's environment
-```
-
-To execute `python` in a book page, open the page with an `R` chunk calling
-`BiocBook::setup_python()` and write ```` ```{python} ```` chunks after it. Keep
-at least one `R` chunk on the page: that is what keeps `quarto` on the `knitr`
-engine, and therefore on `reticulate`, rather than on `jupyter`.
-
+The initiated RStudio Server instance will be available at
+[http://localhost:8787](http://localhost:8787) (user: `rstudio`, password:
+`physalia`). See [Getting started](pages/getting-started.qmd) for more details.
 
 # Session info {-}
 
@@ -99,7 +200,7 @@ engine, and therefore on `reticulate`, rather than on `jupyter`.
 ```{r "session info"}
 #| cache: false
 sessioninfo::session_info(
-    installed.packages()[,"Package"], 
+    installed.packages()[,"Package"],
     include_base = TRUE
 )
 ```

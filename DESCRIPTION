@@ -1,31 +1,98 @@
 Package: scRNAseqPhysalia2026
-Title: What the Package Does (One Line, Title Case)
-Description: 
-    This sentence is a placeholder. It should be changed by the author of 
-    the package to describe the purpose of this BiocBook. 
-    It should be at least 3 sentences otherwise `BiocCheck` will complain.
-Version: 0.98.0
-Date: `r date()`
-Authors@R: 
-    person(
-        "First", "Last", , "first.last@example.com", 
-        role = c("aut", "cre"),
-        comment = c(ORCID = "YOUR-ORCID-ID")
+Title: Single-cell RNA-seq analysis with R/Bioconductor (Physalia 2026)
+Description:
+    Course material for the 2026 edition of the Physalia workshop
+    "Single-cell RNA-seq analysis with R/Bioconductor". This BiocBook gathers
+    the lectures and hands-on labs of the five-day course: from sequencing
+    reads to count matrices, quality control, normalisation, dimensionality
+    reduction, clustering and cell annotation, batch correction, single-cell
+    ATAC-seq and trajectory inference. A Docker image providing every tool,
+    package and dataset used in the labs is built for each version of the
+    book, and is used to run the workshop on the Bioconductor Orchestra
+    platform.
+Version: 1.0.0
+Date: 2026-11-06
+Authors@R:
+    c(
+        person(
+            "Jacques", "Serizay", , "jacquesserizay@gmail.com",
+            role = c("aut", "cre"),
+            comment = c(ORCID = "0000-0002-4295-0624")
+        ),
+        person("Orr", "Ashenberg", , "orr@broadinstitute.org", role = "aut"),
+        person("Fabricio", "Almeida-Silva", , "fabricio_almeidasilva@hotmail.com", role = "aut")
     )
-URL: https://github.com/js2264/scRNAseqPhysalia2026
-BugReports: https://github.com/js2264/scRNAseqPhysalia2026
+URL: https://github.com/js2264/scRNAseq_Physalia_2026
+BugReports: https://github.com/js2264/scRNAseq_Physalia_2026/issues
 Depends:
-    R (>= 4.3)
+    R (>= 4.6)
 Imports:
 Suggests:
-    BiocBook, 
-    BiocManager, 
-    BiocVersion, 
-    BiocStyle, 
+    BiocBook,
+    BiocManager,
+    BiocVersion,
+    BiocStyle,
     reticulate,
     glue,
     sessioninfo,
-    knitr 
+    knitr,
+    rmarkdown,
+    tidyverse,
+    dplyr,
+    tidyr,
+    tibble,
+    readr,
+    purrr,
+    stringr,
+    ggplot2,
+    patchwork,
+    cowplot,
+    pheatmap,
+    scales,
+    mgcv,
+    Matrix,
+    data.table,
+    MatrixGenerics,
+    igraph,
+    ggraph,
+    clustree,
+    uwot,
+    Rtsne,
+    hdf5r,
+    Seurat,
+    SeuratObject,
+    Signac,
+    rliger,
+    harmony,
+    BiocFileCache,
+    BiocParallel,
+    AnnotationDbi,
+    org.Hs.eg.db,
+    SummarizedExperiment,
+    SingleCellExperiment,
+    GenomicRanges,
+    GenomeInfoDb,
+    plyranges,
+    rtracklayer,
+    airway,
+    scRNAseq,
+    TENxPBMCData,
+    DropletUtils,
+    scuttle,
+    scater,
+    scran,
+    scrapper,
+    bluster,
+    batchelor,
+    scDblFinder,
+    celldex,
+    SingleR,
+    DESeq2,
+    slingshot,
+    LoomExperiment,
+    velociraptor,
+    EnsDb.Hsapiens.v75,
+    biovizBase
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 BiocType: Book

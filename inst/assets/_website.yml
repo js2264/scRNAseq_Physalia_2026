@@ -5,6 +5,9 @@ website:
   page-footer:
     background: light
     left: |
+      Single-cell RNA-seq analysis with R/Bioconductor (Physalia 2026) |  
+      J. Serizay, O. Ashenberg, F. Almeida-Silva
+    right: |
       This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with :heart:
   repo-branch: devel
   repo-actions: [edit, issue]

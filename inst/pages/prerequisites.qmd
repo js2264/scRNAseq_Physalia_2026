@@ -1,0 +1,46 @@
+# Prerequisites {-}
+
+## Knowledge
+
+The course is intended for those who have basic familiarity with Unix and the
+`R` scripting language.
+
+We will also assume that you are familiar with mapping and analyzing bulk
+RNA-seq data as well as with the commonly available computational tools.
+
+-   If a refresher is needed for Unix command line (hopefully not), please go over [this tutorial](https://ryanstutorials.net/linuxtutorial/) and its [companion cheatsheet](https://ryanstutorials.net/linuxtutorial/cheatsheet.php).
+-   Getting down to basics: an introduction to the fundamentals of R ([courtesy of Mark Ravinet](https://markravinet.github.io/Introduction.html)).
+-   Gentle introduction to `R/Bioconductor`: [here](https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html)
+-   For a full in-depth guide of `Bioconductor` ecosystem: read the comprehensive `R/Bioconductor` book from Kasper D. Hansen, freely available under the CC BY-NC-SA 4.0 license [here](https://leanpub.com/bioconductor).
+-   The reference book for single-cell analysis with Bioconductor: [Orchestrating Single-Cell Analysis with Bioconductor (OSCA)](https://bioconductor.org/books/release/OSCA/).
+
+## Local configuration
+
+Everything will be performed in the cloud, on the Orchestra platform (see
+[Getting started](getting-started.qmd)). You will only need:
+
+-   A computer with a high-speed internet access and an up-to-date web browser (Chrome, Firefox, Safari or Edge);
+-   A Google account (personal or institutional), to sign in to the Orchestra platform;
+-   The Zoom visioconference software.
+
+Optionally, if you wish to run the labs on your own computer after the
+workshop, you will need to install [Docker](https://docs.docker.com/get-docker/)
+(with at least 8 GB of RAM available to it).
+
+## Remote configuration
+
+The workshop sessions run from the Docker image built from this book
+([`ghcr.io/js2264/scrnaseqphysalia2026`](https://github.com/js2264/scRNAseq_Physalia_2026/pkgs/container/scrnaseqphysalia2026)).
+This image is built automatically by GitHub Actions every time the book is
+updated, from the [`Dockerfile`](https://github.com/js2264/scRNAseq_Physalia_2026/blob/devel/Dockerfile)
+stored in the book repository. It is based on the official
+[`bioconductor/bioconductor_docker`](https://hub.docker.com/r/bioconductor/bioconductor_docker)
+image, and it provides:
+
+-   `R`, `Bioconductor` and `RStudio Server`;
+-   all the `R` packages used in the labs (listed in the [`DESCRIPTION`](https://github.com/js2264/scRNAseq_Physalia_2026/blob/devel/DESCRIPTION) file of the book);
+-   the command-line tools used in the labs (`seqkit`, `samtools`, `fastqc`, `ffq`, listed in [`inst/requirements.yml`](https://github.com/js2264/scRNAseq_Physalia_2026/blob/devel/inst/requirements.yml));
+-   the datasets used in the `R` labs, already downloaded and cached.
+
+The exact version of every package installed in the image is listed in the
+"Session info" section of the [Welcome](../index.qmd) page.

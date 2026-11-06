@@ -105,14 +105,7 @@ pre.sourceCode.python, code.sourceCode.python {
 }
 
 /* Chapter label ---------------------------------------- */
-
-.chapter-number::before {
-  content: "Chapter ";
-}
-
-.chapter-number::after {
-  content: " –";
-}
+/* Page titles already read "Lecture X - ..." / "Lab X: ...": no "Chapter" prefix */
 
 /* Cover image ------------------------------------------ */
 

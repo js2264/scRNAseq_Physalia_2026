@@ -2,6 +2,10 @@ project:
   type: book
   output-dir: docs
   post-render: assets/post-render.R
+  ## Lecture slides are embedded in `<iframe>`s, which quarto does not scan for
+  ## resources: copy every PDF to the rendered book explicitly
+  resources:
+    - "pages/**/*.pdf"
 
 metadata-files:
   - assets/_book.yml
