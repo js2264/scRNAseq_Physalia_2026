@@ -365,6 +365,14 @@ files is available in `~/Share/`.
 cp ~/Share/SRR11575369_*.fq.gz ~/data/
 ```
 
+Here is what these files look like (here, the copies from `~/Share/`, which
+are identical to the files you streamed in `~/data/`):
+
+```{sh filename = "bash"}
+ls -lh ~/Share/SRR11575369_*.fq.gz
+zcat ~/Share/SRR11575369_1.fq.gz | head -n 12
+```
+
 :::
 :::
 
@@ -396,6 +404,12 @@ answered using the [`seqkit`](https://bioinf.shenwei.me/seqkit/usage/) tool:
 seqkit --help
 seqkit stats --help
 seqkit stats ~/data/SRR11575369_*.fq.gz
+```
+
+On the copies of these files in `~/Share/`:
+
+```{sh filename = "bash"}
+seqkit stats --quiet ~/Share/SRR11575369_*.fq.gz
 ```
 
 :::

@@ -45,10 +45,14 @@ RUN Rscript -e 'if (packageVersion("BiocFileCache") < "3.3.2") remotes::install_
 ## provides the command-line tools used in the labs (`samtools`, `seqkit`,
 ## `fastqc`, `ffq`), point every R session in the image at it, and append its
 ## `bin/` folder to the `PATH` of R sessions and of terminals (including the
-## `RStudio` terminal), after the system folders
+## `RStudio` terminal), after the system folders. `basilisk` (used by
+## `velociraptor` in Lab 8) builds its `python` environments from the `python`
+## pointed at by `BASILISK_CUSTOM_PYTHON_<version>`, or else downloads and
+## compiles one with `pyenv`: point it at the `python` of the book environment
 RUN Rscript -e 'BiocBook::setup_python(requirements = "/opt/pkg/inst/requirements.yml"); cat(sprintf("RETICULATE_PYTHON=%s\n", reticulate::py_config()$python), file = file.path(R.home("etc"), "Renviron.site"), append = TRUE)' && \
     ENV_BIN="$(Rscript -e 'cat(dirname(reticulate::py_config()$python))')" && \
     echo "PATH=\${PATH}:${ENV_BIN}" >> "$(R RHOME)/etc/Renviron.site" && \
+    echo "BASILISK_CUSTOM_PYTHON_$(Rscript -e 'cat(gsub(".", "_", basilisk:::defaultPythonVersion, fixed = TRUE))')=${ENV_BIN}/python" >> "$(R RHOME)/etc/Renviron.site" && \
     echo "export PATH=\"\${PATH}:${ENV_BIN}\"" > /etc/profile.d/scrnaseqphysalia2026.sh && \
     echo "export PATH=\"\${PATH}:${ENV_BIN}\"" >> /etc/bash.bashrc && \
     chmod -R a+rX "${R_USER_CACHE_DIR}" && \
