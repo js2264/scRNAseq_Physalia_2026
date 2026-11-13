@@ -10,8 +10,8 @@ Description:
     package and dataset used in the labs is built for each version of the
     book, and is used to run the workshop on the Bioconductor Orchestra
     platform.
-Version: 1.0.2
-Date: 2026-11-06
+Version: 1.0.3
+Date: 2026-11-13
 Authors@R:
     c(
         person(

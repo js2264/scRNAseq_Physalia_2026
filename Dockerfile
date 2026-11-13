@@ -73,6 +73,21 @@ RUN mkdir -p /opt/Share && \
     ln -sfn /opt/Share /root/Share && \
     ln -sfn /opt/Share /home/rstudio/Share && \
     ls -l /opt/Share/ /opt/Share/data_wrangling/ /opt/Share/group_exercises/
+
+## Lab 7: scATAC-seq data of 10k human PBMCs (10x Genomics, ~2 GB with the
+## `fragments` file), downloaded from 10x Genomics in `/opt/Share/scATAC`, so
+## that participants do not download them in their session (and so that the
+## lab is run when rendering the book). Lab 1: a copy of the metadata `ffq`
+## returns for `SRR11575369`, used when NCBI rejects `ffq` queries (`429 Too
+## Many Requests`, e.g. when many participants query it at the same time)
+ARG SCATAC_URL=https://cf.10xgenomics.com/samples/cell-atac/1.0.1/atac_v1_pbmc_10k/atac_v1_pbmc_10k_
+RUN mkdir -p /opt/Share/scATAC && \
+    for f in filtered_peak_bc_matrix.h5 peaks.bed singlecell.csv fragments.tsv.gz fragments.tsv.gz.tbi; do \
+        curl -fsSL --retry 5 --retry-delay 10 -o "/opt/Share/scATAC/atac_v1_pbmc_10k_${f}" "${SCATAC_URL}${f}" || exit 1 ; \
+    done && \
+    cp /opt/pkg/inst/extdata/SRR11575369_ffq.json /opt/Share/ && \
+    chmod -R a+rX,go-w /opt/Share && \
+    ls -l /opt/Share/ /opt/Share/scATAC/
 COPY --chmod=755 <<'EOF' /etc/cont-init.d/03_share
 #!/usr/bin/with-contenv bash
 ## Link the workshop files to the home folder of the RStudio user
@@ -83,9 +98,17 @@ fi
 exit 0
 EOF
 
-## Build/install using same approach than BBS
+## Build/install using same approach than BBS. The book is rendered with the
+## home folder of the RStudio user: Lab 1 runs terminal commands in `~`, and
+## its outputs then show the paths participants see. The files these commands
+## create are removed afterwards, so that participants start with a clean home
+## folder
 RUN R CMD INSTALL /opt/pkg
-RUN R CMD build --keep-empty-dirs --no-resave-data /opt/pkg
+RUN ls -A /home/rstudio > /tmp/home-before && \
+    HOME=/home/rstudio R CMD build --keep-empty-dirs --no-resave-data /opt/pkg && \
+    (cd /home/rstudio && ls -A | grep -vxF -f /tmp/home-before | xargs -r rm -rf) && \
+    rm /tmp/home-before && \
+    ls -lA /home/rstudio
 
 ## Let every user (e.g. `rstudio`) read and update the datasets cached while
 ## rendering the book

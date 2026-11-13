@@ -1,9 +1,5 @@
 # Lab 7: Single-cell ATAC-seq analysis workflow
 
-```{r include = FALSE, echo = FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-```
-
 ::: {.callout-note icon='true'}
 
 ## Notes
@@ -11,8 +7,8 @@ knitr::opts_chunk$set(eval = FALSE)
 The estimated time for this lab is around 1h10.
 
 This lab relies on the `fragments` file of a 10x Genomics scATAC-seq
-experiment (~2 GB): its code is not run when the book is built, and no output
-is shown on this page. Run it in your workshop session!
+experiment (~2 GB), already available in your workshop session. It needs ~12 GB 
+of memory, and takes ~15 minutes to run from start to end.
 
 :::
 
@@ -47,14 +43,30 @@ The dataset contains roughly ~ 10,000 cells.
 
 ## Process human PBMC dataset
 
-### Download data
+### Data
 
-The files we need are directly available from the 10x Genomics website. We
-download them in a `~/data/scATAC` folder (this may take a few minutes, the
-`fragments` file weighs ~2 GB). Note that the `fragments` file and its index
-(`.tbi`) must sit next to each other, with matching names.
+The files we need are directly available from the 10x Genomics website. They 
+have already been downloaded in your workshop session, in the 
+`~/Share/scATAC/` folder. Note that the `fragments` file and its index (`.tbi`) 
+must sit next to each other, with matching names.
 
 ```{r filename = "R"}
+scatac_dir <- file.path(path.expand("~"), "Share", "scATAC")
+list.files(scatac_dir)
+h5_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5")
+peaks_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_peaks.bed")
+metadata_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_singlecell.csv")
+fragments_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_fragments.tsv.gz")
+```
+
+::: {.callout-tip icon='true'}
+## Downloading the data on your own computer
+
+To run this lab outside of the workshop session, download the files from the 
+10x Genomics website, e.g. in a `~/data/scATAC` folder (this may take a few 
+minutes, the `fragments` file weighs ~2 GB): 
+
+```{r eval = FALSE, filename = "R"}
 scatac_dir <- file.path(path.expand("~"), "data", "scATAC")
 dir.create(scatac_dir, recursive = TRUE, showWarnings = FALSE)
 options(timeout = 3600)
@@ -76,6 +88,7 @@ peaks_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_peaks.bed")
 metadata_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_singlecell.csv")
 fragments_file <- file.path(scatac_dir, "atac_v1_pbmc_10k_fragments.tsv.gz")
 ```
+:::
 
 ### Import data
 
@@ -118,7 +131,7 @@ Import counts matrix and feature annotations using an import function provided b
 ::: {.callout-answer}
 ::: {.callout-note title="Answer" collapse="true"}
 
-```{r filename = "R"}
+```{r filename = "R", message = FALSE}
 library(Seurat)
 library(Signac)
 library(rtracklayer)
@@ -170,7 +183,7 @@ Generate human annotations from Ensembl using a parsing function from `Signac`.
 ::: {.callout-answer}
 ::: {.callout-note title="Answer" collapse="true"}
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 ## - Get human gene annotations (hg19/GRCh37) to feed it into the future `ChromatinAssay`
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
 GenomeInfoDb::seqlevelsStyle(annotations) <- 'UCSC'
@@ -285,7 +298,7 @@ Let's go through them one by one.
 ::: {.callout-answer}
 ::: {.callout-note title="Answer" collapse="true"}
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 # compute nucleosome signal score per cell
 PBMC <- NucleosomeSignal(object = PBMC)
 PBMC
@@ -298,6 +311,16 @@ PBMC
 DensityScatter(PBMC, x = 'nCount_ATAC', y = 'TSS.enrichment', log_x = TRUE, quantiles = TRUE)
 ```
 
+::: {.callout-note icon='true'}
+## `ATACqc()`
+
+In the current development version of `Signac`, `NucleosomeSignal()` and
+`TSSEnrichment()` are deprecated in favour of `ATACqc()`, which computes all
+these QC metrics at once with the external `fragtk` tool. `fragtk` is not
+installed in the workshop environment: we keep using the deprecated functions,
+which still work (their deprecation warnings are hidden on this page).
+:::
+
 :::
 :::
 
@@ -307,7 +330,7 @@ DensityScatter(PBMC, x = 'nCount_ATAC', y = 'TSS.enrichment', log_x = TRUE, quan
 Let's compare the distributions of the different QC metrics, for cells with
 a high or a low TSS enrichment score.
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 PBMC$high.tss <- ifelse(PBMC$TSS.enrichment > 2.5, 'High', 'Low')
 table(PBMC$high.tss)
 VlnPlot(
@@ -340,7 +363,7 @@ Group genomic loci by their nucleosome signal (> 4 or < 4) and plot the fragment
 ::: {.callout-answer}
 ::: {.callout-note title="Answer" collapse="true"}
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 PBMC$nucleosome_group <- ifelse(PBMC$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
 FragmentHistogram(object = PBMC, group.by = 'nucleosome_group')
 ```
@@ -415,7 +438,7 @@ PBMC <- RunSVD(PBMC)
 DepthCor(PBMC)
 
 ## - Embed in 2D UMAP
-PBMC <- RunUMAP(object = PBMC, reduction = 'lsi', dims = 2:30)
+PBMC <- RunUMAP(object = PBMC, reduction = 'lsi', dims = 2:30, verbose = FALSE)
 
 ## - Cluster cells
 PBMC <- FindNeighbors(object = PBMC, reduction = 'lsi', dims = 2:30)
@@ -487,18 +510,25 @@ FeaturePlot(
 )
 ```
 
-Based on these markers, we can annotate clusters. **Note that the cluster
-numbers obtained in your session may differ from the ones below**: adapt the
-mapping to your own results!
+Based on these markers, we can annotate clusters. Here, each cluster is 
+annotated with the cell type whose marker has the highest average gene 
+activity in the cluster: check this annotation against the plots above! 
+Rarer cell types (e.g. dendritic cells) would require additional markers. 
 
 ```{r filename = "R"}
-PBMC$annotation <- dplyr::case_when(
-  Idents(PBMC) %in% c(0, 5, 9, 12) ~ "Monocytes",
-  Idents(PBMC) %in% c(1, 2, 3, 4, 7, 10) ~ "T-cells",
-  Idents(PBMC) %in% c(6) ~ "NK-cells",
-  Idents(PBMC) %in% c(8, 11) ~ "B-cells",
-  Idents(PBMC) %in% c(13, 14) ~ "DC"
+markers <- c('B-cells' = 'MS4A1', 'T-cells' = 'CD3D', 'NK-cells' = 'NKG7', 'Monocytes' = 'TREM1')
+activity <- GetAssayData(PBMC, assay = 'RNA', layer = 'data')[markers, ]
+avg_activity <- sapply(
+  split(colnames(PBMC), PBMC$seurat_clusters),
+  function(cells) Matrix::rowMeans(activity[, cells, drop = FALSE])
 )
+rownames(avg_activity) <- names(markers)
+round(avg_activity, 2)
+cluster_types <- rownames(avg_activity)[apply(avg_activity, 2, which.max)]
+names(cluster_types) <- colnames(avg_activity)
+cluster_types
+PBMC$annotation <- unname(cluster_types[as.character(PBMC$seurat_clusters)])
+table(PBMC$annotation)
 DimPlot(PBMC, group.by = 'annotation', label = TRUE) + NoLegend()
 ```
 
@@ -525,7 +555,7 @@ This is more rigorous, but much slower (> 30 minutes for this comparison): try
 it after the workshop!
 :::
 
-```{r filename = "R"}
+```{r filename = "R", warning = FALSE}
 DefaultAssay(PBMC) <- 'ATAC'
 Idents(PBMC) <- PBMC$annotation
 da_peaks <- FindMarkers(

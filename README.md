@@ -32,11 +32,16 @@ datasets of the labs.
 The lecture slides (PDF) are in `inst/pages/day*/`. The `R` labs are run
 (and their outputs shown) when the book is built, with public datasets fetched
 from GEO, 10x Genomics, the Human Protein Atlas, `ExperimentHub` and the
-`scRNAseq`/`celldex` packages. The terminal commands of Lab 1 and the
-scATAC-seq lab (Lab 7, large `fragments` files) are displayed but not run.
-`cellranger` is not run at all (Lab 2): its recorded output is shown, and the
-files it produced are provided in `~/Share` (see below), which the other
-commands of Lab 2 read when the book is built.
+`scRNAseq`/`celldex` packages. The terminal commands of Lab 1 (`samtools`,
+`ffq`, `seqkit`, `wget`...) and the scATAC-seq lab (Lab 7) are run too, the
+latter on data provided in `~/Share` (see below). `cellranger` is not run at all
+(Lab 2): its recorded output is shown, and the files it produced are provided
+in `~/Share`, which the other commands of Lab 2 read when the book is built.
+
+The book is rendered (in the `Dockerfile`) with the home folder of the
+`rstudio` user, so that the outputs of the terminal commands show the paths
+participants see; the files these commands create in `~` are removed
+afterwards.
 
 The labs follow the current Bioconductor devel (3.24) recommendations: most of
 `scuttle` and `scran` is deprecated in favour of `scrapper` (QC, normalization,
@@ -105,8 +110,8 @@ Files which cannot be produced in a workshop session, or are too large for
 this git repository, are distributed as the `Share.tar.gz` asset of the
 [`share` release](https://github.com/js2264/scRNAseq_Physalia_2026/releases/tag/share)
 of this repository. The `Dockerfile` extracts it (read-only) in `/opt/Share`,
-linked to `~/Share` for the RStudio user (and for `root`, which renders the
-book). Its content is described in `Share/README.md`:
+linked to `~/Share` for the RStudio user (whose home folder is also used to 
+render the book) and for `root`. Its content is described in `Share/README.md`:
 
 - Lab 1: first 25,000 read pairs of `SRR11575369` (a backup of the files
   streamed from the ENA in the lab);
@@ -116,6 +121,16 @@ book). Its content is described in `Share/README.md`:
 - Day 5: WT and mutant datasets of the group projects (in vitro
   differentiation of multiciliated cells, from Khoury Damaa, Serizay et al.,
   Cell Reports 2025, doi:10.1016/j.celrep.2024.115117, GEO GSE201773).
+
+Two more items are added to `/opt/Share` by the `Dockerfile` (they are not in
+`Share.tar.gz`):
+
+- Lab 7: `scATAC/`, the scATAC-seq data of 10k human PBMCs (filtered peak
+  matrix, peaks, per-cell metadata, and the ~2 GB `fragments` file with its
+  index), downloaded from 10x Genomics when building the image;
+- Lab 1: `SRR11575369_ffq.json`, the output of `ffq SRR11575369` (from
+  `inst/extdata/`), for participants whose `ffq` queries are rejected by NCBI
+  (`429 Too Many Requests`, likely when everybody runs it at the same time).
 
 To update it, edit the (git-ignored) `Share/` folder at the root of the
 repository, then re-upload the archive (this replaces the asset; the next
