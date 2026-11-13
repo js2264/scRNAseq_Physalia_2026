@@ -174,6 +174,8 @@ We will prepare scRNAseq data from a PBMC run, provided by 10X and hosted by `Bi
 > > ##      anyMissing, rowMedians
 > > sce <- TENxPBMCData::TENxPBMCData('pbmc4k')
 > > ##  OpenTelemetry error: there is no package called 'otelsdk'
+> > ##  Warning: replacing previous import 'BiocGenerics::version' by
+> > ##  'BiocManager::version' when loading 'AnnotationHub'
 > > ##  OpenTelemetry error: there is no package called 'otelsdk'
 > > ##  see ?TENxPBMCData and browseVignettes('TENxPBMCData') for documentation
 > > ##  downloading 1 resources
@@ -535,9 +537,9 @@ Today, we will focus on graph-based clustering, as it is becoming the standard f
 > > set.seed(1000)
 > > graph <- bluster::makeSNNGraph(reducedDim(sce, 'PCA'), k = 5)
 > > graph
-> > ##  IGRAPH eb749fc U-W- 4340 68716 -- 
+> > ##  IGRAPH dec18a5 U-W- 4340 68716 -- 
 > > ##  + attr: weight (e/n)
-> > ##  + edges from eb749fc:
+> > ##  + edges from dec18a5:
 > > ##   [1]   6-- 16   6-- 21   6-- 22   4-- 23  12-- 25   1-- 26  12-- 28  23-- 32
 > > ##   [9]  15-- 35  14-- 36  32-- 48  18-- 52   6-- 53  16-- 53  47-- 54  52-- 55
 > > ##  [17]  49-- 55  26-- 55   2-- 57  27-- 58   7-- 61  15-- 64  39-- 67  31-- 67
@@ -1075,7 +1077,7 @@ This exercise was adapted from Chapts. 7-12 of [Orchestrating Single-Cell Analys
 >     ##   collate  C
 >     ##   ctype    en_US.UTF-8
 >     ##   tz       Etc/UTC
->     ##   date     2026-11-06
+>     ##   date     2026-11-13
 >     ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 >     ##   quarto   1.11.5 @ /usr/local/bin/quarto
 >     ##  
@@ -1094,8 +1096,8 @@ This exercise was adapted from Chapts. 7-12 of [Orchestrating Single-Cell Analys
 >     ##   beeswarm               0.4.0   2021-06-01 [2] RSPM (R 4.6.0)
 >     ##   Biobase              * 2.73.2  2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocBaseUtils          1.15.1  2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
->     ##   BiocFileCache          3.3.2   2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
->     ##   BiocGenerics         * 0.59.12 2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocFileCache          3.3.3   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocGenerics         * 0.59.13 2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocManager            1.30.27 2025-11-14 [2] CRAN (R 4.6.1)
 >     ##   BiocNeighbors          2.7.3   2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocParallel           1.47.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
@@ -1229,7 +1231,7 @@ This exercise was adapted from Chapts. 7-12 of [Orchestrating Single-Cell Analys
 >     ##   XVector                0.53.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12  2025-12-10 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+>     ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

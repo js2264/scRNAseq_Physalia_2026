@@ -251,6 +251,27 @@ There are several ways to find this information, e.g. `ffq` command line tool, 
 > > ``` sh
 > > cp ~/Share/SRR11575369_*.fq.gz ~/data/
 > > ```
+> >
+> > Here is what these files look like (here, the copies from `~/Share/`, which are identical to the files you streamed in `~/data/`):
+> >
+> > ``` sh
+> > ls -lh ~/Share/SRR11575369_*.fq.gz
+> > zcat ~/Share/SRR11575369_1.fq.gz | head -n 12
+> > ##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /root/Share/SRR11575369_1.fq.gz
+> > ##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /root/Share/SRR11575369_2.fq.gz
+> > ##  @SRR11575369.1 1/1
+> > ##  ANCAACAGTGGAATTCGTTTTGATGAAAAAAATAAATTTGTTCTTCAAAGCAGAGTGAATGATGCAGTACGAGCTCTTGCTCTTGAAAACCCATCACAACTTTATAATTTAATAATTAGTGAAAAATTAAAAAAATAATATTTCTTATATT
+> > ##  +
+> > ##  F#F:FFFFF:FFFFFFFFFF:F,FF,FF::F,::FFFFFFFFFFF:FF:FF:F,FFF,F:F,FFF,FF:FF:F:FFF:FF:FFFF,:F::FFFF:FF,FF:F:FF,,:F:F,::,F:F:FF,,::,FF:,,F,,,,,:FFFF::F:,,,FF
+> > ##  @SRR11575369.2 2/1
+> > ##  TNGCCAGTCAATACCGCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGTGTTTTTTTTTTTTTATATAATAAAATTTTTTTTTTTTTTAATAAAATTTTTTTTTTATTTT
+> > ##  +
+> > ##  F#FFFFFFF::FF:FF::FFFFFFFFFFFFFFFF:FFFFFFFFFFFFF,,FFFFFFFFFF:FFFFFF:FFFFFFFFFFF:F,FFFFF,,,:,,::FFFFFFFF,,:,,,F,,,,,,FFFFFF,F,,FF:,F,:,F,FFFFF,,,:,,F::F
+> > ##  @SRR11575369.3 3/1
+> > ##  TNGTTGGTCCTTAATCGATGCATCCGTTTTTTTTTTATTTTTTTTTTTTTTTTTTTGTATTTTTATTATTGATGGGGTTTCACCATGTTTGCCAGGCTGGTATAGAAATCCATACCTCATTATACACCACCCACATCCACCCAAATTGCTA
+> > ##  +
+> > ##  F#FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFF,F:FFFFF:,FF,,,FF,FFF:FF,F,FF,FFF,F,F,FF,,FF:,:::,F::FF,,FFF,:F,,,,,,:FF,,F:FFF,:F,FFF,FF,F,:FF
+> > ```
 >
 > > **TIP:**
 > >
@@ -268,6 +289,15 @@ There are several ways to find this information, e.g. `ffq` command line tool, 
 > > seqkit --help
 > > seqkit stats --help
 > > seqkit stats ~/data/SRR11575369_*.fq.gz
+> > ```
+> >
+> > On the copies of these files in `~/Share/`:
+> >
+> > ``` sh
+> > seqkit stats --quiet ~/Share/SRR11575369_*.fq.gz
+> > ##  file                             format  type  num_seqs    sum_len  min_len  avg_len  max_len
+> > ##  /root/Share/SRR11575369_1.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151
+> > ##  /root/Share/SRR11575369_2.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151
 > > ```
 
 ### 3.4.2 Processed count matrices

@@ -410,7 +410,7 @@ CoveragePlot(
 >     ##   collate  C
 >     ##   ctype    en_US.UTF-8
 >     ##   tz       Etc/UTC
->     ##   date     2026-11-06
+>     ##   date     2026-11-13
 >     ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 >     ##   quarto   1.11.5 @ /usr/local/bin/quarto
 >     ##  
@@ -430,7 +430,7 @@ CoveragePlot(
 >     ##   sessioninfo   1.2.4   2026-06-04 [2] RSPM (R 4.6.0)
 >     ##   xfun          0.62    2026-10-16 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+>     ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##  

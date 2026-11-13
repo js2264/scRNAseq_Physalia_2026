@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-5f883865545033bfab6feb3d329ab180.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-12bc14a37a5be0a5f4103bb70fc80799.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-0d3bfac1744e638db8b1375e035aa079.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -595,6 +595,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">##      anyMissing, rowMedians</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">TENxPBMCData</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TENxPBMCData/man/TENxPBMCData.html">TENxPBMCData</a></span><span class="op">(</span><span class="st">'pbmc4k'</span><span class="op">)</span></span>
 <span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span><span class="co">##  Warning: replacing previous import 'BiocGenerics::version' by</span></span>
+<span><span class="co">##  'BiocManager::version' when loading 'AnnotationHub'</span></span>
 <span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
 <span><span class="co">##  see ?TENxPBMCData and browseVignettes('TENxPBMCData') for documentation</span></span>
 <span><span class="co">##  downloading 1 resources</span></span>
@@ -1118,9 +1120,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu">bluster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bluster/man/makeSNNGraph.html">makeSNNGraph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html">reducedDim</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">'PCA'</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">graph</span></span>
-<span><span class="co">##  IGRAPH eb749fc U-W- 4340 68716 -- </span></span>
+<span><span class="co">##  IGRAPH dec18a5 U-W- 4340 68716 -- </span></span>
 <span><span class="co">##  + attr: weight (e/n)</span></span>
-<span><span class="co">##  + edges from eb749fc:</span></span>
+<span><span class="co">##  + edges from dec18a5:</span></span>
 <span><span class="co">##   [1]   6-- 16   6-- 21   6-- 22   4-- 23  12-- 25   1-- 26  12-- 28  23-- 32</span></span>
 <span><span class="co">##   [9]  15-- 35  14-- 36  32-- 48  18-- 52   6-- 53  16-- 53  47-- 54  52-- 55</span></span>
 <span><span class="co">##  [17]  49-- 55  26-- 55   2-- 57  27-- 58   7-- 61  15-- 64  39-- 67  31-- 67</span></span>
@@ -1906,7 +1908,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   collate  C
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2026-11-06
+##   date     2026-11-13
 ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 ##   quarto   1.11.5 @ /usr/local/bin/quarto
 ##  
@@ -1925,8 +1927,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   beeswarm               0.4.0   2021-06-01 [2] RSPM (R 4.6.0)
 ##   Biobase              * 2.73.2  2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
 ##   BiocBaseUtils          1.15.1  2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
-##   BiocFileCache          3.3.2   2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
-##   BiocGenerics         * 0.59.12 2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocFileCache          3.3.3   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocGenerics         * 0.59.13 2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
 ##   BiocManager            1.30.27 2025-11-14 [2] CRAN (R 4.6.1)
 ##   BiocNeighbors          2.7.3   2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
 ##   BiocParallel           1.47.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
@@ -2060,7 +2062,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   XVector                0.53.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 ##   yaml                   2.3.12  2025-12-10 [2] RSPM (R 4.6.0)
 ##  
-##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 ##   [2] /usr/local/lib/R/site-library
 ##   [3] /usr/local/lib/R/library
 ##   * ── Packages attached to the search path.

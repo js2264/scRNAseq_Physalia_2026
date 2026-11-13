@@ -107,6 +107,8 @@ Four different datasets of human pancreatic islets are distributed by the `scRNA
 > > ##      anyMissing, rowMedians
 > > library(scRNAseq)
 > > ##  OpenTelemetry error: there is no package called 'otelsdk'
+> > ##  Warning: replacing previous import 'BiocGenerics::version' by
+> > ##  'BiocManager::version' when loading 'AnnotationHub'
 > > ##  OpenTelemetry error: there is no package called 'otelsdk'
 > > celseq <- fetchDataset("grun-pancreas-2016", "2023-12-14")
 > > celseq2 <- fetchDataset("muraro-pancreas-2016", "2023-12-19")
@@ -891,7 +893,7 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   collate  C
 >     ##   ctype    en_US.UTF-8
 >     ##   tz       Etc/UTC
->     ##   date     2026-11-06
+>     ##   date     2026-11-13
 >     ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 >     ##   quarto   1.11.5 @ /usr/local/bin/quarto
 >     ##  
@@ -912,8 +914,8 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   beeswarm               0.4.0     2021-06-01 [2] RSPM (R 4.6.0)
 >     ##   Biobase              * 2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
->     ##   BiocFileCache          3.3.2     2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
->     ##   BiocGenerics         * 0.59.12   2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocFileCache          3.3.3     2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocGenerics         * 0.59.13   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocManager            1.30.27   2025-11-14 [2] CRAN (R 4.6.1)
 >     ##   BiocNeighbors          2.7.3     2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
@@ -989,7 +991,7 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   matrixStats          * 1.5.0     2025-01-07 [2] RSPM (R 4.6.0)
 >     ##   memoise                2.0.1     2021-11-26 [2] RSPM (R 4.6.0)
 >     ##   metapod                1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
->     ##   org.Hs.eg.db           3.24.4    2026-11-06 [2] Bioconductor
+>     ##   org.Hs.eg.db           3.24.6    2026-11-13 [2] Bioconductor
 >     ##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
 >     ##   patchwork            * 1.3.2     2025-08-25 [2] RSPM (R 4.6.0)
 >     ##   pillar                 1.11.1    2025-09-17 [2] RSPM (R 4.6.0)
@@ -1050,7 +1052,7 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+>     ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

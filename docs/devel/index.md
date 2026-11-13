@@ -14,8 +14,8 @@ Fabrício Almeida-Silva
 
 **Package:** scRNAseqPhysalia2026\
 **Authors:** Jacques Serizay \[aut, cre\], Orr Ashenberg \[aut\], Fabricio Almeida-Silva \[aut\]\
-**Compiled:** 2026-11-06\
-**Package version:** 1.0.1\
+**Compiled:** 2026-11-13\
+**Package version:** 1.0.2\
 **R version:** **R version 4.6.1 (2026-06-24)**\
 **BioC version:** **3.24**\
 **License:** MIT + file LICENSE\
@@ -161,7 +161,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-11-06
+> ##   date     2026-11-13
 > ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -191,8 +191,8 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   Biobase                2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   BiocBook               1.11.7    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   BiocFileCache          3.3.2     2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
-> ##   BiocGenerics           0.59.12   2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+> ##   BiocFileCache          3.3.3     2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+> ##   BiocGenerics           0.59.13   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   biocmake               1.5.1     2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   BiocManager            1.30.27   2025-11-14 [2] CRAN (R 4.6.1)
@@ -372,7 +372,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   nlme                   3.1-171   2026-09-01 [2] RSPM (R 4.6.1)
 > ##   nnet                   7.3-21    2026-08-03 [2] RSPM (R 4.6.1)
 > ##   openssl                2.4.2     2026-06-09 [2] RSPM (R 4.6.0)
-> ##   org.Hs.eg.db           3.24.4    2026-11-06 [2] Bioconductor
+> ##   org.Hs.eg.db           3.24.6    2026-11-13 [2] Bioconductor
 > ##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
 > ##   pak                    0.11.1    2026-07-22 [2] RSPM (R 4.6.0)
 > ##   parallel               4.6.1     2026-10-29 [3] local
@@ -475,7 +475,7 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   scran                  1.41.1    2026-05-20 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scrapper               1.7.11    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   scRNAseq               2.27.0    2026-04-30 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   scRNAseqPhysalia2026   1.0.1     2026-11-06 [1] local
+> ##   scRNAseqPhysalia2026   1.0.2     2026-11-13 [1] local
 > ##   sctransform            0.4.3     2026-01-10 [2] RSPM (R 4.6.0)
 > ##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   selectr                0.8-0     2026-09-27 [2] RSPM (R 4.6.0)
@@ -555,11 +555,11 @@ The initiated RStudio Server instance will be available at <http://localhost:878
 > ##   xtable                 1.8-8     2026-02-22 [2] RSPM (R 4.6.0)
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
-> ##   zellkonverter          1.23.0    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
+> ##   zellkonverter          1.23.1    2026-11-10 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   zip                    3.0.2     2026-08-04 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+> ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

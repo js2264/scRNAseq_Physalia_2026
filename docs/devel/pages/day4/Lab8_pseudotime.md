@@ -283,7 +283,7 @@ The [Human Protein Atlas (HPA)](https://www.proteinatlas.org) is a valuable reso
 > >     distinct(`Gene name`, .keep_all = TRUE) |>
 > >     column_to_rownames('Gene name') |>
 > >     as.matrix()
-> > ##  Rows: 3087080 Columns: 4
+> > ##  Rows: 3107242 Columns: 4
 > > ##  ── Column specification ─────────────────────────────────────────────────────
 > > ##  Delimiter: "\t"
 > > ##  chr (3): Gene, Gene name, Cell type
@@ -298,12 +298,12 @@ The [Human Protein Atlas (HPA)](https://www.proteinatlas.org) is a valuable reso
 > > )
 > > HPA_se
 > > ##  class: SummarizedExperiment 
-> > ##  dim: 20151 154 
+> > ##  dim: 20151 155 
 > > ##  metadata(0):
 > > ##  assays(1): logcounts
 > > ##  rownames(20151): TSPAN6 TNMD ... ENSG00000291316 TMEM276
 > > ##  rowData names(0):
-> > ##  colnames(154): adipocytes adrenal cortex cells ... vascular
+> > ##  colnames(155): adipocytes adrenal cortex cells ... vascular
 > > ##    endothelial cells vascular smooth muscle cells
 > > ##  colData names(1): cell_type
 > > ```
@@ -314,7 +314,7 @@ The [Human Protein Atlas (HPA)](https://www.proteinatlas.org) is a valuable reso
 > >
 > > ``` r
 > > length(HPA_se$cell_type)
-> > ##  [1] 154
+> > ##  [1] 155
 > > HPA_se$cell_type
 > > ##    [1] "adipocytes"                               
 > > ##    [2] "adrenal cortex cells"                     
@@ -325,151 +325,152 @@ The [Human Protein Atlas (HPA)](https://www.proteinatlas.org) is a valuable reso
 > > ##    [7] "b-cells"                                  
 > > ##    [8] "basal keratinocytes"                      
 > > ##    [9] "basal prostatic cells"                    
-> > ##   [10] "bergmann glia"                            
-> > ##   [11] "brain excitatory neurons"                 
-> > ##   [12] "brain inhibitory neurons"                 
-> > ##   [13] "breast hormone-responsive cells"          
-> > ##   [14] "breast lactating cells"                   
-> > ##   [15] "breast myoepithelial cells"               
-> > ##   [16] "breast secretory cells"                   
-> > ##   [17] "cardiomyocytes"                           
-> > ##   [18] "cdc"                                      
-> > ##   [19] "cholangiocytes"                           
-> > ##   [20] "choroid plexus epithelial cells"          
-> > ##   [21] "colonocytes"                              
-> > ##   [22] "cone photoreceptor cells"                 
-> > ##   [23] "conjunctival goblet cells"                
-> > ##   [24] "corticotrophs"                            
-> > ##   [25] "cytotrophoblasts"                         
-> > ##   [26] "decidual stromal cells"                   
-> > ##   [27] "differentiating spermatogonia"            
-> > ##   [28] "distal convoluted tubule cells"           
-> > ##   [29] "early primary spermatocytes"              
-> > ##   [30] "early spermatids"                         
-> > ##   [31] "endometrial ciliated cells"               
-> > ##   [32] "endometrial glandular cells"              
-> > ##   [33] "endometrial luminal cells"                
-> > ##   [34] "endometrial secretory cells"              
-> > ##   [35] "endometrial stromal cells"                
-> > ##   [36] "enteric stem cells"                       
-> > ##   [37] "enteric transient amplifying cells"       
-> > ##   [38] "enterocytes"                              
-> > ##   [39] "ependymal cells"                          
-> > ##   [40] "epicardial cells"                         
-> > ##   [41] "epididymal basal cells"                   
-> > ##   [42] "epididymal clear cells"                   
-> > ##   [43] "epididymal efferent duct absorptive cells"
-> > ##   [44] "epididymal efferent duct ciliated cells"  
-> > ##   [45] "epididymal principal cells"               
-> > ##   [46] "erythrocyte progenitors"                  
-> > ##   [47] "erythrocytes"                             
-> > ##   [48] "esophageal apical cells"                  
-> > ##   [49] "esophageal basal cells"                   
-> > ##   [50] "esophageal suprabasal cells"              
-> > ##   [51] "extravillous trophoblasts"                
-> > ##   [52] "fallopian secretory cells"                
-> > ##   [53] "fallopian tube ciliated cells"            
-> > ##   [54] "fibro-adipogenic progenitors"             
-> > ##   [55] "fibroblasts"                              
-> > ##   [56] "foveolar cells"                           
-> > ##   [57] "gastric chief cells"                      
-> > ##   [58] "gastric progenitor cells"                 
-> > ##   [59] "goblet cells"                             
-> > ##   [60] "gonadotrophs"                             
-> > ##   [61] "granulosa cells"                          
-> > ##   [62] "hematopoietic stem cells"                 
-> > ##   [63] "hepatic stellate cells"                   
-> > ##   [64] "hepatocytes"                              
-> > ##   [65] "hofbauer cells"                           
-> > ##   [66] "innate lymphoid cells"                    
-> > ##   [67] "kupffer cells"                            
-> > ##   [68] "lacrimal acinar cells"                    
-> > ##   [69] "lactotrophs"                              
-> > ##   [70] "late primary spermatocytes"               
-> > ##   [71] "late spermatids"                          
-> > ##   [72] "leydig cells"                             
-> > ##   [73] "loop of henle epithelial cells"           
-> > ##   [74] "lymphatic endothelial cells"              
-> > ##   [75] "macrophages"                              
-> > ##   [76] "mast cells"                               
-> > ##   [77] "medullary thymic epithelial cells"        
-> > ##   [78] "megakaryocyte progenitors"                
-> > ##   [79] "megakaryocyte-erythroid progenitors"      
-> > ##   [80] "megakaryocytes"                           
-> > ##   [81] "melanocytes"                              
-> > ##   [82] "mesothelial cells"                        
-> > ##   [83] "microglia"                                
-> > ##   [84] "migrating cytotrophoblasts"               
-> > ##   [85] "monocyte progenitors"                     
-> > ##   [86] "monocytes"                                
-> > ##   [87] "mucous neck cells"                        
-> > ##   [88] "müller glia"                              
-> > ##   [89] "myonuclei"                                
-> > ##   [90] "myosatellite cells"                       
-> > ##   [91] "neuroendocrine cells"                     
-> > ##   [92] "neutrophil progenitors"                   
-> > ##   [93] "neutrophils"                              
-> > ##   [94] "nk-cells"                                 
-> > ##   [95] "ocular epithelial cells"                  
-> > ##   [96] "oligodendrocyte progenitor cells"         
-> > ##   [97] "oligodendrocytes"                         
-> > ##   [98] "oocytes"                                  
-> > ##   [99] "other brain neurons"                      
-> > ##  [100] "ovarian stromal cells"                    
-> > ##  [101] "pancreatic acinar cells"                  
-> > ##  [102] "pancreatic duct cells"                    
-> > ##  [103] "pancreatic islet cells"                   
-> > ##  [104] "paneth cells"                             
-> > ##  [105] "papillary tip epithelial cells"           
-> > ##  [106] "parietal cells"                           
-> > ##  [107] "pdcs"                                     
-> > ##  [108] "pericytes"                                
-> > ##  [109] "peritubular myoid cells"                  
-> > ##  [110] "pituicytes/fscs"                          
-> > ##  [111] "pituitary stem cells"                     
-> > ##  [112] "plasma cells"                             
-> > ##  [113] "platelets"                                
-> > ##  [114] "podocytes"                                
-> > ##  [115] "prostatic club cells"                     
-> > ##  [116] "prostatic glandular cells"                
-> > ##  [117] "prostatic hillock cells"                  
-> > ##  [118] "proximal tubule cells"                    
-> > ##  [119] "renal collecting duct intercalated cells" 
-> > ##  [120] "renal collecting duct principal cells"    
-> > ##  [121] "renal connecting tubule cells"            
-> > ##  [122] "respiratory basal cells"                  
-> > ##  [123] "respiratory ciliated cells"               
-> > ##  [124] "respiratory deuterosomal cells"           
-> > ##  [125] "respiratory ionocytes"                    
-> > ##  [126] "respiratory secretory cells"              
-> > ##  [127] "retinal amacrine cells"                   
-> > ##  [128] "retinal bipolar cells"                    
-> > ##  [129] "retinal ganglion cells"                   
-> > ##  [130] "retinal horizontal cells"                 
-> > ##  [131] "retinal pigment epithelial cells"         
-> > ##  [132] "rod photoreceptor cells"                  
-> > ##  [133] "salivary acinar cells"                    
-> > ##  [134] "salivary basal cells"                     
-> > ##  [135] "salivary duct cells"                      
-> > ##  [136] "salivary ionocytes"                       
-> > ##  [137] "salivary myoepithelial cells"             
-> > ##  [138] "schwann cells"                            
-> > ##  [139] "sertoli cells"                            
-> > ##  [140] "smooth muscle cells"                      
-> > ##  [141] "somatotrophs"                             
-> > ##  [142] "submucosal glandular cells"               
-> > ##  [143] "suprabasal keratinocytes"                 
-> > ##  [144] "syncytiotrophoblasts"                     
-> > ##  [145] "t-cells"                                  
-> > ##  [146] "thymic myoid cells"                       
-> > ##  [147] "thymocytes"                               
-> > ##  [148] "thyrotrophs"                              
-> > ##  [149] "transitional alveolar cells"              
-> > ##  [150] "tuft cells"                               
-> > ##  [151] "undifferentiated spermatogonia"           
-> > ##  [152] "urothelial cells"                         
-> > ##  [153] "vascular endothelial cells"               
-> > ##  [154] "vascular smooth muscle cells"
+> > ##   [10] "basophils"                                
+> > ##   [11] "bergmann glia"                            
+> > ##   [12] "bone marrow mscs"                         
+> > ##   [13] "brain excitatory neurons"                 
+> > ##   [14] "brain inhibitory neurons"                 
+> > ##   [15] "breast hormone-responsive cells"          
+> > ##   [16] "breast lactating cells"                   
+> > ##   [17] "breast myoepithelial cells"               
+> > ##   [18] "breast secretory cells"                   
+> > ##   [19] "cardiomyocytes"                           
+> > ##   [20] "cdcs"                                     
+> > ##   [21] "cholangiocytes"                           
+> > ##   [22] "choroid plexus epithelial cells"          
+> > ##   [23] "colonocytes"                              
+> > ##   [24] "cone photoreceptor cells"                 
+> > ##   [25] "conjunctival goblet cells"                
+> > ##   [26] "corticotrophs"                            
+> > ##   [27] "cytotrophoblasts"                         
+> > ##   [28] "decidual stromal cells"                   
+> > ##   [29] "differentiating spermatogonia"            
+> > ##   [30] "distal convoluted tubule cells"           
+> > ##   [31] "early primary spermatocytes"              
+> > ##   [32] "early spermatids"                         
+> > ##   [33] "endometrial ciliated cells"               
+> > ##   [34] "endometrial glandular cells"              
+> > ##   [35] "endometrial luminal cells"                
+> > ##   [36] "endometrial secretory cells"              
+> > ##   [37] "endometrial stromal cells"                
+> > ##   [38] "enteric stem cells"                       
+> > ##   [39] "enteric transient amplifying cells"       
+> > ##   [40] "enterocytes"                              
+> > ##   [41] "enteroendocrine cells"                    
+> > ##   [42] "ependymal cells"                          
+> > ##   [43] "epididymal basal cells"                   
+> > ##   [44] "epididymal clear cells"                   
+> > ##   [45] "epididymal efferent duct absorptive cells"
+> > ##   [46] "epididymal efferent duct ciliated cells"  
+> > ##   [47] "epididymal principal cells"               
+> > ##   [48] "erythrocyte progenitors"                  
+> > ##   [49] "erythrocytes"                             
+> > ##   [50] "esophageal apical cells"                  
+> > ##   [51] "esophageal basal cells"                   
+> > ##   [52] "esophageal suprabasal cells"              
+> > ##   [53] "extravillous trophoblasts"                
+> > ##   [54] "fallopian secretory cells"                
+> > ##   [55] "fallopian tube ciliated cells"            
+> > ##   [56] "fibro-adipogenic progenitors"             
+> > ##   [57] "fibroblasts"                              
+> > ##   [58] "foveolar cells"                           
+> > ##   [59] "gastric chief cells"                      
+> > ##   [60] "gastric progenitor cells"                 
+> > ##   [61] "goblet cells"                             
+> > ##   [62] "gonadotrophs"                             
+> > ##   [63] "granulosa cells"                          
+> > ##   [64] "hematopoietic stem cells"                 
+> > ##   [65] "hepatic stellate cells"                   
+> > ##   [66] "hepatocytes"                              
+> > ##   [67] "hofbauer cells"                           
+> > ##   [68] "innate lymphoid cells"                    
+> > ##   [69] "kupffer cells"                            
+> > ##   [70] "lacrimal acinar cells"                    
+> > ##   [71] "lactotrophs"                              
+> > ##   [72] "late primary spermatocytes"               
+> > ##   [73] "late spermatids"                          
+> > ##   [74] "leydig cells"                             
+> > ##   [75] "loop of henle epithelial cells"           
+> > ##   [76] "lymphatic endothelial cells"              
+> > ##   [77] "macrophages"                              
+> > ##   [78] "mast cells"                               
+> > ##   [79] "medullary thymic epithelial cells"        
+> > ##   [80] "megakaryocyte progenitors"                
+> > ##   [81] "megakaryocyte-erythroid progenitors"      
+> > ##   [82] "megakaryocytes"                           
+> > ##   [83] "melanocytes"                              
+> > ##   [84] "mesothelial cells"                        
+> > ##   [85] "microglia"                                
+> > ##   [86] "migrating cytotrophoblasts"               
+> > ##   [87] "monocyte progenitors"                     
+> > ##   [88] "monocytes"                                
+> > ##   [89] "mucous neck cells"                        
+> > ##   [90] "müller glia"                              
+> > ##   [91] "myonuclei"                                
+> > ##   [92] "myosatellite cells"                       
+> > ##   [93] "neutrophil progenitors"                   
+> > ##   [94] "neutrophils"                              
+> > ##   [95] "nk-cells"                                 
+> > ##   [96] "ocular epithelial cells"                  
+> > ##   [97] "oligodendrocyte progenitor cells"         
+> > ##   [98] "oligodendrocytes"                         
+> > ##   [99] "oocytes"                                  
+> > ##  [100] "other brain neurons"                      
+> > ##  [101] "ovarian stromal cells"                    
+> > ##  [102] "pancreatic acinar cells"                  
+> > ##  [103] "pancreatic duct cells"                    
+> > ##  [104] "pancreatic islet cells"                   
+> > ##  [105] "paneth cells"                             
+> > ##  [106] "papillary tip epithelial cells"           
+> > ##  [107] "parietal cells"                           
+> > ##  [108] "pdcs"                                     
+> > ##  [109] "pericytes"                                
+> > ##  [110] "peritubular myoid cells"                  
+> > ##  [111] "pituicytes/fscs"                          
+> > ##  [112] "pituitary stem cells"                     
+> > ##  [113] "plasma cells"                             
+> > ##  [114] "platelets"                                
+> > ##  [115] "podocytes"                                
+> > ##  [116] "prostatic club cells"                     
+> > ##  [117] "prostatic glandular cells"                
+> > ##  [118] "prostatic hillock cells"                  
+> > ##  [119] "proximal tubule cells"                    
+> > ##  [120] "renal collecting duct intercalated cells" 
+> > ##  [121] "renal collecting duct principal cells"    
+> > ##  [122] "renal connecting tubule cells"            
+> > ##  [123] "respiratory basal cells"                  
+> > ##  [124] "respiratory ciliated cells"               
+> > ##  [125] "respiratory deuterosomal cells"           
+> > ##  [126] "respiratory ionocytes"                    
+> > ##  [127] "respiratory secretory cells"              
+> > ##  [128] "retinal amacrine cells"                   
+> > ##  [129] "retinal bipolar cells"                    
+> > ##  [130] "retinal ganglion cells"                   
+> > ##  [131] "retinal horizontal cells"                 
+> > ##  [132] "retinal pigment epithelial cells"         
+> > ##  [133] "rod photoreceptor cells"                  
+> > ##  [134] "salivary acinar cells"                    
+> > ##  [135] "salivary basal cells"                     
+> > ##  [136] "salivary duct cells"                      
+> > ##  [137] "salivary ionocytes"                       
+> > ##  [138] "salivary myoepithelial cells"             
+> > ##  [139] "schwann cells"                            
+> > ##  [140] "sertoli cells"                            
+> > ##  [141] "smooth muscle cells"                      
+> > ##  [142] "somatotrophs"                             
+> > ##  [143] "submucosal glandular cells"               
+> > ##  [144] "suprabasal keratinocytes"                 
+> > ##  [145] "syncytiotrophoblasts"                     
+> > ##  [146] "t-cells"                                  
+> > ##  [147] "thymic myoid cells"                       
+> > ##  [148] "thymocytes"                               
+> > ##  [149] "thyrotrophs"                              
+> > ##  [150] "transitional alveolar cells"              
+> > ##  [151] "tuft cells"                               
+> > ##  [152] "undifferentiated spermatogonia"           
+> > ##  [153] "urothelial cells"                         
+> > ##  [154] "vascular endothelial cells"               
+> > ##  [155] "vascular smooth muscle cells"
 > > ```
 
 We can use the HPA reference to annotate cell types in the testis dataset.
@@ -757,7 +758,9 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 
 > **WARNING:**
 >
-> RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with [`velocyto`](https://velocyto.org/). The resulting `loom` file (`Guo_testis_full-counts.loom`, 38 MB) is shipped with this book, and installed in your workshop session: its path is given by `system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")`. The code below is not run when the book is built.
+> RNA velocity requires the counts of spliced and unspliced reads, for each gene in each cell. These counts are not provided in GEO: they were computed from the raw reads of the study with [`velocyto`](https://velocyto.org/). The resulting `loom` file (`Guo_testis_full-counts.loom`, 38 MB) is shipped with this book, and installed in your workshop session: its path is given by `system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")`.
+>
+> `velociraptor` runs [`scVelo`](https://scvelo.readthedocs.io/) (a `python` package) in a dedicated `python` environment, managed by the `basilisk` package: this environment is already installed in your workshop session.
 
 > **NOTE:**
 >
@@ -772,6 +775,18 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 > > loom_file <- system.file("extdata", "Guo_testis_full-counts.loom", package = "scRNAseqPhysalia2026")
 > > full_GSE112013_counts <- LoomExperiment::import(loom_file)
 > > full_GSE112013_counts
+> > ##  class: LoomExperiment 
+> > ##  dim: 16006 6131 
+> > ##  metadata(8): CreatedWith CreationDate ... velocyto.__version__
+> > ##    velocyto.logic
+> > ##  assays(2): spliced unspliced
+> > ##  rownames: NULL
+> > ##  rowData names(6): Accession Chromosome ... Start Strand
+> > ##  colnames(6131): AAACCTGGTGCCTTGG AAACCTGTCAACGGGA ...
+> > ##    TTTGTCAGTGTGCGTC TTTGTCATCCAAACTG
+> > ##  colData names(5): Barcode CellID ids ncells sample
+> > ##  rowGraphs(0): NULL
+> > ##  colGraphs(0): NULL
 > >
 > > ## - Filter `germcells` genes and cells to only retain those present in `full_GSE112013_counts`
 > > germcells <- germcells[
@@ -782,12 +797,26 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 > > ## - Reorder rows of `full_GSE112013_counts_germcells` to match those of `germcells`
 > > full_GSE112013_counts_germcells <- full_GSE112013_counts[match(rowData(germcells)$gene_id, rowData(full_GSE112013_counts)$Accession), match(germcells$Barcode, full_GSE112013_counts$Barcode)]
 > > dim(germcells)
+> > ##  [1] 15543  3967
 > > dim(full_GSE112013_counts_germcells)
+> > ##  [1] 15543  3967
 > >
 > > ## - Add spliced/unspliced counts to germcells
 > > assay(germcells, 'spliced', withDimnames=FALSE) <- as(assay(full_GSE112013_counts_germcells, 'spliced'), 'dgCMatrix')
 > > assay(germcells, 'unspliced', withDimnames=FALSE) <- as(assay(full_GSE112013_counts_germcells, 'unspliced'), 'dgCMatrix')
 > > germcells
+> > ##  class: SingleCellExperiment 
+> > ##  dim: 15543 3967 
+> > ##  metadata(2): scDblFinder.threshold qc
+> > ##  assays(4): counts logcounts spliced unspliced
+> > ##  rownames(15543): SAMD11 NOC2L ... DRP2 TRIM49
+> > ##  rowData names(8): gene_name gene_id ... hvg isHVG
+> > ##  colnames(3967): Donor2-AAACCTGGTGCCTTGG-1 Donor2-AAACCTGTCAACGGGA-1
+> > ##    ... Donor1-TTTGTCAGTAAGGGAA-2 Donor1-TTTGTCATCCAAACTG-2
+> > ##  colData names(18): cellid Barcode ... annotation pseudotime
+> > ##  reducedDimNames(3): corrected TSNE corrected_2
+> > ##  mainExpName: NULL
+> > ##  altExpNames(0):
 > >
 > > ## - Run velociraptor
 > > velo_out <- velociraptor::scvelo(
@@ -796,23 +825,95 @@ As we saw earlier, TI does not necessarily know which direction is right for a g
 > >     subset.row = rowData(germcells)$isHVG,
 > >     use.dimred = "corrected"
 > > )
+> > ##  Registered S3 method overwritten by 'zellkonverter':
+> > ##    method                                             from      
+> > ##    py_to_r.pandas.core.arrays.categorical.Categorical reticulate
+> > ##  Using Python: /opt/R-cache/R/BiocBook/envs/scRNAseqPhysalia2026-1d65e4bd55da/bin/python
+> > ##  Creating virtual environment '/opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env' ...
+> > ##  + /opt/R-cache/R/BiocBook/envs/scRNAseqPhysalia2026-1d65e4bd55da/bin/python -m venv /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env
+> > ##  Done!
+> > ##  Installing packages: pip, wheel, setuptools
+> > ##  + /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env/bin/python -m pip install --upgrade pip wheel setuptools
+> > ##  Installing packages: 'anndata==0.11.4', 'array-api-compat==1.12.0', 'click==8.2.1', 'contourpy==1.3.2', 'cycler==0.12.1', 'fonttools==4.58.5', 'h5py==3.14.0', 'joblib==1.5.1', 'kiwisolver==1.4.8', 'legacy-api-wrap==1.4.1', 'llvmlite==0.44.0', 'loompy==3.0.8', 'matplotlib==3.10.3', 'natsort==8.4.0', 'networkx==3.5', 'numba==0.61.2', 'numpy==2.2.6', 'numpy-groupies==0.11.3', 'packaging==25.0', 'pandas==2.3.1', 'patsy==1.0.1', 'pillow==11.3.0', 'pip==25.1.1', 'pynndescent==0.5.13', 'pyparsing==3.2.3', 'python-dateutil==2.9.0.post0', 'pytz==2025.2', 'scanpy==1.11.3', 'scikit-learn==1.7.0', 'scipy==1.15.3', 'scvelo==0.3.3', 'seaborn==0.13.2', 'session-info2==0.1.2', 'setuptools==80.9.0', 'six==1.17.0', 'statsmodels==0.14.5', 'threadpoolctl==3.6.0', 'tqdm==4.67.1', 'typing_extensions==4.14.1', 'tzdata==2025.2', 'umap-learn==0.5.9.post2', 'wheel==0.45.1'
+> > ##  + /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env/bin/python -m pip install --upgrade --no-user 'anndata==0.11.4' 'array-api-compat==1.12.0' 'click==8.2.1' 'contourpy==1.3.2' 'cycler==0.12.1' 'fonttools==4.58.5' 'h5py==3.14.0' 'joblib==1.5.1' 'kiwisolver==1.4.8' 'legacy-api-wrap==1.4.1' 'llvmlite==0.44.0' 'loompy==3.0.8' 'matplotlib==3.10.3' 'natsort==8.4.0' 'networkx==3.5' 'numba==0.61.2' 'numpy==2.2.6' 'numpy-groupies==0.11.3' 'packaging==25.0' 'pandas==2.3.1' 'patsy==1.0.1' 'pillow==11.3.0' 'pip==25.1.1' 'pynndescent==0.5.13' 'pyparsing==3.2.3' 'python-dateutil==2.9.0.post0' 'pytz==2025.2' 'scanpy==1.11.3' 'scikit-learn==1.7.0' 'scipy==1.15.3' 'scvelo==0.3.3' 'seaborn==0.13.2' 'session-info2==0.1.2' 'setuptools==80.9.0' 'six==1.17.0' 'statsmodels==0.14.5' 'threadpoolctl==3.6.0' 'tqdm==4.67.1' 'typing_extensions==4.14.1' 'tzdata==2025.2' 'umap-learn==0.5.9.post2' 'wheel==0.45.1'
+> > ##  Virtual environment '/opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env' successfully created.
+> > ##  computing moments based on connectivities
+> > ##      finished (0:00:00) --> added 
+> > ##      'Ms' and 'Mu', moments of un/spliced abundances (adata.layers)
+> > ##  computing velocities
+> > ##      finished (0:00:00) --> added 
+> > ##      'velocity', velocity vectors for each individual cell (adata.layers)
+> > ##  computing velocity graph (using 1/4 cores)
+> > ##  WARNING: Unable to create progress bar. Consider installing `tqdm` as `pip install tqdm` and `ipywidgets` as `pip install ipywidgets`,
+> > ##  or disable the progress bar using `show_progress_bar=False`.
+> > ##      finished (0:00:02) --> added 
+> > ##      'velocity_graph', sparse matrix with cosine correlations (adata.uns)
+> > ##  computing terminal states
+> > ##      identified 6 regions of root cells and 3 regions of end points .
+> > ##      finished (0:00:00) --> added
+> > ##      'root_cells', root cells of Markov diffusion process (adata.obs)
+> > ##      'end_points', end points of Markov diffusion process (adata.obs)
+> > ##  --> added 'velocity_length' (adata.obs)
+> > ##  --> added 'velocity_confidence' (adata.obs)
+> > ##  --> added 'velocity_confidence_transition' (adata.obs)
+> > ##  For native R and reading and writing of H5AD files, an R <AnnData> object,
+> > ##  and conversion to <SingleCellExperiment> or <Seurat> objects, check out the
+> > ##  anndataR package:
+> > ##  ℹ Install it from Bioconductor with `BiocManager::install("anndataR")`
+> > ##  ℹ See more at <https://bioconductor.org/packages/anndataR/>
+> > ##  This message is displayed once per session.
 > > velo_out
+> > ##  class: SingleCellExperiment 
+> > ##  dim: 1955 3967 
+> > ##  metadata(4): neighbors velocity_params velocity_graph
+> > ##    velocity_graph_neg
+> > ##  assays(6): X spliced ... Mu velocity
+> > ##  rownames(1955): C1orf159 TTLL10 ... COL6A2 SPATC1L
+> > ##  rowData names(4): velocity_gamma velocity_qreg_ratio velocity_r2
+> > ##    velocity_genes
+> > ##  colnames(3967): Donor2-AAACCTGGTGCCTTGG-1 Donor2-AAACCTGTCAACGGGA-1
+> > ##    ... Donor1-TTTGTCAGTAAGGGAA-2 Donor1-TTTGTCATCCAAACTG-2
+> > ##  colData names(7): velocity_self_transition root_cells ...
+> > ##    velocity_confidence velocity_confidence_transition
+> > ##  reducedDimNames(1): X_pca
+> > ##  mainExpName: NULL
+> > ##  altExpNames(0):
 > > ```
 
 - **Embed the velocity field in tSNE scRNAseq embedding and plot the RNA velocity field on top of tSNE projection. Conclude.**
 
 ``` r
 embedded_velo <- velociraptor::embedVelocity(reducedDim(germcells, "TSNE"), velo_out)
+##  ℹ Using the 'X' assay as the X matrix
+##  computing velocity embedding
+##      finished (0:00:00) --> added
+##      'velocity_target', embedded velocity vectors (adata.obsm)
 head(embedded_velo)
+##               [,1]        [,2]
+##  [1,] -0.004190276  0.62071260
+##  [2,] -0.182686754 -0.42189365
+##  [3,] -0.092559296  0.13643846
+##  [4,] -0.344845658 -0.38175330
+##  [5,] -0.056569775 -0.03182575
+##  [6,]  0.279834642  0.37126586
 grid_df <- velociraptor::gridVectors(reducedDim(germcells, "TSNE"), embedded_velo, resolution = 30, scale = TRUE)
 head(grid_df)
+##    start.TSNE1 start.TSNE2   end.TSNE1  end.TSNE2
+##  1  17.6814096   26.505914  16.7363358  28.448114
+##  2 -10.5292413  -18.545300 -10.9718974 -20.662721
+##  3  -3.2539728  -13.097256  -3.6592306 -12.211134
+##  4  -7.9481561  -18.364766  -8.6062669 -20.702600
+##  5  -0.7843155    2.813711  -0.7006013   3.094165
+##  6  -5.6143385   10.685881  -4.5985983  12.160603
 scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha = 0.5) +
     geom_segment(
         data = grid_df,
-        mapping = aes(x = start.1, y = start.2, xend = end.1, yend = end.2),
+        mapping = aes(x = start.TSNE1, y = start.TSNE2, xend = end.TSNE1, yend = end.TSNE2),
         arrow = arrow(length = unit(0.05, "inches"), type = "closed")
     )
 ```
+
+![](Lab8_pseudotime_files/figure-html/unnamed-chunk-14-1.png)
 
 ## 15.4 Session info
 
@@ -828,7 +929,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   collate  C
 >     ##   ctype    en_US.UTF-8
 >     ##   tz       Etc/UTC
->     ##   date     2026-11-06
+>     ##   date     2026-11-13
 >     ##   pandoc   3.13 @ /usr/bin/ (via rmarkdown)
 >     ##   quarto   1.11.5 @ /usr/local/bin/quarto
 >     ##  
@@ -836,13 +937,14 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   package              * version   date (UTC) lib source
 >     ##   abind                  1.4-8     2024-09-12 [2] RSPM (R 4.6.0)
 >     ##   AnnotationDbi          1.75.2    2026-07-21 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   basilisk               1.25.0    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   batchelor              1.29.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   beachmat               2.29.3    2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   beeswarm               0.4.0     2021-06-01 [2] RSPM (R 4.6.0)
 >     ##   Biobase              * 2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
->     ##   BiocFileCache        * 3.3.2     2026-11-06 [2] xgit (https://git.bioconductor.org/packages/BiocFileCache@709e8bb)
->     ##   BiocGenerics         * 0.59.12   2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocFileCache        * 3.3.3     2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   BiocGenerics         * 0.59.13   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocNeighbors          2.7.3     2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   BiocParallel           1.47.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
@@ -868,6 +970,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   DelayedMatrixStats     1.35.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   dichromat              2.0-1     2026-07-22 [2] RSPM (R 4.6.0)
 >     ##   digest                 0.6.39    2025-11-19 [2] RSPM (R 4.6.0)
+>     ##   dir.expiry             1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   dplyr                * 1.2.1     2026-04-03 [2] RSPM (R 4.6.0)
 >     ##   dqrng                  0.4.1     2024-05-28 [2] RSPM (R 4.6.0)
 >     ##   edgeR                  4.99.12   2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
@@ -886,6 +989,8 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   glue                   1.8.1     2026-04-17 [2] RSPM (R 4.6.0)
 >     ##   gridExtra              2.3.1     2026-06-25 [2] RSPM (R 4.6.0)
 >     ##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
+>     ##   h5mread                1.5.3     2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   HDF5Array              1.41.3    2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 >     ##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
 >     ##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
@@ -901,6 +1006,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   lattice                0.23-1    2026-08-12 [2] RSPM (R 4.6.1)
 >     ##   lifecycle              1.0.5     2026-01-08 [2] RSPM (R 4.6.0)
 >     ##   limma                  3.99.4    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   LoomExperiment         1.31.0    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   lubridate            * 1.9.5     2026-02-04 [2] RSPM (R 4.6.0)
 >     ##   magrittr               2.0.5     2026-04-04 [2] RSPM (R 4.6.0)
 >     ##   MASS                   7.3-66    2026-07-15 [2] RSPM (R 4.6.1)
@@ -911,7 +1017,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   metapod                1.21.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   mgcv                   1.9-4     2025-11-07 [3] CRAN (R 4.6.1)
 >     ##   nlme                   3.1-171   2026-09-01 [2] RSPM (R 4.6.1)
->     ##   org.Hs.eg.db           3.24.4    2026-11-06 [2] Bioconductor
+>     ##   org.Hs.eg.db           3.24.6    2026-11-13 [2] Bioconductor
 >     ##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
 >     ##   pillar                 1.11.1    2025-09-17 [2] RSPM (R 4.6.0)
 >     ##   pkgconfig              2.0.3     2019-09-22 [2] RSPM (R 4.6.0)
@@ -928,6 +1034,10 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   readr                * 2.2.0     2026-02-19 [2] RSPM (R 4.6.0)
 >     ##   ResidualMatrix         1.23.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   restfulr               0.0.17    2026-06-11 [2] RSPM (R 4.6.0)
+>     ##   reticulate             1.47.0    2026-09-03 [2] RSPM (R 4.6.0)
+>     ##   rhdf5                  2.57.20   2026-10-06 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   rhdf5filters           1.25.5    2026-10-28 [2] Bioconductor 3.24 (R 4.6.1)
+>     ##   Rhdf5lib               2.1.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   rjson                  0.2.23    2024-09-16 [2] RSPM (R 4.6.0)
 >     ##   rlang                  1.3.0     2026-07-05 [2] RSPM (R 4.6.0)
 >     ##   rmarkdown              2.32      2026-09-01 [2] RSPM (R 4.6.0)
@@ -966,6 +1076,7 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   tzdb                   0.5.0     2025-03-15 [2] RSPM (R 4.6.0)
 >     ##   UCSC.utils             1.9.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   vctrs                  0.7.3     2026-04-11 [2] RSPM (R 4.6.0)
+>     ##   velociraptor           1.23.0    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   vipor                  0.4.7     2023-12-18 [2] RSPM (R 4.6.0)
 >     ##   viridis                0.6.5     2024-01-29 [2] RSPM (R 4.6.0)
 >     ##   viridisLite            0.4.3     2026-02-04 [2] RSPM (R 4.6.0)
@@ -976,10 +1087,21 @@ scater::plotReducedDim(germcells, 'TSNE', colour_by = "annotation", point_alpha 
 >     ##   XML                    3.99-0.25 2026-09-27 [2] RSPM (R 4.6.0)
 >     ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
+>     ##   zellkonverter          1.23.1    2026-11-10 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##  
->     ##   [1] /tmp/Rtmpz8OMVQ/Rinstb1b9be642
+>     ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.
+>     ##  
+>     ##  ─ Python configuration ────────────────────────────────────────────────────
+>     ##   python:         /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env/bin/python
+>     ##   libpython:      /opt/R-cache/R/BiocBook/envs/scRNAseqPhysalia2026-1d65e4bd55da/lib/libpython3.12.so
+>     ##   pythonhome:     /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env:/opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env
+>     ##   version:        3.12.16 (main, Oct 26 2026, 11:37:43) [GCC 15.3.0]
+>     ##   numpy:          /opt/R-cache/R/basilisk/1.25.0/velociraptor/1.23.0/env/lib/python3.12/site-packages/numpy
+>     ##   numpy_version:  2.2.6
+>     ##   
+>     ##   NOTE: Python version was forced by use_python() function
 >     ##  
 >     ##  ───────────────────────────────────────────────────────────────────────────
