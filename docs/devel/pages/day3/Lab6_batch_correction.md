@@ -1052,7 +1052,7 @@ Then, differential gene expression is performed between clusters, using a *pseud
 >     ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 >     ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 >     ##  
->     ##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
+>     ##   [1] /tmp/RtmpyQdi1U/Rinstc2e9543f3
 >     ##   [2] /usr/local/lib/R/site-library
 >     ##   [3] /usr/local/lib/R/library
 >     ##   * ── Packages attached to the search path.

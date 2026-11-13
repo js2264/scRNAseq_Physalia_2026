@@ -336,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>
 <a href="#process-human-pbmc-dataset" id="toc-process-human-pbmc-dataset" class="nav-link active" data-scroll-target="#process-human-pbmc-dataset"><span class="header-section-number">13.1</span> Process human PBMC dataset</a>
   <ul class="collapse">
-<li><a href="#download-data" id="toc-download-data" class="nav-link" data-scroll-target="#download-data"><span class="header-section-number">13.1.1</span> Download data</a></li>
+<li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">13.1.1</span> Data</a></li>
   <li><a href="#import-data" id="toc-import-data" class="nav-link" data-scroll-target="#import-data"><span class="header-section-number">13.1.2</span> Import data</a></li>
   <li><a href="#create-a-seurat-object" id="toc-create-a-seurat-object" class="nav-link" data-scroll-target="#create-a-seurat-object"><span class="header-section-number">13.1.3</span> Create a <code>Seurat</code> object</a></li>
   <li><a href="#check-qcs" id="toc-check-qcs" class="nav-link" data-scroll-target="#check-qcs"><span class="header-section-number">13.1.4</span> Check QCs</a></li>
@@ -378,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <p>The estimated time for this lab is around 1h10.</p>
-<p>This lab relies on the <code>fragments</code> file of a 10x Genomics scATAC-seq experiment (~2 GB): its code is not run when the book is built, and no output is shown on this page. Run it in your workshop session!</p>
+<p>This lab relies on the <code>fragments</code> file of a 10x Genomics scATAC-seq experiment (~2 GB), already available in your workshop session. It needs ~12 GB of memory, and takes ~15 minutes to run from start to end.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -405,15 +405,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this lab, we will process a PBMC single-cell ATAC-seq (scATAC-seq) dataset and perform preliminary analysis to assess quality of these data. The data for this lab comes from <a href="https://www.10xgenomics.com/datasets/10-k-peripheral-blood-mononuclear-cells-pbm-cs-from-a-healthy-donor-1-standard-1-0-1">10X Genomics</a>. The dataset contains roughly ~ 10,000 cells.</p>
 <section id="process-human-pbmc-dataset" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="process-human-pbmc-dataset">
 <span class="header-section-number">13.1</span> Process human PBMC dataset</h2>
-<section id="download-data" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="download-data">
-<span class="header-section-number">13.1.1</span> Download data</h3>
-<p>The files we need are directly available from the 10x Genomics website. We download them in a <code>~/data/scATAC</code> folder (this may take a few minutes, the <code>fragments</code> file weighs ~2 GB). Note that the <code>fragments</code> file and its index (<code>.tbi</code>) must sit next to each other, with matching names.</p>
+<section id="data" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="data">
+<span class="header-section-number">13.1.1</span> Data</h3>
+<p>The files we need are directly available from the 10x Genomics website. They have already been downloaded in your workshop session, in the <code>~/Share/scATAC/</code> folder. Note that the <code>fragments</code> file and its index (<code>.tbi</code>) must sit next to each other, with matching names.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">scatac_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/path.expand.html">path.expand</a></span><span class="op">(</span><span class="st">"~"</span><span class="op">)</span>, <span class="st">"data"</span>, <span class="st">"scATAC"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">scatac_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/path.expand.html">path.expand</a></span><span class="op">(</span><span class="st">"~"</span><span class="op">)</span>, <span class="st">"Share"</span>, <span class="st">"scATAC"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">scatac_dir</span><span class="op">)</span></span>
+<span><span class="co">##  [1] "atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5"</span></span>
+<span><span class="co">##  [2] "atac_v1_pbmc_10k_fragments.tsv.gz"          </span></span>
+<span><span class="co">##  [3] "atac_v1_pbmc_10k_fragments.tsv.gz.tbi"      </span></span>
+<span><span class="co">##  [4] "atac_v1_pbmc_10k_peaks.bed"                 </span></span>
+<span><span class="co">##  [5] "atac_v1_pbmc_10k_singlecell.csv"</span></span>
+<span><span class="va">h5_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="st">"atac_v1_pbmc_10k_filtered_peak_bc_matrix.h5"</span><span class="op">)</span></span>
+<span><span class="va">peaks_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="st">"atac_v1_pbmc_10k_peaks.bed"</span><span class="op">)</span></span>
+<span><span class="va">metadata_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="st">"atac_v1_pbmc_10k_singlecell.csv"</span><span class="op">)</span></span>
+<span><span class="va">fragments_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="st">"atac_v1_pbmc_10k_fragments.tsv.gz"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Downloading the data on your own computer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To run this lab outside of the workshop session, download the files from the 10x Genomics website, e.g.&nbsp;in a <code>~/data/scATAC</code> folder (this may take a few minutes, the <code>fragments</code> file weighs ~2 GB):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">scatac_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/path.expand.html">path.expand</a></span><span class="op">(</span><span class="st">"~"</span><span class="op">)</span>, <span class="st">"data"</span>, <span class="st">"scATAC"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">scatac_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>timeout <span class="op">=</span> <span class="fl">3600</span><span class="op">)</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://cf.10xgenomics.com/samples/cell-atac/1.0.1/atac_v1_pbmc_10k/"</span></span>
@@ -435,6 +464,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">fragments_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">scatac_dir</span>, <span class="st">"atac_v1_pbmc_10k_fragments.tsv.gz"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+</div>
+</div>
 </section><section id="import-data" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="import-data">
 <span class="header-section-number">13.1.2</span> Import data</h3>
 <p>Notice how the count matrix is in a <code>.h5</code> format. We have already encountered this kind of 10x Genomics outputs in <a href="../../pages/day2/Lab3_Rbioc.html">Lab 3</a>. Back then, we imported them with <code><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html">DropletUtils::read10xCounts</a></code>.</p>
@@ -452,7 +483,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Does this function work here?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -461,15 +492,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">scatac</span> <span class="op">&lt;-</span> <span class="fu">DropletUtils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html">read10xCounts</a></span><span class="op">(</span><span class="va">h5_file</span><span class="op">)</span></span>
-<span><span class="va">scatac</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">scatac</span> <span class="op">&lt;-</span> <span class="fu">DropletUtils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html">read10xCounts</a></span><span class="op">(</span><span class="va">h5_file</span><span class="op">)</span></span>
+<span><span class="va">scatac</span></span>
+<span><span class="co">##  class: SingleCellExperiment </span></span>
+<span><span class="co">##  dim: 89796 8728 </span></span>
+<span><span class="co">##  metadata(1): Samples</span></span>
+<span><span class="co">##  assays(1): counts</span></span>
+<span><span class="co">##  rownames(89796): chr1:565107-565550 chr1:569174-569639 ...</span></span>
+<span><span class="co">##    chrY:59001782-59002175 chrY:59017143-59017246</span></span>
+<span><span class="co">##  rowData names(3): ID Symbol Type</span></span>
+<span><span class="co">##  colnames: NULL</span></span>
+<span><span class="co">##  colData names(2): Sample Barcode</span></span>
+<span><span class="co">##  reducedDimNames(0):</span></span>
+<span><span class="co">##  mainExpName: NULL</span></span>
+<span><span class="co">##  altExpNames(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -496,7 +539,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Import counts matrix and feature annotations using an import function provided by <code>Seurat</code>.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -505,14 +548,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stuart-lab/signac">Signac</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org">stringr</a></span><span class="op">)</span></span>
@@ -533,7 +576,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>How many accessible genomic segments were found in this dataset?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -542,15 +585,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">features</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">features</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">features</span></span>
+<span><span class="co">##  GRanges object with 89796 ranges and 1 metadata column:</span></span>
+<span><span class="co">##            seqnames            ranges strand |                   peak</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |            &lt;character&gt;</span></span>
+<span><span class="co">##        [1]     chr1     565108-565550      * |     chr1-565108-565550</span></span>
+<span><span class="co">##        [2]     chr1     569175-569639      * |     chr1-569175-569639</span></span>
+<span><span class="co">##        [3]     chr1     713461-714823      * |     chr1-713461-714823</span></span>
+<span><span class="co">##        [4]     chr1     752423-753038      * |     chr1-752423-753038</span></span>
+<span><span class="co">##        [5]     chr1     762107-763359      * |     chr1-762107-763359</span></span>
+<span><span class="co">##        ...      ...               ...    ... .                    ...</span></span>
+<span><span class="co">##    [89792]     chrY 58993393-58993760      * | chrY-58993393-58993760</span></span>
+<span><span class="co">##    [89793]     chrY 58994572-58994823      * | chrY-58994572-58994823</span></span>
+<span><span class="co">##    [89794]     chrY 58996353-58997331      * | chrY-58996353-58997331</span></span>
+<span><span class="co">##    [89795]     chrY 59001783-59002175      * | chrY-59001783-59002175</span></span>
+<span><span class="co">##    [89796]     chrY 59017144-59017246      * | chrY-59017144-59017246</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 24 sequences from an unspecified genome; no seqlengths</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">features</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 89796</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -581,35 +641,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Generate human annotations from Ensembl using a parsing function from <code>Signac</code>.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>R</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Get human gene annotations (hg19/GRCh37) to feed it into the future `ChromatinAssay`</span></span>
-<span><span class="va">annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/GetGRangesFromEnsDb.html">GetGRangesFromEnsDb</a></span><span class="op">(</span>ensdb <span class="op">=</span> <span class="fu">EnsDb.Hsapiens.v75</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/EnsDb.Hsapiens.v75/man/package.html">EnsDb.Hsapiens.v75</a></span><span class="op">)</span></span>
-<span><span class="fu">GenomeInfoDb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevelsStyle.html">seqlevelsStyle</a></span><span class="op">(</span><span class="va">annotations</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'UCSC'</span></span>
-<span><span class="fu">GenomeInfoDb</span><span class="fu">::</span><span class="fu">genome</span><span class="op">(</span><span class="va">annotations</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"hg19"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<p>Create a <code>ChromatinAssay</code> using <code>counts</code>, <code>features</code>, <code>fragments</code> and <code>annotations</code>.</p>
-<div class="callout-answer">
-<div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -626,24 +657,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Create Chromatin Assay</span></span>
-<span><span class="va">assay</span> <span class="op">&lt;-</span> <span class="fu">Signac</span><span class="fu">::</span><span class="fu"><a href="https://stuartlab.org/signac/reference/CreateChromatinAssay.html">CreateChromatinAssay</a></span><span class="op">(</span></span>
-<span>    counts <span class="op">=</span> <span class="va">cnts</span>,</span>
-<span>    ranges <span class="op">=</span> <span class="va">features</span>,</span>
-<span>    fragments <span class="op">=</span> <span class="va">fragments_file</span>,</span>
-<span>    annotation <span class="op">=</span> <span class="va">annotations</span>,</span>
-<span>    genome <span class="op">=</span> <span class="st">"hg19"</span>,</span>
-<span>    min.cells <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>    min.features <span class="op">=</span> <span class="fl">10</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">assay</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Get human gene annotations (hg19/GRCh37) to feed it into the future `ChromatinAssay`</span></span>
+<span><span class="va">annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/GetGRangesFromEnsDb.html">GetGRangesFromEnsDb</a></span><span class="op">(</span>ensdb <span class="op">=</span> <span class="fu">EnsDb.Hsapiens.v75</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/EnsDb.Hsapiens.v75/man/package.html">EnsDb.Hsapiens.v75</a></span><span class="op">)</span></span>
+<span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span><span class="fu">GenomeInfoDb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevelsStyle.html">seqlevelsStyle</a></span><span class="op">(</span><span class="va">annotations</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'UCSC'</span></span>
+<span><span class="fu">GenomeInfoDb</span><span class="fu">::</span><span class="fu">genome</span><span class="op">(</span><span class="va">annotations</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"hg19"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>What are the dimensions of this object? Are they comparable to the count matrix? Comment.</p>
+<p>Create a <code>ChromatinAssay</code> using <code>counts</code>, <code>features</code>, <code>fragments</code> and <code>annotations</code>.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
@@ -662,8 +687,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">cnts</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">assay</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Create Chromatin Assay</span></span>
+<span><span class="va">assay</span> <span class="op">&lt;-</span> <span class="fu">Signac</span><span class="fu">::</span><span class="fu"><a href="https://stuartlab.org/signac/reference/CreateChromatinAssay.html">CreateChromatinAssay</a></span><span class="op">(</span></span>
+<span>    counts <span class="op">=</span> <span class="va">cnts</span>,</span>
+<span>    ranges <span class="op">=</span> <span class="va">features</span>,</span>
+<span>    fragments <span class="op">=</span> <span class="va">fragments_file</span>,</span>
+<span>    annotation <span class="op">=</span> <span class="va">annotations</span>,</span>
+<span>    genome <span class="op">=</span> <span class="st">"hg19"</span>,</span>
+<span>    min.cells <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    min.features <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">##  Computing hash</span></span>
+<span><span class="va">assay</span></span>
+<span><span class="co">##  ChromatinAssay data with 87561 features for 8728 cells</span></span>
+<span><span class="co">##  Variable features: 0 </span></span>
+<span><span class="co">##  Genome: hg19 </span></span>
+<span><span class="co">##  Annotation present: TRUE </span></span>
+<span><span class="co">##  Motifs present: FALSE </span></span>
+<span><span class="co">##  Fragment files: 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>What are the dimensions of this object? Are they comparable to the count matrix? Comment.</p>
+<div class="callout-answer">
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">cnts</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 89796  8728</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">assay</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 87561  8728</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -688,7 +758,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Create a <code>Seurat</code> object from the <code>ChromatinAssay</code> object.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -697,24 +767,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Create Seurat object</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Create Seurat object</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html">CreateSeuratObject</a></span><span class="op">(</span></span>
 <span>    counts <span class="op">=</span> <span class="va">assay</span>,</span>
 <span>    assay <span class="op">=</span> <span class="st">'ATAC'</span>,</span>
 <span>    meta.data <span class="op">=</span> <span class="va">metadata</span><span class="op">[</span><span class="va">metadata</span><span class="op">$</span><span class="va">is__cell_barcode</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  87561 features across 8728 samples within 1 assay </span></span>
+<span><span class="co">##  Active assay: ATAC (87561 features, 0 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span>
 <span></span>
 <span><span class="va">PBMC</span><span class="op">[[</span><span class="st">'ATAC'</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">##  ChromatinAssay data with 87561 features for 8728 cells</span></span>
+<span><span class="co">##  Variable features: 0 </span></span>
+<span><span class="co">##  Genome: hg19 </span></span>
+<span><span class="co">##  Annotation present: TRUE </span></span>
+<span><span class="co">##  Motifs present: FALSE </span></span>
+<span><span class="co">##  Fragment files: 1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/genomic-range-squeezers.html">granges</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  GRanges object with 87561 ranges and 1 metadata column:</span></span>
+<span><span class="co">##            seqnames            ranges strand |                   peak</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |            &lt;character&gt;</span></span>
+<span><span class="co">##        [1]     chr1     565108-565550      * |     chr1-565108-565550</span></span>
+<span><span class="co">##        [2]     chr1     569175-569639      * |     chr1-569175-569639</span></span>
+<span><span class="co">##        [3]     chr1     713461-714823      * |     chr1-713461-714823</span></span>
+<span><span class="co">##        [4]     chr1     752423-753038      * |     chr1-752423-753038</span></span>
+<span><span class="co">##        [5]     chr1     762107-763359      * |     chr1-762107-763359</span></span>
+<span><span class="co">##        ...      ...               ...    ... .                    ...</span></span>
+<span><span class="co">##    [87557]     chrY 58993393-58993760      * | chrY-58993393-58993760</span></span>
+<span><span class="co">##    [87558]     chrY 58994572-58994823      * | chrY-58994572-58994823</span></span>
+<span><span class="co">##    [87559]     chrY 58996353-58997331      * | chrY-58996353-58997331</span></span>
+<span><span class="co">##    [87560]     chrY 59001783-59002175      * | chrY-59001783-59002175</span></span>
+<span><span class="co">##    [87561]     chrY 59017144-59017246      * | chrY-59017144-59017246</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 24 sequences from an unspecified genome; no seqlengths</span></span>
 <span><span class="fu"><a href="https://stuartlab.org/signac/reference/Annotation.html">Annotation</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  GRanges object with 3072120 ranges and 5 metadata columns:</span></span>
+<span><span class="co">##                    seqnames        ranges strand |           tx_id</span></span>
+<span><span class="co">##                       &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |     &lt;character&gt;</span></span>
+<span><span class="co">##    ENSE00001489430     chrX 192989-193061      + | ENST00000399012</span></span>
+<span><span class="co">##    ENSE00001536003     chrX 192991-193061      + | ENST00000484611</span></span>
+<span><span class="co">##    ENSE00002160563     chrX 193020-193061      + | ENST00000430923</span></span>
+<span><span class="co">##    ENSE00001750899     chrX 197722-197788      + | ENST00000445062</span></span>
+<span><span class="co">##    ENSE00001489388     chrX 197859-198351      + | ENST00000381657</span></span>
+<span><span class="co">##                ...      ...           ...    ... .             ...</span></span>
+<span><span class="co">##    ENST00000361739    chrMT     7586-8269      + | ENST00000361739</span></span>
+<span><span class="co">##    ENST00000361789    chrMT   14747-15887      + | ENST00000361789</span></span>
+<span><span class="co">##    ENST00000361851    chrMT     8366-8572      + | ENST00000361851</span></span>
+<span><span class="co">##    ENST00000361899    chrMT     8527-9207      + | ENST00000361899</span></span>
+<span><span class="co">##    ENST00000362079    chrMT     9207-9990      + | ENST00000362079</span></span>
+<span><span class="co">##                      gene_name         gene_id   gene_biotype     type</span></span>
+<span><span class="co">##                    &lt;character&gt;     &lt;character&gt;    &lt;character&gt; &lt;factor&gt;</span></span>
+<span><span class="co">##    ENSE00001489430      PLCXD1 ENSG00000182378 protein_coding     exon</span></span>
+<span><span class="co">##    ENSE00001536003      PLCXD1 ENSG00000182378 protein_coding     exon</span></span>
+<span><span class="co">##    ENSE00002160563      PLCXD1 ENSG00000182378 protein_coding     exon</span></span>
+<span><span class="co">##    ENSE00001750899      PLCXD1 ENSG00000182378 protein_coding     exon</span></span>
+<span><span class="co">##    ENSE00001489388      PLCXD1 ENSG00000182378 protein_coding     exon</span></span>
+<span><span class="co">##                ...         ...             ...            ...      ...</span></span>
+<span><span class="co">##    ENST00000361739      MT-CO2 ENSG00000198712 protein_coding      cds</span></span>
+<span><span class="co">##    ENST00000361789      MT-CYB ENSG00000198727 protein_coding      cds</span></span>
+<span><span class="co">##    ENST00000361851     MT-ATP8 ENSG00000228253 protein_coding      cds</span></span>
+<span><span class="co">##    ENST00000361899     MT-ATP6 ENSG00000198899 protein_coding      cds</span></span>
+<span><span class="co">##    ENST00000362079      MT-CO3 ENSG00000198938 protein_coding      cds</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 25 sequences (1 circular) from hg19 genome</span></span>
 <span></span>
 <span><span class="co">## - Free some memory: the intermediate objects are no longer needed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">scatac</span>, <span class="va">cnts</span>, <span class="va">assay</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -737,13 +862,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">FRiP</span> <span class="op">&lt;-</span> <span class="va">PBMC</span><span class="op">$</span><span class="va">peak_region_fragments</span> <span class="op">/</span> <span class="va">PBMC</span><span class="op">$</span><span class="va">passed_filters</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">FRiP</span> <span class="op">&lt;-</span> <span class="va">PBMC</span><span class="op">$</span><span class="va">peak_region_fragments</span> <span class="op">/</span> <span class="va">PBMC</span><span class="op">$</span><span class="va">passed_filters</span></span>
 <span><span class="va">PBMC</span><span class="op">$</span><span class="va">nCount_ATAC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">PBMC</span>, layer <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span><span class="op">$</span><span class="va">nFeature_ATAC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">PBMC</span>, layer <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">FRiP</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##          0%        10%        20%        30%        40%        50%        60% </span></span>
+<span><span class="co">##  0.02770289 0.55266699 0.60895480 0.64086129 0.66583010 0.68520756 0.70194678 </span></span>
+<span><span class="co">##         70%        80%        90%       100% </span></span>
+<span><span class="co">##  0.71993709 0.73801044 0.76004660 0.90383142</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nCount_ATAC</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nFeature_ATAC</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co">##        0%      10%      20%      30%      40%      50%      60%      70% </span></span>
+<span><span class="co">##    1710.0   5079.1   7619.8   9522.5  11300.8  13367.5  15754.6  19005.5 </span></span>
+<span><span class="co">##       80%      90%     100% </span></span>
+<span><span class="co">##   23502.6  31316.2 249799.0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nFeature_ATAC</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##       0%     10%     20%     30%     40%     50%     60%     70%     80% </span></span>
+<span><span class="co">##    654.0  2308.4  3349.4  4108.1  4765.0  5447.0  6234.2  7100.9  8241.6 </span></span>
+<span><span class="co">##      90%    100% </span></span>
+<span><span class="co">##   9983.4 30313.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section><section id="peaks-based-qcs" class="level4" data-number="13.1.4.2"><h4 data-number="13.1.4.2" class="anchored" data-anchor-id="peaks-based-qcs">
@@ -764,7 +901,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Since we do have the <code>fragments</code> file at hand, most of the QC steps are available (e.g.&nbsp;<code>TSSEnrichment</code>, <code>NucleosomeSignal</code> or fragment size distribution). Let’s go through them one by one.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -773,23 +910,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute nucleosome signal score per cell</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute nucleosome signal score per cell</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/NucleosomeSignal.html">NucleosomeSignal</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  87561 features across 8728 samples within 1 assay </span></span>
+<span><span class="co">##  Active assay: ATAC (87561 features, 0 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span>
 <span></span>
 <span><span class="co"># compute TSS enrichment score per cell</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu">Signac</span><span class="fu">::</span><span class="fu"><a href="https://stuartlab.org/signac/reference/TSSEnrichment.html">TSSEnrichment</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  Extracting TSS positions</span></span>
+<span><span class="co">##  Extracting fragments at TSSs</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Computing TSS enrichment score</span></span>
 <span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  87561 features across 8728 samples within 1 assay </span></span>
+<span><span class="co">##  Active assay: ATAC (87561 features, 0 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span>
 <span></span>
 <span><span class="co"># plot TSS enrichment vs. number of fragments in peaks</span></span>
 <span><span class="fu"><a href="https://stuartlab.org/signac/reference/DensityScatter.html">DensityScatter</a></span><span class="op">(</span><span class="va">PBMC</span>, x <span class="op">=</span> <span class="st">'nCount_ATAC'</span>, y <span class="op">=</span> <span class="st">'TSS.enrichment'</span>, log_x <span class="op">=</span> <span class="cn">TRUE</span>, quantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><code><a href="https://stuartlab.org/signac/reference/ATACqc.html">ATACqc()</a></code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the current development version of <code>Signac</code>, <code><a href="https://stuartlab.org/signac/reference/NucleosomeSignal.html">NucleosomeSignal()</a></code> and <code><a href="https://stuartlab.org/signac/reference/TSSEnrichment.html">TSSEnrichment()</a></code> are deprecated in favour of <code><a href="https://stuartlab.org/signac/reference/ATACqc.html">ATACqc()</a></code>, which computes all these QC metrics at once with the external <code>fragtk</code> tool. <code>fragtk</code> is not installed in the workshop environment: we keep using the deprecated functions, which still work (their deprecation warnings are hidden on this page).</p>
 </div>
 </div>
 </div>
@@ -805,8 +973,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">2.5</span>, <span class="st">'High'</span>, <span class="st">'Low'</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">2.5</span>, <span class="st">'High'</span>, <span class="st">'Low'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">high.tss</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  High  Low </span></span>
+<span><span class="co">##  8673   55</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op">(</span></span>
 <span>    object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'nCount_ATAC'</span>, <span class="st">'FRiP'</span>, <span class="st">'TSS.enrichment'</span>, <span class="st">'nucleosome_signal'</span><span class="op">)</span>,</span>
@@ -814,6 +985,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    ncol <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -844,7 +1021,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Group genomic loci by their nucleosome signal (&gt; 4 or &lt; 4) and plot the fragment size distribution.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -853,15 +1030,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">nucleosome_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nucleosome_signal</span> <span class="op">&gt;</span> <span class="fl">4</span>, <span class="st">'NS &gt; 4'</span>, <span class="st">'NS &lt; 4'</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">nucleosome_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nucleosome_signal</span> <span class="op">&gt;</span> <span class="fl">4</span>, <span class="st">'NS &gt; 4'</span>, <span class="st">'NS &lt; 4'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://stuartlab.org/signac/reference/FragmentHistogram.html">FragmentHistogram</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, group.by <span class="op">=</span> <span class="st">'nucleosome_group'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -888,7 +1071,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Filter the <code>Seurat</code> object (cells and features) as deemed appropriate.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -897,24 +1080,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Filter data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Filter data</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">PBMC</span>, subset <span class="op">=</span> <span class="va">nCount_ATAC</span> <span class="op">&gt;</span> <span class="fl">3000</span> <span class="op">&amp;</span> <span class="va">nCount_ATAC</span> <span class="op">&lt;</span> <span class="fl">100000</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">PBMC</span>, subset <span class="op">=</span> <span class="va">nFeature_ATAC</span> <span class="op">&gt;</span> <span class="fl">1000</span> <span class="op">&amp;</span> <span class="va">nFeature_ATAC</span> <span class="op">&lt;</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">PBMC</span>, subset <span class="op">=</span> <span class="va">FRiP</span> <span class="op">&gt;</span> <span class="fl">0.30</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">PBMC</span>, subset <span class="op">=</span> <span class="va">TSS.enrichment</span> <span class="op">&gt;</span> <span class="fl">2.5</span> <span class="op">&amp;</span> <span class="va">nucleosome_signal</span> <span class="op">&lt;</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  87561 features across 8165 samples within 1 assay </span></span>
+<span><span class="co">##  Active assay: ATAC (87561 features, 0 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span>
 <span></span>
 <span><span class="co">## - Remove peaks with low coverage</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="va">PBMC</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">PBMC</span>, layer <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">10</span>, <span class="op">]</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="va">PBMC</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">PBMC</span>, layer <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">10</span>, <span class="op">]</span></span>
-<span><span class="va">PBMC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  87207 features across 8165 samples within 1 assay </span></span>
+<span><span class="co">##  Active assay: ATAC (87207 features, 0 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -941,7 +1132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Normalize then further reduce the dimensionality for visualization purposes.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -950,32 +1141,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Normalize data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## - Normalize data</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/RunTFIDF.html">RunTFIDF</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  Performing TF-IDF normalization</span></span>
 <span></span>
 <span><span class="co">## - Reduce dimensionality</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/FindTopFeatures.html">FindTopFeatures</a></span><span class="op">(</span><span class="va">PBMC</span>, min.cutoff <span class="op">=</span> <span class="st">'q50'</span><span class="op">)</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/RunSVD.html">RunSVD</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  Running SVD</span></span>
+<span><span class="co">##  Scaling cell embeddings</span></span>
 <span></span>
 <span><span class="co">## - The first LSI component is often correlated with sequencing depth</span></span>
-<span><span class="fu"><a href="https://stuartlab.org/signac/reference/DepthCor.html">DepthCor</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
-<span></span>
+<span><span class="fu"><a href="https://stuartlab.org/signac/reference/DepthCor.html">DepthCor</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="co">## - Embed in 2D UMAP</span></span>
-<span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, reduction <span class="op">=</span> <span class="st">'lsi'</span>, dims <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/RunUMAP.html">RunUMAP</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, reduction <span class="op">=</span> <span class="st">'lsi'</span>, dims <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## - Cluster cells</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindNeighbors.html">FindNeighbors</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, reduction <span class="op">=</span> <span class="st">'lsi'</span>, dims <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="co">##  Computing nearest neighbor graph</span></span>
+<span><span class="co">##  Computing SNN</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindClusters.html">FindClusters</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">PBMC</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, algorithm <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## - Visualize data</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">PBMC</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -994,7 +1202,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gene.activities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/GeneActivity.html">GeneActivity</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gene.activities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stuartlab.org/signac/reference/GeneActivity.html">GeneActivity</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span></span>
+<span><span class="co">##  Extracting gene coordinates</span></span>
+<span><span class="co">##  Warning in SingleFeatureMatrix(fragment = fragments[[x]], features =</span></span>
+<span><span class="co">##  features, : 13 features are on seqnames not present in the fragment file.</span></span>
+<span><span class="co">##  These will be removed.</span></span>
+<span><span class="co">##  Extracting reads overlapping genomic regions</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>We can now save this new object as an <code>Assay</code> in the <code>PBMC</code> object and normalize it.</p>
@@ -1003,7 +1216,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">[[</span><span class="st">'RNA'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateAssayObject.html">CreateAssayObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">gene.activities</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">[[</span><span class="st">'RNA'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateAssayObject.html">CreateAssayObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">gene.activities</span><span class="op">)</span></span>
+<span><span class="co">##  Warning: Non-unique features (rownames) present in the input matrix, making</span></span>
+<span><span class="co">##  unique</span></span>
 <span></span>
 <span><span class="co"># - Normalize the new RNA assay.</span></span>
 <span><span class="va">PBMC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html">NormalizeData</a></span><span class="op">(</span></span>
@@ -1012,7 +1227,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    normalization.method <span class="op">=</span> <span class="st">'LogNormalize'</span>,</span>
 <span>    scale.factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">nCount_RNA</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">PBMC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">PBMC</span></span>
+<span><span class="co">##  An object of class Seurat </span></span>
+<span><span class="co">##  107217 features across 8165 samples within 2 assays </span></span>
+<span><span class="co">##  Active assay: ATAC (87207 features, 43610 variable features)</span></span>
+<span><span class="co">##   2 layers present: counts, data</span></span>
+<span><span class="co">##   1 other assay present: RNA</span></span>
+<span><span class="co">##   2 dimensional reductions calculated: lsi, umap</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>One can now visualize expression of individual markers across clusters to infer cluster identity.</p>
@@ -1030,7 +1251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Assess the expression of known markers across clusters, projecting the cells in a 2D UMAP.</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1039,14 +1260,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'RNA'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'RNA'</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>  features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
@@ -1055,28 +1276,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    <span class="st">'NKG7'</span>, <span class="co"># NK cell</span></span>
 <span>    <span class="st">'TREM1'</span> <span class="co"># Monocytes</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>  features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'MS4A1'</span>, <span class="st">'CD3D'</span>, <span class="st">'NKG7'</span>, <span class="st">'TREM1'</span><span class="op">)</span>,</span>
 <span>  max.cutoff <span class="op">=</span> <span class="st">'q95'</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>Based on these markers, we can annotate clusters. <strong>Note that the cluster numbers obtained in your session may differ from the ones below</strong>: adapt the mapping to your own results!</p>
+</div>
+<p>Based on these markers, we can annotate clusters. Here, each cluster is annotated with the cell type whose marker has the highest average gene activity in the cluster: check this annotation against the plots above! Rarer cell types (e.g.&nbsp;dendritic cells) would require additional markers.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">PBMC</span><span class="op">$</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">9</span>, <span class="fl">12</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Monocytes"</span>,</span>
-<span>  <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">~</span> <span class="st">"T-cells"</span>,</span>
-<span>  <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="op">~</span> <span class="st">"NK-cells"</span>,</span>
-<span>  <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">11</span><span class="op">)</span> <span class="op">~</span> <span class="st">"B-cells"</span>,</span>
-<span>  <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">13</span>, <span class="fl">14</span><span class="op">)</span> <span class="op">~</span> <span class="st">"DC"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'B-cells'</span> <span class="op">=</span> <span class="st">'MS4A1'</span>, <span class="st">'T-cells'</span> <span class="op">=</span> <span class="st">'CD3D'</span>, <span class="st">'NK-cells'</span> <span class="op">=</span> <span class="st">'NKG7'</span>, <span class="st">'Monocytes'</span> <span class="op">=</span> <span class="st">'TREM1'</span><span class="op">)</span></span>
+<span><span class="va">activity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AssayData.html">GetAssayData</a></span><span class="op">(</span><span class="va">PBMC</span>, assay <span class="op">=</span> <span class="st">'RNA'</span>, layer <span class="op">=</span> <span class="st">'data'</span><span class="op">)</span><span class="op">[</span><span class="va">markers</span>, <span class="op">]</span></span>
+<span><span class="va">avg_activity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span>, <span class="va">PBMC</span><span class="op">$</span><span class="va">seurat_clusters</span><span class="op">)</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="fu">Matrix</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums-methods.html">rowMeans</a></span><span class="op">(</span><span class="va">activity</span><span class="op">[</span>, <span class="va">cells</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">avg_activity</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">markers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">avg_activity</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">##               0    1    2    3    4    5    6    7    8    9   10   11   12</span></span>
+<span><span class="co">##  B-cells   0.01 0.01 0.02 0.01 0.01 0.01 0.02 0.01 0.39 0.02 0.37 0.03 0.03</span></span>
+<span><span class="co">##  T-cells   0.01 0.24 0.35 0.29 0.24 0.00 0.07 0.24 0.02 0.01 0.02 0.19 0.01</span></span>
+<span><span class="co">##  NK-cells  0.03 0.08 0.35 0.03 0.04 0.04 0.42 0.38 0.01 0.02 0.01 0.21 0.03</span></span>
+<span><span class="co">##  Monocytes 0.93 0.06 0.08 0.09 0.05 1.08 0.07 0.06 0.12 0.66 0.07 0.06 0.53</span></span>
+<span><span class="co">##              13   14</span></span>
+<span><span class="co">##  B-cells   0.02 0.00</span></span>
+<span><span class="co">##  T-cells   0.07 0.00</span></span>
+<span><span class="co">##  NK-cells  0.17 0.00</span></span>
+<span><span class="co">##  Monocytes 0.08 0.11</span></span>
+<span><span class="va">cluster_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">avg_activity</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">avg_activity</span>, <span class="fl">2</span>, <span class="va">which.max</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cluster_types</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">avg_activity</span><span class="op">)</span></span>
+<span><span class="va">cluster_types</span></span>
+<span><span class="co">##            0           1           2           3           4           5 </span></span>
+<span><span class="co">##  "Monocytes"   "T-cells"   "T-cells"   "T-cells"   "T-cells" "Monocytes" </span></span>
+<span><span class="co">##            6           7           8           9          10          11 </span></span>
+<span><span class="co">##   "NK-cells"  "NK-cells"   "B-cells" "Monocytes"   "B-cells"  "NK-cells" </span></span>
+<span><span class="co">##           12          13          14 </span></span>
+<span><span class="co">##  "Monocytes"  "NK-cells" "Monocytes"</span></span>
+<span><span class="va">PBMC</span><span class="op">$</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="va">cluster_types</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">seurat_clusters</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##    B-cells Monocytes  NK-cells   T-cells </span></span>
+<span><span class="co">##        549      3822      1074      2720</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span><span class="va">PBMC</span>, group.by <span class="op">=</span> <span class="st">'annotation'</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1107,7 +1371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'ATAC'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/DefaultAssay.html">DefaultAssay</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'ATAC'</span></span>
 <span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html">Idents</a></span><span class="op">(</span><span class="va">PBMC</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">PBMC</span><span class="op">$</span><span class="va">annotation</span></span>
 <span><span class="va">da_peaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindMarkers.html">FindMarkers</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
@@ -1116,24 +1380,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  min.pct <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">da_peaks</span><span class="op">)</span></span>
+<span><span class="co">##                           p_val avg_log2FC pct.1 pct.2 p_val_adj</span></span>
+<span><span class="co">##  chr6-167526058-167528777     0  -6.935443 0.006 0.634         0</span></span>
+<span><span class="co">##  chr19-5130024-5132419        0  -5.468023 0.018 0.641         0</span></span>
+<span><span class="co">##  chr2-232535688-232538032     0  -4.979220 0.020 0.570         0</span></span>
+<span><span class="co">##  chr9-37408890-37409812       0  -7.087202 0.004 0.503         0</span></span>
+<span><span class="co">##  chr14-64701789-64703445      0  -7.604425 0.002 0.497         0</span></span>
+<span><span class="co">##  chr22-42329467-42333086      0  -6.077067 0.007 0.497         0</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html">VlnPlot</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>  features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">da_peaks</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  idents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Monocytes"</span>,<span class="st">"B-cells"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://stuartlab.org/signac/reference/CoveragePlot.html">CoveragePlot</a></span><span class="op">(</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://stuartlab.org/signac/reference/CoveragePlot.html">CoveragePlot</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">PBMC</span>,</span>
 <span>  region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">da_peaks</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>  extend.upstream <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  extend.downstream <span class="op">=</span> <span class="fl">10000</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="Lab7_atac-seq_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section><section id="session-info" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="session-info">
 <span class="header-section-number">13.4</span> Session info</h2>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1142,7 +1425,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
@@ -1160,24 +1443,201 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ##   quarto   1.11.5 @ /usr/local/bin/quarto
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
-##   package     * version date (UTC) lib source
-##   cli           3.6.6   2026-04-09 [2] RSPM (R 4.6.0)
-##   digest        0.6.39  2025-11-19 [2] RSPM (R 4.6.0)
-##   evaluate      1.0.5   2025-08-27 [2] RSPM (R 4.6.0)
-##   fastmap       1.2.0   2024-05-15 [2] RSPM (R 4.6.0)
-##   htmltools     0.5.9   2025-12-04 [2] RSPM (R 4.6.0)
-##   htmlwidgets   1.6.4   2023-12-06 [2] RSPM (R 4.6.0)
-##   jsonlite      2.0.0   2025-03-27 [2] RSPM (R 4.6.0)
-##   knitr         1.52    2026-09-06 [2] RSPM (R 4.6.0)
-##   otel          0.2.0   2025-08-29 [2] RSPM (R 4.6.0)
-##   rlang         1.3.0   2026-07-05 [2] RSPM (R 4.6.0)
-##   rmarkdown     2.32    2026-09-01 [2] RSPM (R 4.6.0)
-##   sessioninfo   1.2.4   2026-06-04 [2] RSPM (R 4.6.0)
-##   xfun          0.62    2026-10-16 [2] RSPM (R 4.6.0)
+##   package              * version   date (UTC) lib source
+##   abind                  1.4-8     2024-09-12 [2] RSPM (R 4.6.0)
+##   AnnotationDbi          1.75.2    2026-07-21 [2] Bioconductor 3.24 (R 4.6.1)
+##   AnnotationFilter       1.37.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   backports              1.5.1     2026-04-03 [2] RSPM (R 4.6.0)
+##   base64enc              0.1-6     2026-02-02 [2] RSPM (R 4.6.0)
+##   beachmat               2.29.3    2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)
+##   Biobase                2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocGenerics         * 0.59.13   2026-11-11 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
+##   BiocParallel           1.47.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   Biostrings             2.81.9    2026-09-06 [2] Bioconductor 3.24 (R 4.6.1)
+##   biovizBase             1.61.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   bit                    4.6.0     2025-03-06 [2] RSPM (R 4.6.0)
+##   bit64                  4.8.6     2026-09-01 [2] RSPM (R 4.6.0)
+##   bitops                 1.1-0     2026-07-30 [2] RSPM (R 4.6.0)
+##   blob                   1.3.0     2026-01-14 [2] RSPM (R 4.6.0)
+##   BSgenome               1.81.1    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)
+##   cachem                 1.1.0     2024-05-16 [2] RSPM (R 4.6.0)
+##   checkmate              2.3.4     2026-02-03 [2] RSPM (R 4.6.0)
+##   cigarillo              1.3.1     2026-07-13 [2] Bioconductor 3.24 (R 4.6.1)
+##   cli                    3.6.6     2026-04-09 [2] RSPM (R 4.6.0)
+##   cluster                2.1.8.3   2026-07-30 [2] RSPM (R 4.6.1)
+##   codetools              0.2-20    2024-03-31 [3] CRAN (R 4.6.1)
+##   colorspace             2.1-4     2026-10-08 [2] RSPM (R 4.6.0)
+##   cowplot                1.2.0     2025-07-07 [2] RSPM (R 4.6.0)
+##   crayon                 1.5.3     2024-06-20 [2] RSPM (R 4.6.0)
+##   curl                   8.1.0     2026-10-14 [2] RSPM (R 4.6.0)
+##   data.table             1.18.6.1  2026-08-24 [2] RSPM (R 4.6.0)
+##   DBI                    1.3.0     2026-02-25 [2] RSPM (R 4.6.0)
+##   DelayedArray           0.39.8    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   DelayedMatrixStats     1.35.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   deldir                 2.0-4     2024-02-28 [2] RSPM (R 4.6.0)
+##   dichromat              2.0-1     2026-07-22 [2] RSPM (R 4.6.0)
+##   digest                 0.6.39    2025-11-19 [2] RSPM (R 4.6.0)
+##   dotCall64              1.2       2024-10-04 [2] RSPM (R 4.6.0)
+##   dplyr                  1.2.1     2026-04-03 [2] RSPM (R 4.6.0)
+##   dqrng                  0.4.1     2024-05-28 [2] RSPM (R 4.6.0)
+##   DropletUtils           1.33.2    2026-09-24 [2] Bioconductor 3.24 (R 4.6.1)
+##   edgeR                  4.99.12   2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+##   EnsDb.Hsapiens.v75     2.99.0    2026-07-20 [2] Bioconductor
+##   ensembldb              2.37.3    2026-06-07 [2] Bioconductor 3.24 (R 4.6.1)
+##   evaluate               1.0.5     2025-08-27 [2] RSPM (R 4.6.0)
+##   farver                 2.1.2     2024-05-13 [2] RSPM (R 4.6.0)
+##   fastDummies            1.7.6     2026-04-22 [2] RSPM (R 4.6.0)
+##   fastmap                1.2.0     2024-05-15 [2] RSPM (R 4.6.0)
+##   fastmatch              1.1-8     2026-01-17 [2] RSPM (R 4.6.0)
+##   fitdistrplus           1.2-6     2026-01-24 [2] RSPM (R 4.6.0)
+##   foreign                0.8-92    2026-10-17 [2] RSPM (R 4.6.1)
+##   Formula                1.2-6     2026-08-03 [2] RSPM (R 4.6.0)
+##   future                 1.80.0    2026-10-16 [2] RSPM (R 4.6.0)
+##   future.apply           1.21.0    2026-10-16 [2] RSPM (R 4.6.0)
+##   generics             * 0.1.4     2025-05-09 [2] RSPM (R 4.6.0)
+##   GenomeInfoDb           1.49.1    2026-05-24 [2] Bioconductor 3.24 (R 4.6.1)
+##   GenomicAlignments      1.49.2    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+##   GenomicFeatures        1.65.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   GenomicRanges        * 1.65.4    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+##   ggplot2                4.0.3     2026-04-22 [2] RSPM (R 4.6.0)
+##   ggrepel                0.9.8     2026-03-17 [2] RSPM (R 4.6.0)
+##   ggridges               0.5.7     2025-08-27 [2] RSPM (R 4.6.0)
+##   globals                0.20.0    2026-10-11 [2] RSPM (R 4.6.0)
+##   glue                   1.8.1     2026-04-17 [2] RSPM (R 4.6.0)
+##   goftest                1.2-3     2021-10-07 [2] RSPM (R 4.6.0)
+##   gridExtra              2.3.1     2026-06-25 [2] RSPM (R 4.6.0)
+##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
+##   h5mread                1.5.3     2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)
+##   HDF5Array              1.41.3    2026-08-21 [2] Bioconductor 3.24 (R 4.6.1)
+##   hdf5r                  1.3.16    2026-09-11 [2] RSPM (R 4.6.0)
+##   Hmisc                  5.3-0     2026-09-06 [2] RSPM (R 4.6.0)
+##   htmlTable              2.5.0     2026-04-22 [2] RSPM (R 4.6.0)
+##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
+##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
+##   httpuv                 1.6.17    2026-03-18 [2] RSPM (R 4.6.0)
+##   httr                   1.4.9     2026-09-01 [2] RSPM (R 4.6.0)
+##   ica                    1.0-3     2022-07-08 [2] RSPM (R 4.6.0)
+##   igraph                 2.3.4     2026-09-30 [2] RSPM (R 4.6.0)
+##   IRanges              * 2.47.5    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   irlba                  2.4.1     2026-10-05 [2] RSPM (R 4.6.0)
+##   jsonlite               2.0.0     2025-03-27 [2] RSPM (R 4.6.0)
+##   KEGGREST               1.53.6    2026-07-23 [2] Bioconductor 3.24 (R 4.6.1)
+##   KernSmooth             2.23-27   2026-08-12 [2] RSPM (R 4.6.1)
+##   knitr                  1.52      2026-09-06 [2] RSPM (R 4.6.0)
+##   labeling               0.4.3     2023-08-29 [2] RSPM (R 4.6.0)
+##   later                  1.4.8     2026-03-05 [2] RSPM (R 4.6.0)
+##   lattice                0.23-1    2026-08-12 [2] RSPM (R 4.6.1)
+##   lazyeval               0.2.3     2026-04-04 [2] RSPM (R 4.6.0)
+##   lifecycle              1.0.5     2026-01-08 [2] RSPM (R 4.6.0)
+##   limma                  3.99.4    2026-11-04 [2] Bioconductor 3.24 (R 4.6.1)
+##   listenv                1.1.0     2026-10-04 [2] RSPM (R 4.6.0)
+##   lmtest                 0.9-40    2022-03-21 [2] RSPM (R 4.6.0)
+##   magrittr               2.0.5     2026-04-04 [2] RSPM (R 4.6.0)
+##   MASS                   7.3-66    2026-07-15 [2] RSPM (R 4.6.1)
+##   Matrix                 1.7-6     2026-07-25 [2] RSPM (R 4.6.1)
+##   MatrixGenerics         1.25.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   matrixStats            1.5.0     2025-01-07 [2] RSPM (R 4.6.0)
+##   memoise                2.0.1     2021-11-26 [2] RSPM (R 4.6.0)
+##   mime                   0.13      2025-03-17 [2] RSPM (R 4.6.0)
+##   miniUI                 0.1.2     2025-04-17 [2] RSPM (R 4.6.0)
+##   nlme                   3.1-171   2026-09-01 [2] RSPM (R 4.6.1)
+##   nnet                   7.3-21    2026-08-03 [2] RSPM (R 4.6.1)
+##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
+##   parallelly             1.48.0    2026-06-29 [2] RSPM (R 4.6.0)
+##   patchwork              1.3.2     2025-08-25 [2] RSPM (R 4.6.0)
+##   pbapply                1.7-5     2026-09-01 [2] RSPM (R 4.6.0)
+##   pillar                 1.11.1    2025-09-17 [2] RSPM (R 4.6.0)
+##   pkgconfig              2.0.3     2019-09-22 [2] RSPM (R 4.6.0)
+##   plotly                 4.12.1    2026-07-22 [2] RSPM (R 4.6.0)
+##   plyr                   1.8.9     2023-10-02 [2] RSPM (R 4.6.0)
+##   png                    0.1-9     2026-03-15 [2] RSPM (R 4.6.0)
+##   polyclip               1.10-7    2024-07-23 [2] RSPM (R 4.6.0)
+##   presto                 1.1.0     2026-09-30 [2] RSPM (R 4.6.0)
+##   progressr              1.1.0     2026-10-18 [2] RSPM (R 4.6.0)
+##   promises               1.5.0     2025-11-01 [2] RSPM (R 4.6.0)
+##   ProtGenerics           1.45.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   purrr                  1.2.2     2026-04-10 [2] RSPM (R 4.6.0)
+##   R.methodsS3            1.8.2     2022-06-13 [2] RSPM (R 4.6.0)
+##   R.oo                   1.27.1    2025-05-02 [2] RSPM (R 4.6.0)
+##   R.utils                2.13.0    2025-02-24 [2] RSPM (R 4.6.0)
+##   R6                     2.6.1     2025-02-15 [2] RSPM (R 4.6.0)
+##   RANN                   2.6.3     2026-08-24 [2] RSPM (R 4.6.0)
+##   RColorBrewer           1.1-3     2022-04-03 [2] RSPM (R 4.6.0)
+##   Rcpp                   1.1.2     2026-07-05 [2] RSPM (R 4.6.0)
+##   RcppAnnoy              0.0.23    2026-01-12 [2] RSPM (R 4.6.0)
+##   RcppHNSW               0.7.0     2026-05-26 [2] RSPM (R 4.6.0)
+##   RcppRoll               0.4.0     2026-09-06 [2] RSPM (R 4.6.0)
+##   RCurl                  1.98-1.20 2026-08-21 [2] RSPM (R 4.6.0)
+##   reshape2               1.4.5     2025-11-12 [2] RSPM (R 4.6.0)
+##   restfulr               0.0.17    2026-06-11 [2] RSPM (R 4.6.0)
+##   reticulate             1.47.0    2026-09-03 [2] RSPM (R 4.6.0)
+##   rhdf5                  2.57.20   2026-10-06 [2] Bioconductor 3.24 (R 4.6.1)
+##   rhdf5filters           1.25.5    2026-10-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   Rhdf5lib               2.1.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   rjson                  0.2.23    2024-09-16 [2] RSPM (R 4.6.0)
+##   rlang                  1.3.0     2026-07-05 [2] RSPM (R 4.6.0)
+##   rmarkdown              2.32      2026-09-01 [2] RSPM (R 4.6.0)
+##   ROCR                   1.0-12    2026-01-23 [2] RSPM (R 4.6.0)
+##   rpart                  4.1.27    2026-03-27 [3] CRAN (R 4.6.1)
+##   Rsamtools              2.29.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   RSpectra               0.16-2    2024-07-18 [2] RSPM (R 4.6.0)
+##   RSQLite                3.53.3    2026-06-30 [2] RSPM (R 4.6.0)
+##   rstudioapi             0.19.0    2026-06-11 [2] RSPM (R 4.6.0)
+##   rtracklayer          * 1.73.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   Rtsne                  0.17      2023-12-07 [2] RSPM (R 4.6.0)
+##   S4Arrays               1.13.2    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   S4Vectors            * 0.51.10   2026-09-16 [2] Bioconductor 3.24 (R 4.6.1)
+##   S7                     0.2.2     2026-04-22 [2] RSPM (R 4.6.0)
+##   scales                 1.4.0     2025-04-24 [2] RSPM (R 4.6.0)
+##   scattermore            1.2       2023-06-12 [2] RSPM (R 4.6.0)
+##   sctransform            0.4.3     2026-01-10 [2] RSPM (R 4.6.0)
+##   scuttle                1.23.2    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   Seqinfo              * 1.3.2     2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)
+##   sessioninfo            1.2.4     2026-06-04 [2] RSPM (R 4.6.0)
+##   Seurat               * 5.6.0     2026-10-03 [2] RSPM (R 4.6.0)
+##   SeuratObject         * 5.4.0     2026-04-11 [2] RSPM (R 4.6.0)
+##   shiny                  1.14.0    2026-06-21 [2] RSPM (R 4.6.0)
+##   Signac               * 1.17.1    2026-04-06 [2] RSPM (R 4.6.0)
+##   SingleCellExperiment   1.35.2    2026-07-16 [2] Bioconductor 3.24 (R 4.6.1)
+##   sp                   * 2.2-4     2026-10-11 [2] RSPM (R 4.6.0)
+##   spam                   2.11-4    2026-05-29 [2] RSPM (R 4.6.0)
+##   SparseArray            1.13.4    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)
+##   sparseMatrixStats      1.25.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   spatstat.data          3.1-9     2025-10-18 [2] RSPM (R 4.6.0)
+##   spatstat.explore       3.8-3     2026-09-23 [2] RSPM (R 4.6.0)
+##   spatstat.geom          3.8-3     2026-09-18 [2] RSPM (R 4.6.0)
+##   spatstat.random        3.5-2     2026-09-22 [2] RSPM (R 4.6.0)
+##   spatstat.sparse        3.2-0     2026-05-21 [2] RSPM (R 4.6.0)
+##   spatstat.univar        3.2-0     2026-05-18 [2] RSPM (R 4.6.0)
+##   spatstat.utils         3.2-5     2026-09-11 [2] RSPM (R 4.6.0)
+##   statmod                1.5.2     2026-05-17 [2] RSPM (R 4.6.0)
+##   stringi                1.8.9     2026-08-04 [2] RSPM (R 4.6.0)
+##   stringr              * 1.6.0     2025-11-04 [2] RSPM (R 4.6.0)
+##   SummarizedExperiment   1.43.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   survival               3.8-12    2026-09-09 [2] RSPM (R 4.6.1)
+##   tensor                 1.5.1     2025-06-17 [2] RSPM (R 4.6.0)
+##   tibble                 3.3.1     2026-01-11 [2] RSPM (R 4.6.0)
+##   tidyr                  1.3.2     2025-12-19 [2] RSPM (R 4.6.0)
+##   tidyselect             1.2.1     2024-03-11 [2] RSPM (R 4.6.0)
+##   UCSC.utils             1.9.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   uwot                   0.2.5     2026-08-29 [2] RSPM (R 4.6.0)
+##   VariantAnnotation      1.59.4    2026-07-24 [2] Bioconductor 3.24 (R 4.6.1)
+##   vctrs                  0.7.3     2026-04-11 [2] RSPM (R 4.6.0)
+##   viridisLite            0.4.3     2026-02-04 [2] RSPM (R 4.6.0)
+##   withr                  3.0.3     2026-06-19 [2] RSPM (R 4.6.0)
+##   xfun                   0.62      2026-10-16 [2] RSPM (R 4.6.0)
+##   XML                    3.99-0.25 2026-09-27 [2] RSPM (R 4.6.0)
+##   xtable                 1.8-8     2026-02-22 [2] RSPM (R 4.6.0)
+##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
+##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
+##   zoo                    1.9-1     2026-09-25 [2] RSPM (R 4.6.0)
 ##  
-##   [1] /tmp/RtmpykH70X/Rinstb68f76ab3
+##   [1] /tmp/RtmpyQdi1U/Rinstc2e9543f3
 ##   [2] /usr/local/lib/R/site-library
 ##   [3] /usr/local/lib/R/library
+##   * ── Packages attached to the search path.
 ##  
 ##  ───────────────────────────────────────────────────────────────────────────</code></pre>
 </div>

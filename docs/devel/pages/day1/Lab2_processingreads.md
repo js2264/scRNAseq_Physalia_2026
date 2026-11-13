@@ -28,11 +28,11 @@ For this workshop, we are going to look at a toy dataset provided by 10x Genomic
 
 ``` sh
 ls -l ~/Share/data_wrangling/
-##  total 16
-##  drwxr-xr-x 5 root root 4096 Nov 13 14:17 cellranger-tiny-bcl-1.2.0
+##  total 28
+##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 cellranger-tiny-bcl-1.2.0
 ##  -rw-r--r-- 1 root root   41 Nov  6 18:09 cellranger-tiny-bcl-simple-1.2.0.csv
-##  drwxr-xr-x 3 root root 4096 Nov  6 18:09 counts
-##  drwxr-xr-x 3 root root 4096 Nov 13 14:17 tiny-bcl
+##  drwxr-xr-x 1 root root 4096 Nov  6 18:09 counts
+##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 tiny-bcl
 ```
 
 > **NOTE:**
@@ -69,10 +69,10 @@ ls -l ~/Share/data_wrangling/
 > > ``` sh
 > > ls -l ~/Share/data_wrangling/cellranger-tiny-bcl-1.2.0
 > > cat ~/Share/data_wrangling/cellranger-tiny-bcl-1.2.0/RunInfo.xml
-> > ##  total 28
-> > ##  drwxr-xr-x 2 root root 4096 Nov 13 14:17 Config
-> > ##  drwxr-xr-x 3 root root 4096 Nov 13 14:17 Data
-> > ##  drwxr-xr-x 2 root root 4096 Nov 13 14:17 InterOp
+> > ##  total 40
+> > ##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 Config
+> > ##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 Data
+> > ##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 InterOp
 > > ##  -rw-r--r-- 1 root root   48 Nov  3  2025 RTAComplete.txt
 > > ##  -rw-r--r-- 1 root root  673 Nov  3  2025 RunInfo.xml
 > > ##  -rw-r--r-- 1 root root 5366 Nov  3  2025 runParameters.xml
@@ -157,10 +157,10 @@ The output folders can be viewed by running the `ls` command:
 ``` sh
 ls -l ~/Share/data_wrangling/tiny-bcl/outs/fastq_path
 ls -l ~/Share/data_wrangling/tiny-bcl/outs/fastq_path/H35KCBCXY/test_sample
-##  total 12
-##  drwxr-xr-x 3 root root 4096 Nov 13 14:17 H35KCBCXY
-##  drwxr-xr-x 3 root root 4096 Nov  3  2025 Reports
-##  drwxr-xr-x 2 root root 4096 Nov 13 14:17 Stats
+##  total 24
+##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 H35KCBCXY
+##  drwxr-xr-x 1 root root 4096 Nov  3  2025 Reports
+##  drwxr-xr-x 1 root root 4096 Nov 13 15:34 Stats
 ##  total 48148
 ##  -rw-r--r-- 1 root root  3930346 Nov  3  2025 test_sample_S1_L001_I1_001.fastq.gz
 ##  -rw-r--r-- 1 root root 11093755 Nov  3  2025 test_sample_S1_L001_R1_001.fastq.gz
@@ -293,16 +293,16 @@ The pipeline outputs can be viewed with `ls`:
 
 ``` sh
 ls -l ~/Share/data_wrangling/counts/outs
-##  total 56900
-##  drwxr-xr-x 7 root root     4096 Nov 13 14:17 analysis
+##  total 56912
+##  drwxr-xr-x 1 root root     4096 Nov 13 15:34 analysis
 ##  -rw-r--r-- 1 root root  2782024 Nov  3  2025 cloupe.cloupe
-##  drwxr-xr-x 2 root root     4096 Nov 13 14:17 filtered_feature_bc_matrix
+##  drwxr-xr-x 1 root root     4096 Nov 13 15:34 filtered_feature_bc_matrix
 ##  -rw-r--r-- 1 root root   506767 Nov  3  2025 filtered_feature_bc_matrix.h5
 ##  -rw-r--r-- 1 root root      627 Nov  3  2025 metrics_summary.csv
 ##  -rw-r--r-- 1 root root  1806311 Nov  3  2025 molecule_info.h5
 ##  -rw-r--r-- 1 root root 47960294 Nov  3  2025 possorted_genome_bam.bam
 ##  -rw-r--r-- 1 root root  1744976 Nov  3  2025 possorted_genome_bam.bam.bai
-##  drwxr-xr-x 2 root root     4096 Nov 13 14:17 raw_feature_bc_matrix
+##  drwxr-xr-x 1 root root     4096 Nov 13 15:34 raw_feature_bc_matrix
 ##  -rw-r--r-- 1 root root   921409 Nov  3  2025 raw_feature_bc_matrix.h5
 ##  -rw-r--r-- 1 root root  2513806 Nov  3  2025 web_summary.html
 ```

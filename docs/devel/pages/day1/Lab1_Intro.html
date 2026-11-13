@@ -333,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#connect-to-rstudio-server" id="toc-connect-to-rstudio-server" class="nav-link active" data-scroll-target="#connect-to-rstudio-server"><span class="header-section-number">3.1</span> Connect to RStudio Server</a></li>
+<li><a href="#connect-to-rstudio-server-on-orchestra" id="toc-connect-to-rstudio-server-on-orchestra" class="nav-link active" data-scroll-target="#connect-to-rstudio-server-on-orchestra"><span class="header-section-number">3.1</span> Connect to RStudio Server on Orchestra</a></li>
   <li><a href="#use-a-terminal-within-rstudio" id="toc-use-a-terminal-within-rstudio" class="nav-link" data-scroll-target="#use-a-terminal-within-rstudio"><span class="header-section-number">3.2</span> Use a terminal within RStudio</a></li>
   <li><a href="#basic-terminal-commands" id="toc-basic-terminal-commands" class="nav-link" data-scroll-target="#basic-terminal-commands"><span class="header-section-number">3.3</span> Basic terminal commands</a></li>
   <li>
@@ -375,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <p>The estimated time for this lab is around 1h15.</p>
-<p>This lab only uses the <code>terminal</code> and the <code>R</code> console interactively: none of the code on this page is run when the book is built.</p>
+<p>The <code>terminal</code> commands of this lab are run when the book is built, in the same environment as your workshop session: the outputs shown on this page are what you should get.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -396,11 +396,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </div>
 </div>
-<section id="connect-to-rstudio-server" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="connect-to-rstudio-server">
-<span class="header-section-number">3.1</span> Connect to RStudio Server</h2>
+<section id="connect-to-rstudio-server-on-orchestra" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="connect-to-rstudio-server-on-orchestra">
+<span class="header-section-number">3.1</span> Connect to RStudio Server on Orchestra</h2>
 <p>Most of single-cell RNA-seq analysis takes place either in <code>python</code> or in <code>R</code>. Here, we focus on how to leverage <code>R</code> to investigate scRNAseq data. <code>RStudio</code> is an <code>IDE</code> (Integrated Development Environment, in other words: a nice graphical interface to run <code>R</code>-related commands).</p>
-<p>For this workshop, every participant gets their own <code>RStudio Server</code> session, running in the cloud from the <strong>Docker image built from this book</strong>. Follow the steps described in <a href="../../pages/getting-started.html">Getting started</a> to launch it from the Orchestra platform: a new tab opens in your browser with <code>RStudio</code> already logged in.</p>
-<p>Notice how when you log in <code>RStudio</code>, there are multiple panels. Familiarize yourself with the different panels.</p>
+<p>For this workshop, every participant gets their own <code>RStudio Server</code> session, running in the cloud from the <strong>Docker image built from this book</strong>, on the <a href="https://orchestraplatform.org/">Orchestra platform</a>. Orchestra is an open-source platform, supported by the Bioconductor community, which runs workshop environments in the cloud: each participant gets their own, isolated <code>RStudio</code> session, in their web browser. There is nothing to install on your computer, and no password to type.</p>
+<ol type="1">
+<li>Open the Orchestra dashboard: <strong>the link will be given by your instructors at the beginning of the workshop</strong>.</li>
+<li>Sign in with a Google account (any Google account works, either a personal Gmail address or an institutional account backed by Google).</li>
+<li>Pick the <strong>“Single-cell RNA-seq analysis with R/Bioconductor (Physalia 2026)”</strong> workshop from the catalog and click on <strong>Launch</strong>. Starting the session can take a few minutes the first time (the status moves from <code>Pending</code> to <code>Starting</code> to <code>Ready</code>).</li>
+<li>When it’s <code>Ready</code>, click on <strong>Open</strong>: <code>RStudio</code> opens in a new tab of your browser, already logged in.</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Your session is temporary!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every session has a time limit, shown as a countdown on its card in the dashboard (you can extend it by clicking on <code>+1h</code>). <strong>When a session expires (or when you terminate it), everything in it is removed</strong>, including the files you created.</p>
+<p>Download anything you want to keep (scripts, notebooks, results) before the end of each day: in <code>RStudio</code>, tick the files in the <code>Files</code> pane, then click on <code>More</code> &gt; <code>Export...</code>.</p>
+<p>If Orchestra is unavailable, you can run the same environment on your own computer with Docker: see <a href="../../pages/getting-started.html">Getting started</a>.</p>
+</div>
+</div>
+<p>Notice how, once <code>RStudio</code> is open, there are multiple panels. Familiarize yourself with the different panels.</p>
 <p>The interactive <code>R</code> console is generally found in the bottom left corner of <code>RStudio</code> (though it may be in another corner sometimes). All the rest (history panel, environment panel, directory explorer panel, editor panel) are extra features provided by <code>RStudio</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -462,6 +483,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="basic-terminal-commands" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="basic-terminal-commands">
 <span class="header-section-number">3.3</span> Basic terminal commands</h2>
 <p>One can list files, download files, check help pages, …, just like in <code>R</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Code blocks and folders
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On this page, each block of <code>bash</code> code is run in a new terminal, which starts in your home folder (<code>~</code>): this is why some blocks start with <code>cd ~/data</code>. In your own terminal, moving to <code>~/data</code> once is enough.</p>
+</div>
+</div>
 <ul>
 <li>Check the your present directory</li>
 </ul>
@@ -470,18 +504,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  /home/rstudio</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
-<li>Check history</li>
+<li>Check history (in your terminal, this lists the commands you typed; on this page, each block runs in a new terminal, so the history is empty)</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -492,18 +527,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span> <span class="op">&gt;</span> ~/history.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">history</span> <span class="op">&gt;</span> ~/history.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
-<li>make a new folder called data</li>
+<li>make a new folder called data (<code>-p</code>: do not complain if it already exists)</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ~/data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -514,7 +549,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  /home/rstudio/data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -525,18 +562,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ../history.txt ./</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> ../history.txt ./</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 0</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 0 Nov 13 15:35 history.txt</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
-<li>check the help of the <code>wget</code> command</li>
+<li>check the help of the <code>wget</code> command (here, only its first 20 lines, with <code>head</code>)</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--help</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  GNU Wget 1.21.4, a non-interactive network retriever.</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  Usage: wget [OPTION]... [URL]...</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  Mandatory arguments to long options are mandatory for short options too.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  Startup:</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">##    -V,  --version                   display the version of Wget and exit</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">##    -h,  --help                      print this help</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">##    -b,  --background                go to background after startup</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">##    -e,  --execute=COMMAND           execute a `.wgetrc'-style command</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  Logging and input file:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">##    -o,  --output-file=FILE          log messages to FILE</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">##    -a,  --append-output=FILE        append messages to FILE</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">##    -d,  --debug                     print lots of debugging information</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">##    -q,  --quiet                     quiet (no output)</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">##    -v,  --verbose                   be verbose (this is the default)</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">##    -nv, --no-verbose                turn off verboseness, without being quiet</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">##         --report-speed=TYPE         output bandwidth as TYPE.  TYPE can be bits</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">##    -i,  --input-file=FILE           download URLs found in local or external FILE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -560,8 +621,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--help</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> <span class="at">--help</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">--help</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  Program: samtools (Tools for alignments in the SAM format)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  Version: 1.21 (using htslib 1.24)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  Usage:   samtools &lt;command&gt; [options]</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  Commands:</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- Indexing</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">##       dict           create a sequence dictionary file</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">##       faidx          index/extract FASTA</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">##       fqidx          index/extract FASTQ</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">##       index          index alignment</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- Editing</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">##       calmd          recalculate MD/NM tags and '=' bases</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">##       fixmate        fix mate information</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">##       reheader       replace BAM header</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">##       targetcut      cut fosmid regions (for fosmid pool only)</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">##       addreplacerg   adds or replaces RG tags</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">##       markdup        mark duplicates</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">##       ampliconclip   clip oligos from the end of reads</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- File operations</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">##       collate        shuffle and group alignments by name</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">##       cat            concatenate BAMs</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">##       consensus      produce a consensus Pileup/FASTA/FASTQ</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">##       merge          merge sorted alignments</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co">##       mpileup        multi-way pileup</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co">##       sort           sort alignment file</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">##       split          splits a file by read group</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">##       quickcheck     quickly check if SAM/BAM/CRAM file appears intact</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co">##       fastq          converts a BAM to a FASTQ</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co">##       fasta          converts a BAM to a FASTA</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co">##       import         Converts FASTA or FASTQ files to SAM/BAM/CRAM</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co">##       reference      Generates a reference from aligned data</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co">##       reset          Reverts aligner changes in reads</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- Statistics</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="co">##       bedcov         read depth per BED region</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co">##       coverage       alignment depth and percent coverage</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="co">##       depth          compute the depth</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="co">##       flagstat       simple stats</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co">##       idxstats       BAM index stats</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co">##       cram-size      list CRAM Content-ID and Data-Series sizes</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="co">##       phase          phase heterozygotes</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co">##       stats          generate stats (former bamcheck)</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="co">##       ampliconstats  generate amplicon specific stats</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- Viewing</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="co">##       flags          explain BAM flags</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="co">##       head           header viewer</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="co">##       tview          text alignment viewer</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="co">##       view           SAM&lt;-&gt;BAM&lt;-&gt;CRAM conversion</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="co">##       depad          convert padded BAM to unpadded BAM</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="co">##       samples        list the samples in a set of SAM/BAM/CRAM files</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="co">##    -- Misc</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="co">##       help [cmd]     display this help message or help for [cmd]</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="co">##       version        detailed version information</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="co">##  Usage: samtools view [options] &lt;in.bam&gt;|&lt;in.sam&gt;|&lt;in.cram&gt; [region ...]</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="co">##  Output options:</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="co">##    -b, --bam                  Output BAM</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="co">##    -C, --cram                 Output CRAM (requires -T)</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="co">##    -1, --fast                 Use fast BAM compression (and default to --bam)</span></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a><span class="co">##    -u, --uncompressed         Uncompressed BAM output (and default to --bam)</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="co">##    -h, --with-header          Include header in SAM output</span></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="co">##    -H, --header-only          Print SAM header only (no alignments)</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a><span class="co">##        --no-header            Print SAM alignment records only [default]</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="co">##    -c, --count                Print only the count of matching records</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="co">##    -o, --output FILE          Write output to FILE [standard output]</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="co">##    -U, --unoutput FILE, --output-unselected FILE</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a><span class="co">##                               Output reads not selected by filters to FILE</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a><span class="co">##    -p, --unmap                Set flag to UNMAP on reads not selected</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="co">##                               then write to output file.</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="co">##    -P, --fetch-pairs          Retrieve complete pairs even when outside of region</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="co">##  Input options:</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="co">##    -t, --fai-reference FILE   FILE listing reference names and lengths</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="co">##    -M, --use-index            Use index and multi-region iterator for regions</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co">##        --region[s]-file FILE  Use index to include only reads overlapping FILE</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="co">##    -X, --customized-index     Expect extra index file argument after &lt;in.bam&gt;</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co">##  Filtering options (Only include in output reads that...):</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co">##    -L, --target[s]-file FILE  ...overlap (BED) regions in FILE</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co">##    -N, --qname-file [^]FILE   ...whose read name is listed in FILE ("^" negates)</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co">##    -r, --read-group STR       ...are in read group STR</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="co">##    -R, --read-group-file [^]FILE</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="co">##                               ...are in a read group listed in FILE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -573,19 +724,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">--help</span> <span class="op">&gt;</span> samtools-view-help.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">--help</span> <span class="op">&gt;</span> samtools-view-help.txt</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 5 samtools-view-help.txt</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  Usage: samtools view [options] &lt;in.bam&gt;|&lt;in.sam&gt;|&lt;in.cram&gt; [region ...]</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  Output options:</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">##    -b, --bam                  Output BAM</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
-<li>Download a file from Internet with <code>wget</code>
-</li>
+<li>Download a file from Internet with <code>wget</code> (<code>-nv</code>: only print a summary line, rather than a progress bar)</li>
 </ul>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-nv</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  2026-11-13 15:35:50 URL:https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz [136259701/136259701] -&gt; "cellranger-tiny-bcl-1.2.0.tar.gz" [1]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <ul>
@@ -596,7 +755,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> ~/data/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> ~/data/</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  total 130M</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 130M Mar  5  2017 cellranger-tiny-bcl-1.2.0.tar.gz</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root    0 Nov 13 15:35 history.txt</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 5.8K Nov 13 15:35 samtools-view-help.txt</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -609,16 +772,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Download the <code>git</code> repository for this course from <code>GitHub</code>:</p>
+<p>Download the <code>git</code> repository for this course from <code>GitHub</code> (<code>--depth 1</code>: without the history of the repository; <code>--quiet</code>: without progress messages):</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/js2264/scRNAseq_Physalia_2026.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--quiet</span> <span class="at">--depth</span> 1 https://github.com/js2264/scRNAseq_Physalia_2026.git</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> scRNAseq_Physalia_2026/inst/pages</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  day1</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  day2</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  day3</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  day4</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  day5</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  extra.qmd</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  getting-started.qmd</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  images</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  prerequisites.qmd</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  program.qmd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>This downloads the repository for this course to your home folder in your workshop session. To get it on your local computer (to save the lectures and exercises), go to <a href="https://github.com/js2264/scRNAseq_Physalia_2026">the GitHub repo page</a>, click on the green <code>Code</code> button, then <code>Download ZIP</code>. Beware, the download may take a significant time based on your internet connection (~100 MB).</p>
+<p>This downloads the repository for this course to your home folder in your workshop session. To get it on your local computer (to save the lectures and exercises), go to <a href="https://github.com/js2264/scRNAseq_Physalia_2026">the GitHub repo page</a>, click on the green <code>Code</code> button, then <code>Download ZIP</code>. Beware, the download may take a significant time based on your internet connection (~270 MB).</p>
 </div>
 </div>
 </section><section id="single-cell-rna-seq-datasets" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="single-cell-rna-seq-datasets">
@@ -687,30 +861,9 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <p>The <a href="https://github.com/pachterlab/ffq"><code>ffq</code> tool</a> from the Pachter lab is already installed in your workshop session. Check <code>ffq</code> help and try fetching the metadata of the sequencing run of sample <code>AXH009</code> (<code>GSM4486714</code>): <code>SRR11575369</code>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Installing <code>ffq</code> on your own machine
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>ffq</code> is a <code>python</code> package, available from <code>PyPI</code>:</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install ffq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -719,19 +872,99 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> <span class="at">--help</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> SRR11575369 <span class="op">&gt;</span> SRR11575369_ffq.json</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 30 SRR11575369_ffq.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> <span class="at">--help</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ffq</span> SRR11575369 <span class="op">&gt;</span> SRR11575369_ffq.json</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 30 SRR11575369_ffq.json</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  usage: ffq [-h] [-o OUT] [-l LEVEL] [--ftp] [--aws] [--gcp] [--ncbi] [--split]</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">##             [--verbose] [--version]</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">##             IDs [IDs ...]</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  ffq 0.3.1: A command line tool to find sequencing data from SRA / GEO / ENCODE</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  / ENA / EBI-EMBL / DDBJ / Biosample.</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  positional arguments:</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">##    IDs         One or multiple SRA / GEO / ENCODE / ENA / EBI-EMBL / DDBJ /</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">##                Biosample accessions, DOIs, or paper titles</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  options:</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">##    -h, --help  Show this help message and exit</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co">##    -o OUT      Path to write metadata (default: standard out)</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">##    -l LEVEL    Max depth to fetch data within accession tree</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co">##    --ftp       Return FTP links</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">##    --aws       Return AWS links</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co">##    --gcp       Return GCP links</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co">##    --ncbi      Return NCBI links</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="co">##    --split     Split output into separate files by accession (`-o` is a</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co">##                directory)</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="co">##    --verbose   Print debugging information</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co">##    --version   show program's version number and exit</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="co">##  [2026-11-13 15:35:59,340]    INFO Parsing run SRR11575369</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">##  {</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co">##      "SRR11575369": {</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co">##          "accession": "SRR11575369",</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="co">##          "experiment": "SRX8143297",</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co">##          "study": "SRP257542",</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="co">##          "sample": "SRS6506205",</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="co">##          "title": "Illumina NovaSeq 6000 paired end sequencing; GSM4486714: single cell RNA seq of human epididymis epithelial tissue [AXH009]; Homo sapiens; RNA-Seq",</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="co">##          "attributes": {</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="co">##              "loader": "latf-load",</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ENA-STATUS": "PUBLIC",</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ENA-FIRST-PUBLIC": "2020-08-27",</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ENA-LAST-UPDATE": "2020-08-27",</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ENA-BASE-COUNT": 136010047290,</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ENA-SPOT-COUNT": 450364395</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="co">##          },</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="co">##          "files": {</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a><span class="co">##              "ftp": [</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="co">##                  {</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "accession": "SRR11575369",</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "filename": "SRR11575369_1.fastq.gz",</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "filetype": "fastq",</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "filesize": 34995132199,</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "filenumber": 1,</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "md5": "f1c825a9a7ca9ce11a872fcd8777bd5e",</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "urltype": "ftp",</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_1.fastq.gz"</span></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a><span class="co">##                  },</span></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a><span class="co">##                  {</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "accession": "SRR11575369",</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "filename": "SRR11575369_2.fastq.gz",</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p><code>ffq</code> returns the metadata of the run in <code>JSON</code> format: the experiment, study and sample it belongs to, and the download links of its files.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><code>429 Too Many Requests</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>ffq</code> queries the NCBI and ENA servers, which limit the number of requests they accept from the same place: when all the participants of the workshop run <code>ffq</code> at the same time, NCBI may reject some of the queries (<code>ERROR 429 Client Error: Too Many Requests</code>), and <code>ffq</code> then writes an empty file. Wait a little and try again or, if it keeps failing, use the copy of the result provided in <code>~/Share/</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Use the copy in ~/Share/ if `ffq` failed (i.e. if SRR11575369_ffq.json is empty)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-s</span> SRR11575369_ffq.json <span class="bu">]</span> <span class="kw">||</span> <span class="fu">cp</span> ~/Share/SRR11575369_ffq.json ./</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> SRR11575369_ffq.json</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 3420 Nov 13 15:36 SRR11575369_ffq.json</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
 <p><code>ffq</code> can, in principle, also be queried with GEO accessions directly (e.g. <code>ffq GSE148963</code>). With the current release of <code>ffq</code> (0.3.1), these queries (as well as queries of SRA studies, <code>SRP...</code>) fail, as NCBI changed the GEO web pages <code>ffq</code> reads. Queries of SRA runs (<code>SRR...</code>) work fine.</p>
 </div>
 </div>
@@ -754,74 +987,6 @@ Tip
 <p>Can you find the links to raw data associated with the <code>GSE148963</code> GEO ID?</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><code>ffq</code> lists the download links of the files of the run, from several mirrors (<code>ftp</code>: the ENA, <code>aws</code>, <code>gcp</code> and <code>ncbi</code>). You can use a <code>grep</code> command: <code>grep</code> returns the lines which match a given pattern (e.g.&nbsp;a link…)!</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-<p>And with a bit of <code>sed</code> magick…</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,.*"ftp://,ftp://,'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,".*,,'</span> <span class="op">&gt;</span> SRR11575369_fastqlist.txt</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> SRR11575369_fastqlist.txt</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">## `ffq` looks through the SRA/ENA databases to find metadata associated with the `SRR11575369` run (including download links)</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## grep '"url": "ftp://' recovers the text lines that contain FTP download links</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">## the `sed` commands clean up the text lines</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">## the `wget` command downloads locally the links listed in the generated file (SRR11575369_fastqlist.txt)</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># wget -i SRR11575369_fastqlist.txt ## Do not run, it would take too long (2 x 35 GB)...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-<p>To get the runs of every sample of the study at once, you can directly query the <a href="https://www.ebi.ac.uk/ena/portal/api/">ENA portal API</a> with the SRA study ID of <code>GSE148963</code>: <code>SRP257542</code> (listed in the <code>Relations</code> section of the GEO page, and in the <code>study</code> field returned by <code>ffq</code>).</p>
-<div class="cell" data-layout-align="center">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="st">"https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRP257542&amp;result=read_run&amp;fields=run_accession,sample_alias,sample_title,fastq_bytes,fastq_ftp"</span> <span class="op">&gt;</span> SRP257542_runs.tsv</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 1-4 SRP257542_runs.tsv</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 5 SRP257542_runs.tsv <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">';'</span> <span class="st">'\n'</span> <span class="op">&gt;</span> GSE148963_fastqlist.txt</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> GSE148963_fastqlist.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout-question">
-<div class="callout callout-style-default callout-note callout-titled" title="Question">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The full <code>fastq</code> files for a single run of this study weigh ~35 GB each… Let’s only download the first 25,000 reads of the <code>SRR11575369</code> run (sample <code>AXH009</code>), by streaming the file from the ENA and stopping after 100,000 lines (each read spans 4 lines). Have a look at it!</p>
-<div class="callout-answer">
-<div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -833,76 +998,52 @@ Tip
 </div>
 <div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p><code>ffq</code> lists the download links of the files of the run, from several mirrors (<code>ftp</code>: the ENA, <code>aws</code>, <code>gcp</code> and <code>ncbi</code>). You can use a <code>grep</code> command: <code>grep</code> returns the lines which match a given pattern (e.g.&nbsp;a link…)!</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/data <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/data</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> READ <span class="kw">in</span> 1 2<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Streaming the first 25,000 reads of SRR11575369_</span><span class="va">${READ}</span><span class="st">.fastq.gz..."</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">curl</span> <span class="at">-s</span> <span class="va">${URL}</span>/SRR11575369_<span class="va">${READ}</span>.fastq.gz <span class="dt">\</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">zcat</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="dt">\</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 100000 <span class="dt">\</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span> <span class="fu">gzip</span> <span class="op">&gt;</span> SRR11575369_<span class="va">${READ}</span>.fq.gz</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> SRR11575369_<span class="pp">*</span>.fq.gz</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> SRR11575369_1.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_1.fastq.gz"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">##                      "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_2.fastq.gz"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p><code>curl</code> streams the compressed file, <code>zcat</code> decompresses it on the fly, <code>head</code> stops the stream after 100,000 lines and <code>gzip</code> compresses these lines into a new file. When <code>head</code> stops, <code>curl</code> and <code>zcat</code> complain that they cannot write anymore: <code>-s</code> and <code>2&gt;/dev/null</code> silence these (expected) errors.</p>
-<p>Each file takes ~30 seconds to download and weighs ~2 MB. If a file only weighs a few bytes, the download failed (e.g.&nbsp;the ENA server is busy): a copy of both files is available in <code>~/Share/</code>.</p>
+<p>And with a bit of <code>sed</code> magick…</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz ~/data/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'"url": "ftp://'</span> SRR11575369_ffq.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,.*"ftp://,ftp://,'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s,".*,,'</span> <span class="op">&gt;</span> SRR11575369_fastqlist.txt</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> SRR11575369_fastqlist.txt</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## `ffq` looks through the SRA/ENA databases to find metadata associated with the `SRR11575369` run (including download links)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">## grep '"url": "ftp://' recovers the text lines that contain FTP download links</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">## the `sed` commands clean up the text lines</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">## the `wget` command downloads locally the links listed in the generated file (SRR11575369_fastqlist.txt)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># wget -i SRR11575369_fastqlist.txt ## Do not run, it would take too long (2 x 35 GB)...</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_1.fastq.gz</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/069/SRR11575369/SRR11575369_2.fastq.gz</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>Here is what these files look like (here, the copies from <code>~/Share/</code>, which are identical to the files you streamed in <code>~/data/</code>):</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Each of these two <code>fastq</code> files weighs ~35 GB: downloading them would take far too long. Let’s pretend we downloaded them with <code>wget -i SRR11575369_fastqlist.txt</code>: their first 25,000 reads are available in <code>~/Share/</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/SRR11575369_1.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 12</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /root/Share/SRR11575369_1.fq.gz</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /root/Share/SRR11575369_2.fq.gz</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.1 1/1</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  ANCAACAGTGGAATTCGTTTTGATGAAAAAAATAAATTTGTTCTTCAAAGCAGAGTGAATGATGCAGTACGAGCTCTTGCTCTTGAAAACCCATCACAACTTTATAATTTAATAATTAGTGAAAAATTAAAAAAATAATATTTCTTATATT</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  F#F:FFFFF:FFFFFFFFFF:F,FF,FF::F,::FFFFFFFFFFF:FF:FF:F,FFF,F:F,FFF,FF:FF:F:FFF:FF:FFFF,:F::FFFF:FF,FF:F:FF,,:F:F,::,F:F:FF,,::,FF:,,F,,,,,:FFFF::F:,,,FF</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.2 2/1</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  TNGCCAGTCAATACCGCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGTGTTTTTTTTTTTTTATATAATAAAATTTTTTTTTTTTTTAATAAAATTTTTTTTTTATTTT</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  F#FFFFFFF::FF:FF::FFFFFFFFFFFFFFFF:FFFFFFFFFFFFF,,FFFFFFFFFF:FFFFFF:FFFFFFFFFFF:F,FFFFF,,,:,,::FFFFFFFF,,:,,,F,,,,,,FFFFFF,F,,FF:,F,:,F,FFFFF,,,:,,F::F</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.3 3/1</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  TNGTTGGTCCTTAATCGATGCATCCGTTTTTTTTTTATTTTTTTTTTTTTTTTTTTGTATTTTTATTATTGATGGGGTTTCACCATGTTTGCCAGGCTGGTATAGAAATCCATACCTCATTATACACCACCCACATCCACCCAAATTGCTA</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  F#FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFF,F:FFFFF:,FF,,,FF,FFF:FF,F,FF,FFF,F,F,FF,,FF:,:::,F::FF,,FFF,:F,,,,,,:FF,,F:FFF,:F,FFF,FF,F,:FF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span><code>zcat</code> on macOS
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Running these commands on your own Mac? There, <code>zcat file.gz</code> looks for a <code>file.gz.Z</code> file and fails: use <code>gzcat file.gz</code> (or <code>gunzip -c file.gz</code>) instead. Reading a stream (<code>... | zcat</code>) works as on Linux.</p>
-</div>
-</div>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /home/rstudio/Share/SRR11575369_1.fq.gz</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 1.9M Nov  6 18:09 /home/rstudio/Share/SRR11575369_2.fq.gz</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="callout-question">
@@ -916,8 +1057,8 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Try and understand the structure of the <code>fq.gz</code> file. What is the meaning of each line? What is the difference between the <code>_1</code> and <code>_2</code> files?</p>
-<p>How many reads are there in the <code>fq.gz</code> file? And how long are they? Can you get a summary of what is in this file? All of these questions can be quickly answered using the <a href="https://bioinf.shenwei.me/seqkit/usage/"><code>seqkit</code></a> tool:</p>
+<p>Try and understand the structure of the <code>fq.gz</code> files. What is the meaning of each line? What is the difference between the <code>_1</code> and <code>_2</code> files?</p>
+<p>How many reads are there in each <code>fq.gz</code> file? And how long are they? Can you get a summary of what is in these files? All of these questions can be quickly answered using the <a href="https://bioinf.shenwei.me/seqkit/usage/"><code>seqkit</code></a> tool:</p>
 <div class="callout-answer">
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
@@ -936,21 +1077,100 @@ Tip
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> <span class="at">--help</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--help</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats ~/data/SRR11575369_<span class="pp">*</span>.fq.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/SRR11575369_1.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 8</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ~/Share/SRR11575369_2.fq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 8</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.1 1/1</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  ANCAACAGTGGAATTCGTTTTGATGAAAAAAATAAATTTGTTCTTCAAAGCAGAGTGAATGATGCAGTACGAGCTCTTGCTCTTGAAAACCCATCACAACTTTATAATTTAATAATTAGTGAAAAATTAAAAAAATAATATTTCTTATATT</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  F#F:FFFFF:FFFFFFFFFF:F,FF,FF::F,::FFFFFFFFFFF:FF:FF:F,FFF,F:F,FFF,FF:FF:F:FFF:FF:FFFF,:F::FFFF:FF,FF:F:FF,,:F:F,::,F:F:FF,,::,FF:,,F,,,,,:FFFF::F:,,,FF</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.2 2/1</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  TNGCCAGTCAATACCGCCCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGTGTTTTTTTTTTTTTATATAATAAAATTTTTTTTTTTTTTAATAAAATTTTTTTTTTATTTT</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  F#FFFFFFF::FF:FF::FFFFFFFFFFFFFFFF:FFFFFFFFFFFFF,,FFFFFFFFFF:FFFFFF:FFFFFFFFFFF:F,FFFFF,,,:,,::FFFFFFFF,,:,,,F,,,,,,FFFFFF,F,,FF:,F,:,F,FFFFF,,,:,,F::F</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.1 1/2</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  TCCCGCAGACCAGATGATAATCGTATTTTTTTTTTCTATTTTTTTAATATTAATTAAATTCGGAATTACAAATTTTTAAAAAGTTTGAAAATGTAGAGAATTTATAAAAATTATTGTTAAATTTGTTGTGTCGAAATCTAAGAAATATTGT</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  F,:FFF,,,,F,,:FF,F:F:F,:F:FFF,FFF:F,::F,::FF:,,F,:F:,:,,,,F:,:F,F:F,:,F,FFFFF,F,::FFF:F,::,FFFF:,F,F:FF,F,,,:,,F,FF,FF:,,FFFFFF,FF,,,,F,F,F,,,:,FF:FF,:</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  @SRR11575369.2 2/2</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  GCCCAGAGCCCTGCTATCATCGATTCGGACCCAGTGGATGAGGAAGTGCTGATGTCGCTGGTGGTGGAACTGGGGTTGGACCGAGCCAATGAGCTTCCGGAGCTGTGGCTGGGGCAGAATGAGTTTGACTTCACTGCGGACTTTCCATCTA</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">##  +</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">##  FFF:,F,FFFFFFFFFF:FFFF,FFF,FFFFFFFFFFFFFF:FFFFFFFFF,FF,FF:F:FFFFFFFFFFFFFFF,FF:FFFFFFFFFF:FFF:F,FF:FFFF:,FFF:FFFFFFFFFF:FF:FFF:,FFFFFFF,,,F,FFF::FFFFFF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>On the copies of these files in <code>~/Share/</code>:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--quiet</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">##  file                             format  type  num_seqs    sum_len  min_len  avg_len  max_len</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  /root/Share/SRR11575369_1.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  /root/Share/SRR11575369_2.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> <span class="at">--help</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 30</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--help</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">seqkit</span> stats <span class="at">--quiet</span> ~/Share/SRR11575369_<span class="pp">*</span>.fq.gz</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">##  SeqKit -- a cross-platform and ultrafast toolkit for FASTA/Q file manipulation</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">##  Version: 2.9.0</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">##  Author: Wei Shen &lt;shenwei356@gmail.com&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  Documents  : http://bioinf.shenwei.me/seqkit</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  Source code: https://github.com/shenwei356/seqkit</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  Please cite:</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">##    1. https://doi.org/10.1002/imt2.191</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">##    2. https://doi.org/10.1371/journal.pone.0163962</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">##  Seqkit utlizies the pgzip (https://github.com/klauspost/pgzip) package to</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">##  read and write gzip file, and the outputted gzip file would be slighty</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">##  larger than files generated by GNU gzip.</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">##  Seqkit writes gzip files very fast, much faster than the multi-threaded pigz,</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">##  therefore there's no need to pipe the result to gzip/pigz.</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">##  Seqkit also supports reading and writing xz (.xz) and zstd (.zst) formats since v2.2.0.</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">##  Bzip2 format is supported since v2.4.0.</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">##  Compression level:</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="co">##    format   range   default  comment</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">##    gzip     1-9     5        https://github.com/klauspost/pgzip sets 5 as the default value.</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">##    xz       NA      NA       https://github.com/ulikunitz/xz does not support.</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co">##    zstd     1-4     2        roughly equals to zstd 1, 3, 7, 11, respectively.</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="co">##    bzip     1-9     6        https://github.com/dsnet/compress</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="co">##  simple statistics of FASTA/Q files</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="co">##  Columns:</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="co">##  </span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="co">##    1.  file      input file, "-" for STDIN</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="co">##    2.  format    FASTA or FASTQ</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="co">##    3.  type      DNA, RNA, Protein or Unlimit</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="co">##    4.  num_seqs  number of sequences</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="co">##    5.  sum_len   number of bases or residues       , with gaps or spaces counted</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a><span class="co">##    6.  min_len   minimal sequence length           , with gaps or spaces counted</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="co">##    7.  avg_len   average sequence length           , with gaps or spaces counted</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="co">##    8.  max_len   miximal sequence length           , with gaps or spaces counted</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a><span class="co">##    9.  Q1        first quartile of sequence length , with gaps or spaces counted</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="co">##    10. Q2        median of sequence length         , with gaps or spaces counted</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="co">##    11. Q3        third quartile of sequence length , with gaps or spaces counted</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a><span class="co">##    12. sum_gap   number of gaps</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a><span class="co">##    13. N50       N50. https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics#N50</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="co">##    14. N50_num   N50_num or L50. https://en.wikipedia.org/wiki/N50,_L50,_and_related_statistics#L50</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a><span class="co">##    15. Q20(%)    percentage of bases with the quality score greater than 20</span></span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a><span class="co">##    16. Q30(%)    percentage of bases with the quality score greater than 30</span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a><span class="co">##  file                                     format  type  num_seqs    sum_len  min_len  avg_len  max_len</span></span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a><span class="co">##  /home/rstudio/Share/SRR11575369_1.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151</span></span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a><span class="co">##  /home/rstudio/Share/SRR11575369_2.fq.gz  FASTQ   DNA     25,000  3,775,000      151      151      151</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><code>zcat</code> on macOS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Running these commands on your own Mac? There, <code>zcat file.gz</code> looks for a <code>file.gz.Z</code> file and fails: use <code>gzcat file.gz</code> (or <code>gunzip -c file.gz</code>) instead. Reading a stream (<code>... | zcat</code>) works as on Linux.</p>
 </div>
 </div>
 </div>
@@ -1016,15 +1236,51 @@ Tip
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> FILE <span class="kw">in</span> matrix.mtx genes.tsv barcodes.tsv<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">wget</span> <span class="va">${URL}</span>/GSM4486714_AXH009_<span class="va">${FILE}</span>.gz</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> GSM4486714_AXH009_<span class="pp">*</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_genes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_barcodes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_matrix.mtx.gz <span class="kw">|</span> <span class="fu">head</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/data</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="va">URL</span><span class="op">=</span>https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> FILE <span class="kw">in</span> matrix.mtx genes.tsv barcodes.tsv<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">wget</span> <span class="at">-nv</span> <span class="va">${URL}</span>/GSM4486714_AXH009_<span class="va">${FILE}</span>.gz</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> GSM4486714_AXH009_<span class="pp">*</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_genes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_barcodes.tsv.gz <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> GSM4486714_AXH009_matrix.mtx.gz <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">##  2026-11-13 15:36:05 URL:https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl/GSM4486714_AXH009_matrix.mtx.gz [30406214/30406214] -&gt; "GSM4486714_AXH009_matrix.mtx.gz" [1]</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">##  2026-11-13 15:36:06 URL:https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl/GSM4486714_AXH009_genes.tsv.gz [257279/257279] -&gt; "GSM4486714_AXH009_genes.tsv.gz" [1]</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">##  2026-11-13 15:36:06 URL:https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4486nnn/GSM4486714/suppl/GSM4486714_AXH009_barcodes.tsv.gz [8649/8649] -&gt; "GSM4486714_AXH009_barcodes.tsv.gz" [1]</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 8.5K Apr 20  2020 GSM4486714_AXH009_barcodes.tsv.gz</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root 252K Apr 20  2020 GSM4486714_AXH009_genes.tsv.gz</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">##  -rw-r--r-- 1 root root  29M Apr 20  2020 GSM4486714_AXH009_matrix.mtx.gz</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000243485 MIR1302-10</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000237613 FAM138A</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000186092 OR4F5</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000238009 RP11-34P13.7</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000239945 RP11-34P13.8</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000237683 AL627309.1</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000239906 RP11-34P13.14</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000241599 RP11-34P13.9</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000228463 AP006222.2</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co">##  ENSG00000237094 RP4-669L17.10</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGAGATGGGTC-1</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGAGCTAGTTC-1</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGGTTACCAGT-1</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGGTTGGGACA-1</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGTCCTAGTGA-1</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAACGGGTCGGAGGTA-1</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAAGATGGTCGAACAG-1</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAAGATGGTTAAGACA-1</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAAGATGTCACCTTAT-1</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="co">##  AAAGCAAAGAAGGTGA-1</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="co">##  %%MatrixMarket matrix coordinate integer general</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a><span class="co">##  %</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="co">##  32738 1876 9847254</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a><span class="co">##  32722 1 1</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="co">##  32709 1 42</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a><span class="co">##  32708 1 1</span></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="co">##  32707 1 2</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="co">##  32706 1 26</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="co">##  32705 1 2</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="co">##  32704 1 28</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>These three files are the standard output of <code>cellranger</code> (a “Matrix Market” sparse matrix, see <a href="../../pages/day1/Lab2_processingreads.html">Lab 2</a>): the <code>.mtx</code> file only lists the non-zero entries of the count matrix, one per line, as <code>&lt;gene index&gt; &lt;cell index&gt; &lt;count&gt;</code>, after a 3-line header. The genes and barcodes files give the names of the rows and of the columns of the matrix. We will see how to import them in <code>R</code> in <a href="../../pages/day2/Lab3_Rbioc.html">Lab 3</a>.</p>
